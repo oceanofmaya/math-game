@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Math Game</title>
+    <meta name="keywords" content="Math,Game" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="EN" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="version" content="1.0.0" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/visual-themes/jellyfish.css" />
+    <link rel="stylesheet" type="text/css" href="css/visual-themes/firefly.css" />
+    <link rel="stylesheet" type="text/css" href="css/visual-themes/pearl.css" />
+    <link rel="stylesheet" type="text/css" href="css/visual-themes/mushroom.css" />
+    <link rel="stylesheet" type="text/css" href="css/visual-themes/maple.css" />
+
+    <script src="js/constants.js"></script>
+    <script src="js/sound-manager.js"></script>
+    <script src="js/visual-themes/base-theme.js"></script>
+    <script src="js/visual-themes/manager.js"></script>
+    <script src="js/visual-themes/jellyfish.js"></script>
+    <script src="js/visual-themes/firefly.js"></script>
+    <script src="js/visual-themes/pearl.js"></script>
+    <script src="js/visual-themes/mushroom.js"></script>
+    <script src="js/visual-themes/maple.js"></script>
+    <script src="js/scripts.js"></script>
+  </head>
+
+  <body>
+    <div id="version-display" class="version-display"></div>
+    <form id="gameForm" onsubmit="event.preventDefault();">
+      <h1>Math Game</h1>
+      <div class="flex-container count-container">
+        <div>Correct:&nbsp;<span id="countCorrect" class="success"></span></div>
+        <div>&nbsp;Wrong:&nbsp;<span id="countWrong" class="fail"></span></div>
+        <div>&nbsp;Skipped:&nbsp;<span id="countSkip" class="skip"></span></div>
+      </div>
+      <div class="flex-container flex-direction-column">
+        <div>
+          <fieldset>
+            <legend>Mode</legend>
+            <div class="mode-toggle-container">
+              <button type="button" id="gameModeButton" class="mode-button">Game</button>
+              <button type="button" id="sampleModeButton" class="mode-button inactive">Sample</button>
+              <span class="separator">|</span>
+              <button type="button" id="musicToggleButton" class="mode-button" title="Toggle theme music">♪</button>
+              <button
+                type="button"
+                id="helpToggle"
+                class="mode-button help-toggle-button"
+                title="Show/Hide How to Play"
+              >
+                ?
+              </button>
+            </div>
+          </fieldset>
+          <fieldset id="helpContent" class="help-content hidden">
+            <legend id="helpLegend">How to Play</legend>
+            <div id="helpTextGame" class="help-text">
+              <p><strong>Quick Start:</strong> Select a theme, then start answering math problems!</p>
+              <p>
+                <strong>Visual Effects:</strong> Correct answers create visual elements. They start grayscale and become
+                colorful as you progress. More correct answers unlock pulse and wave effects.
+              </p>
+              <p><strong>Max Number:</strong> Sets the difficulty range (1-999), but varies by operation:</p>
+              <ul class="help-list">
+                <li><strong>+</strong> and <strong>×</strong>: Both numbers from 1 to max</li>
+                <li><strong>−</strong>: First number 1 to max, second ≤ first (no negatives)</li>
+                <li><strong>÷</strong>: Divisor 1 to max, dividend up to max² (whole numbers only)</li>
+              </ul>
+              <p>
+                <strong>Skip vs Wrong:</strong> Both remove visual elements. Use Skip when you don't know the answer;
+                Wrong is for incorrect submissions.
+              </p>
+            </div>
+            <div id="helpTextSample" class="help-text hidden">
+              <p><strong>Purpose:</strong> Test visual themes without playing the game.</p>
+              <p>
+                <strong>Controls:</strong> Select theme and element count, then use buttons to test effects: Birth
+                (create), Age (colorize), Color, Pulse, Color Wave, End (remove), Reset.
+              </p>
+              <p><strong>Tip:</strong> Click "Birth" after changing element count to apply changes.</p>
+            </div>
+          </fieldset>
+        </div>
+        <div class="game-mode-fields">
+          <div>
+            <fieldset>
+              <legend>Theme</legend>
+              <select id="visualThemeSelect">
+                <option value="" selected disabled>Choose...</option>
+                <option value="firefly">Firefly</option>
+                <option value="jellyfish">Jellyfish</option>
+                <option value="pearl">Pearl</option>
+                <option value="mushroom">Mushroom</option>
+                <option value="maple">Maple</option>
+              </select>
+            </fieldset>
+          </div>
+          <fieldset id="visualHint">
+            <legend>Effects</legend>
+            <!-- Visual effects status content will appear here -->
+          </fieldset>
+        </div>
+        <div id="sampleModeFields" class="hidden">
+          <div>
+            <fieldset>
+              <legend>Theme</legend>
+              <select id="visualThemeSelectSample">
+                <option value="" selected disabled>Choose...</option>
+                <option value="firefly">Firefly</option>
+                <option value="jellyfish">Jellyfish</option>
+                <option value="pearl">Pearl</option>
+                <option value="mushroom">Mushroom</option>
+                <option value="maple">Maple</option>
+              </select>
+            </fieldset>
+          </div>
+          <fieldset>
+            <legend>Theme Controls</legend>
+            <div class="sample-controls-container">
+              <label class="sample-element-label">
+                <span class="sample-element-label-text">Elements:</span>
+                <select id="sampleElementCount" class="sample-element-select">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5" selected>5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </label>
+              <div class="sample-element-hint">Click "Birth" to create elements</div>
+              <div class="sample-lifecycle-hint">Lifecycle progression (top to bottom):</div>
+              <button type="button" id="sampleBirth" class="sample-button">Birth</button>
+              <button type="button" id="sampleAge" class="sample-button-secondary">Age (Remove Grayscale)</button>
+              <button type="button" id="sampleColor" class="sample-button-secondary">Color</button>
+              <button type="button" id="samplePulse" class="sample-button-secondary">Pulse</button>
+              <button type="button" id="sampleColorWave" class="sample-button-secondary">Color Wave</button>
+              <button type="button" id="sampleEnd" class="sample-button-secondary">End</button>
+              <button type="button" id="sampleReset" class="sample-button-reset">Reset</button>
+            </div>
+          </fieldset>
+        </div>
+        <div class="game-mode-fields">
+          <fieldset>
+            <legend>Operation</legend>
+            <div class="operation-selector">
+              <input type="button" class="operation-btn" id="op-add" value="+" title="Addition" />
+              <input type="button" class="operation-btn" id="op-subtract" value="−" title="Subtraction" />
+              <input type="button" class="operation-btn active" id="op-multiply" value="×" title="Multiplication" />
+              <input type="button" class="operation-btn" id="op-divide" value="÷" title="Division" />
+              <span class="separator">|</span>
+              <input type="button" class="operation-btn" id="op-reset" value="↺" title="Reset Counts" />
+            </div>
+          </fieldset>
+        </div>
+        <div class="game-mode-fields">
+          <fieldset>
+            <legend>
+              <span id="number1"></span>
+              <span id="operationSymbol">&nbsp;×&nbsp;</span>
+              <span id="number2"></span>
+            </legend>
+            <input id="answer" type="number" placeholder="Answer" autofocus />
+            <div class="button-container">
+              <input type="submit" id="submitAnswer" value="✓" title="Done" />
+              <input type="button" id="skipQuestion" value="⏭" title="Skip" />
+            </div>
+            <div id="answerMessage">
+              <!-- answer message is going to go here -->
+            </div>
+          </fieldset>
+        </div>
+        <div class="game-mode-fields">
+          <fieldset>
+            <legend>Max Number</legend>
+            <input id="maxNumber" type="number" value="20" placeholder="Number" />
+            <div class="button-container">
+              <input type="button" id="changeMaxNumber" value="↻" title="Change" />
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+
+    <script type="text/javascript">
+      // Initialize event handlers after DOM is ready
+      document.addEventListener('DOMContentLoaded', function () {
+        const Constants = OceanOfMaya.Constants;
+
+        // Reset max number input to default
+        const maxNumberInput = document.getElementById('maxNumber');
+        if (maxNumberInput) {
+          maxNumberInput.value = Constants.DEFAULT_MAX_NUMBER.toString();
+        }
+
+        // Initialize sample element count dropdown based on game capacity
+        // This will be updated by VisualThemes.Manager.updateSampleElementDropdown()
+        // after the manager is initialized
+
+        // Mode toggle buttons
+        const gameButton = document.getElementById('gameModeButton');
+        const sampleButton = document.getElementById('sampleModeButton');
+
+        // Help content elements (needed for updateHelpContent function)
+        const helpTextGame = document.getElementById('helpTextGame');
+        const helpTextSample = document.getElementById('helpTextSample');
+        const helpLegend = document.getElementById('helpLegend');
+
+        // Function to update help content based on current mode
+        function updateHelpContent() {
+          const isSampleMode = sampleButton && sampleButton.classList.contains('active');
+          if (helpTextGame && helpTextSample) {
+            if (isSampleMode) {
+              helpTextGame.classList.add('hidden');
+              helpTextSample.classList.remove('hidden');
+              if (helpLegend) {
+                helpLegend.textContent = 'Sample Mode';
+              }
+            } else {
+              helpTextGame.classList.remove('hidden');
+              helpTextSample.classList.add('hidden');
+              if (helpLegend) {
+                helpLegend.textContent = 'How to Play';
+              }
+            }
+          }
+        }
+
+        if (gameButton && sampleButton) {
+          gameButton.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.setMode('game');
+            }
+            // Update help content if it's currently visible
+            setTimeout(function () {
+              if (helpContent && !helpContent.classList.contains('hidden')) {
+                updateHelpContent();
+              }
+            }, 0);
+          });
+          sampleButton.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.setMode('sample');
+            }
+            // Update help content if it's currently visible
+            setTimeout(function () {
+              if (helpContent && !helpContent.classList.contains('hidden')) {
+                updateHelpContent();
+              }
+            }, 0);
+          });
+        }
+
+        // Sample mode controls
+        const sampleBirth = document.getElementById('sampleBirth');
+        const sampleAge = document.getElementById('sampleAge');
+        const sampleColor = document.getElementById('sampleColor');
+        const samplePulse = document.getElementById('samplePulse');
+        const sampleColorWave = document.getElementById('sampleColorWave');
+        const sampleEnd = document.getElementById('sampleEnd');
+        const sampleReset = document.getElementById('sampleReset');
+
+        if (sampleBirth)
+          sampleBirth.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleBirth();
+            }
+          });
+        if (sampleAge)
+          sampleAge.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleAge();
+            }
+          });
+        if (sampleColor)
+          sampleColor.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleColor();
+            }
+          });
+        if (samplePulse)
+          samplePulse.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.samplePulse();
+            }
+          });
+        if (sampleColorWave)
+          sampleColorWave.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleColorWave();
+            }
+          });
+        if (sampleEnd)
+          sampleEnd.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleEnd();
+            }
+          });
+        if (sampleReset)
+          sampleReset.addEventListener('click', function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              OceanOfMaya.VisualThemes.Manager.sampleReset();
+            }
+          });
+
+        // Theme selectors
+        const themeSelect = document.getElementById('visualThemeSelect');
+        const themeSelectSample = document.getElementById('visualThemeSelectSample');
+
+        if (themeSelect) {
+          themeSelect.addEventListener('change', function () {
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.changeVisualTheme();
+            }
+          });
+        }
+
+        if (themeSelectSample) {
+          themeSelectSample.addEventListener('change', function () {
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.changeVisualTheme();
+            }
+          });
+        }
+
+        // Operation buttons
+        const opAdd = document.getElementById('op-add');
+        const opSubtract = document.getElementById('op-subtract');
+        const opMultiply = document.getElementById('op-multiply');
+        const opDivide = document.getElementById('op-divide');
+        const opReset = document.getElementById('op-reset');
+
+        if (opAdd)
+          opAdd.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('add');
+          });
+        if (opSubtract)
+          opSubtract.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('subtract');
+          });
+        if (opMultiply)
+          opMultiply.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('multiply');
+          });
+        if (opDivide)
+          opDivide.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('divide');
+          });
+        if (opReset)
+          opReset.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.resetCounts();
+          });
+
+        // Form submission and buttons
+        const gameForm = document.getElementById('gameForm');
+        const submitAnswer = document.getElementById('submitAnswer');
+        const skipQuestion = document.getElementById('skipQuestion');
+        const changeMaxNumber = document.getElementById('changeMaxNumber');
+
+        if (gameForm) {
+          gameForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.validateAnswer();
+            }
+          });
+        }
+
+        if (submitAnswer) {
+          submitAnswer.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.validateAnswer();
+            }
+          });
+        }
+
+        if (skipQuestion) {
+          skipQuestion.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.skipQuestion();
+          });
+        }
+
+        if (changeMaxNumber) {
+          changeMaxNumber.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.changeMaxNumber();
+          });
+        }
+
+        // Sync theme selects
+        if (themeSelect && themeSelectSample) {
+          themeSelectSample.addEventListener('change', function () {
+            themeSelect.value = this.value;
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.changeVisualTheme();
+            }
+          });
+          themeSelect.addEventListener('change', function () {
+            themeSelectSample.value = this.value;
+          });
+        }
+
+        // Ensure placeholder is selected on page load (override any browser restore behavior)
+        if (themeSelect) {
+          themeSelect.value = '';
+        }
+        if (themeSelectSample) {
+          themeSelectSample.value = '';
+        }
+
+        // Initialize visual theme system
+        // Theme will be initialized when user selects from dropdown (requires user interaction for audio)
+        if (OceanOfMaya && OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+          OceanOfMaya.VisualThemes.Manager.sampleMode = false;
+          // Don't initialize theme automatically - wait for user selection
+          // But update sample element dropdown to reflect current capacity
+          OceanOfMaya.VisualThemes.Manager.updateSampleElementDropdown();
+        }
+
+        // Initialize game
+        if (OceanOfMaya.MathGame) {
+          OceanOfMaya.MathGame.setOperation(Constants.DEFAULT_OPERATION);
+          OceanOfMaya.MathGame.refreshCount();
+        }
+
+        // Display version
+        const versionDisplay = document.getElementById('version-display');
+        if (versionDisplay && Constants.VERSION) {
+          versionDisplay.textContent = `v${Constants.VERSION}`;
+        }
+
+        // Help toggle button
+        const helpToggle = document.getElementById('helpToggle');
+        const helpContent = document.getElementById('helpContent');
+
+        if (helpToggle && helpContent) {
+          // Initialize help button to inactive (greyed out) since content is hidden by default
+          helpToggle.classList.add('inactive');
+
+          helpToggle.addEventListener('click', function () {
+            const isHidden = helpContent.classList.toggle('hidden');
+            // Toggle active state: blue when shown, grey when hidden
+            if (isHidden) {
+              helpToggle.classList.remove('active');
+              helpToggle.classList.add('inactive');
+            } else {
+              helpToggle.classList.remove('inactive');
+              helpToggle.classList.add('active');
+              // Update content based on current mode when showing
+              updateHelpContent();
+            }
+          });
+        }
+
+        // Initialize button states
+        if (gameButton && sampleButton) {
+          gameButton.classList.add('active');
+          gameButton.classList.remove('inactive');
+          sampleButton.classList.add('inactive');
+          sampleButton.classList.remove('active');
+        }
+
+        // Initialize help content to show game mode by default
+        updateHelpContent();
+
+        // Initialize mode visibility - use classes only, no inline styles
+        const gameFields = document.querySelectorAll('.game-mode-fields');
+        gameFields.forEach((field) => {
+          if (field) {
+            field.classList.remove('hidden');
+          }
+        });
+        const sampleFields = document.getElementById('sampleModeFields');
+        if (sampleFields) {
+          sampleFields.classList.add('hidden');
+          sampleFields.classList.remove('visible');
+        }
+        const countContainer = document.querySelector('.count-container');
+        if (countContainer) {
+          countContainer.classList.remove('hidden');
+        }
+
+        // Initialize sound manager
+        if (OceanOfMaya.Sound && OceanOfMaya.Sound.Manager) {
+          OceanOfMaya.Sound.Manager.initialize();
+
+          // Set up music toggle button
+          const musicToggleButton = document.getElementById('musicToggleButton');
+          if (musicToggleButton) {
+            // Initialize button state based on current mute status
+            if (OceanOfMaya.Sound.Manager.isMuted) {
+              musicToggleButton.classList.add('inactive');
+            } else {
+              musicToggleButton.classList.add('active');
+            }
+
+            musicToggleButton.addEventListener('click', function () {
+              const isMuted = OceanOfMaya.Sound.Manager.toggleMute();
+              musicToggleButton.title = isMuted ? 'Enable theme music' : 'Disable theme music';
+              // Update button styling based on mute state (colors indicate state, icon stays the same)
+              if (isMuted) {
+                musicToggleButton.classList.add('inactive');
+                musicToggleButton.classList.remove('active');
+              } else {
+                musicToggleButton.classList.add('active');
+                musicToggleButton.classList.remove('inactive');
+              }
+
+              // If unmuted and theme is set, resume music
+              if (
+                !isMuted &&
+                OceanOfMaya.VisualThemes &&
+                OceanOfMaya.VisualThemes.Manager &&
+                OceanOfMaya.VisualThemes.Manager.currentTheme
+              ) {
+                // Get current theme name from select element
+                const themeSelect =
+                  document.getElementById('visualThemeSelect') || document.getElementById('visualThemeSelectSample');
+                if (themeSelect) {
+                  OceanOfMaya.Sound.Manager.playThemeMusic(themeSelect.value);
+                }
+              }
+            });
+          }
+
+          // Enable music after user interaction (required for autoplay)
+          // Only plays if a theme has been selected
+          const enableMusicAfterInteraction = function () {
+            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+              const themeSelect =
+                document.getElementById('visualThemeSelect') || document.getElementById('visualThemeSelectSample');
+              if (themeSelect && themeSelect.value) {
+                // Only play music if a theme is actually selected
+                OceanOfMaya.Sound.Manager.playThemeMusic(themeSelect.value);
+              }
+            }
+            // Remove listeners after first interaction
+            document.removeEventListener('click', enableMusicAfterInteraction);
+            document.removeEventListener('keydown', enableMusicAfterInteraction);
+          };
+
+          document.addEventListener('click', enableMusicAfterInteraction, { once: true });
+          document.addEventListener('keydown', enableMusicAfterInteraction, { once: true });
+        }
+      });
+    </script>
+  </body>
+</html>

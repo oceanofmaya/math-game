@@ -1,0 +1,16 @@
+[project]
+name = "math-game"
+version = "1.0.0"
+description = "A simple math game with visual effects"
+license = "MIT"
+authors = ["Kishore Murthy"]
+
+[repository]
+type = "git"
+url = "https://github.com/oceanofmaya/math-game.git"
+homepage = "https://github.com/oceanofmaya/math-game#readme"
+bugs = "https://github.com/oceanofmaya/math-game/issues"
+
+[project.keywords]
+topics = ["multiplication", "math", "game"]
+

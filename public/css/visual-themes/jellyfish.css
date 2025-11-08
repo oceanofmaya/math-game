@@ -1,0 +1,549 @@
+/* Jellyfish Visual Theme Styles */
+
+.jellyfish-bell {
+    border-radius: 50% 50% 50% 50% / 45% 45% 45% 45%;
+    background: 
+        /* Outer glow */
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.1) 15%, transparent 35%),
+        /* Flattened top highlight */
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 25%, transparent 60%),
+        /* Main body with transparency */
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.3) 0%, rgba(220,240,255,0.25) 30%, rgba(180,200,240,0.2) 50%, rgba(120,150,200,0.15) 70%, transparent 100%),
+        /* Bottom shading */
+        radial-gradient(ellipse at 50% 80%, rgba(100,120,180,0.2) 0%, rgba(50,70,130,0.15) 40%, transparent 80%);
+    box-shadow: 
+        /* Outer glow */
+        0 0 40px rgba(255,255,255,0.25),
+        0 0 80px rgba(200,220,255,0.18),
+        0 0 120px rgba(180,200,240,0.12),
+        /* Reduced inner depth */
+        inset 0 5px 30px rgba(255,255,255,0.25),
+        inset 0 -15px 40px rgba(100,120,180,0.2),
+        /* Edge rim */
+        inset 0 0 0 1px rgba(255,255,255,0.15);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 1000;
+    animation: jellyfish-float 14s ease-in-out infinite, jellyfish-pulse-bell 5s ease-in-out infinite;
+    transform-origin: center center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(0.5px);
+    clip-path: ellipse(50% 45% at 50% 50%);
+}
+
+.jellyfish-bell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Radial muscle lines (ridges) */
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0%,
+            rgba(255,255,255,0.06) 8%,
+            transparent 16%,
+            rgba(255,255,255,0.04) 24%,
+            transparent 32%
+        ),
+        /* Flattened top highlight */
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 30%, transparent 60%);
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.5;
+    clip-path: inherit;
+}
+
+.jellyfish-bell::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Subtle radial pattern for texture */
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255,255,255,0.04) 0%,
+            transparent 50%
+        ),
+        /* Flattened edge rim highlight */
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.15) 0%,
+            transparent 15%,
+            transparent 85%,
+            rgba(100,120,180,0.2) 100%
+        );
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.4;
+    clip-path: inherit;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.jellyfish-tentacle {
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.98) 0%,
+        rgba(255,255,255,0.92) 4%,
+        rgba(255,255,255,0.82) 10%,
+        rgba(255,255,255,0.68) 18%,
+        rgba(255,255,255,0.52) 28%,
+        rgba(255,255,255,0.38) 42%,
+        rgba(255,255,255,0.26) 58%,
+        rgba(255,255,255,0.16) 72%,
+        rgba(255,255,255,0.08) 85%,
+        rgba(255,255,255,0.03) 94%,
+        transparent 100%);
+    box-shadow: 
+        0 0 8px rgba(255,255,255,0.9),
+        0 0 16px rgba(220,240,255,0.6),
+        0 0 24px rgba(200,230,255,0.3),
+        inset 0 0 4px rgba(255,255,255,0.5),
+        inset -1.5px 0 3px rgba(200,220,255,0.25),
+        inset 1.5px 0 3px rgba(200,220,255,0.25);
+    pointer-events: none;
+    z-index: 999;
+    animation: jellyfish-tentacle-wave 5s ease-in-out infinite;
+    transform-origin: top center;
+    border-radius: 2px / 50% 50% 60% 60%;
+    position: relative;
+    /* Tapered, flowing tentacle */
+    clip-path: polygon(
+        0% 0%,
+        50% 0%,
+        100% 0%,
+        98% 3%,
+        50% 3%,
+        2% 3%,
+        4% 8%,
+        50% 8%,
+        96% 8%,
+        94% 15%,
+        50% 15%,
+        6% 15%,
+        8% 25%,
+        50% 25%,
+        92% 25%,
+        90% 37%,
+        50% 37%,
+        10% 37%,
+        12% 52%,
+        50% 52%,
+        88% 52%,
+        86% 68%,
+        50% 68%,
+        14% 68%,
+        16% 82%,
+        50% 82%,
+        84% 82%,
+        82% 92%,
+        50% 92%,
+        18% 92%,
+        20% 98%,
+        50% 98%,
+        80% 98%,
+        78% 100%,
+        50% 100%,
+        22% 100%
+    );
+}
+
+.jellyfish-tentacle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(255,255,255,0.5) 0%,
+        rgba(255,255,255,0.4) 15%,
+        rgba(255,255,255,0.25) 35%,
+        rgba(255,255,255,0.12) 60%,
+        rgba(255,255,255,0.04) 85%,
+        transparent 100%);
+    border-radius: 50%;
+    animation: jellyfish-tentacle-glow 3s ease-in-out infinite;
+    pointer-events: none;
+    filter: blur(0.5px);
+}
+
+.jellyfish-tentacle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center top, 
+        rgba(255,255,255,0.3) 0%,
+        rgba(255,255,255,0.1) 15%,
+        transparent 30%);
+    pointer-events: none;
+    animation: jellyfish-tentacle-shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes jellyfish-tentacle-glow {
+    0%, 100% {
+        opacity: 0.7;
+        transform: translateX(-50%) scaleX(1) scaleY(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scaleX(1.15) scaleY(1.02);
+    }
+}
+
+@keyframes jellyfish-tentacle-shimmer {
+    0%, 100% {
+        opacity: 0.4;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(10px);
+    }
+}
+
+@keyframes jellyfish-float {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.01);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    75% {
+        transform: scale(1.01);
+    }
+}
+
+@keyframes jellyfish-pulse-bell {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 40px rgba(255,255,255,0.25),
+            0 0 80px rgba(200,220,255,0.18),
+            0 0 120px rgba(180,200,240,0.12),
+            inset 0 5px 30px rgba(255,255,255,0.25),
+            inset 0 -15px 40px rgba(100,120,180,0.2);
+        filter: brightness(1);
+    }
+    25% {
+        transform: scale(1.08);
+        box-shadow: 
+            0 0 55px rgba(255,255,255,0.35),
+            0 0 110px rgba(200,220,255,0.25),
+            0 0 160px rgba(180,200,240,0.18),
+            0 0 200px rgba(150,180,220,0.12),
+            inset 0 6px 35px rgba(255,255,255,0.3),
+            inset 0 -16px 45px rgba(100,120,180,0.25);
+        filter: brightness(1.05);
+    }
+    50% {
+        transform: scale(1.25);
+        box-shadow: 
+            0 0 90px rgba(255,255,255,0.45),
+            0 0 170px rgba(200,220,255,0.3),
+            0 0 260px rgba(180,200,240,0.22),
+            0 0 350px rgba(150,180,220,0.15),
+            0 0 420px rgba(120,150,200,0.1),
+            inset 0 8px 50px rgba(255,255,255,0.35),
+            inset 0 -20px 60px rgba(100,120,180,0.3);
+        filter: brightness(1.15);
+    }
+    75% {
+        transform: scale(1.12);
+        box-shadow: 
+            0 0 70px rgba(255,255,255,0.4),
+            0 0 140px rgba(200,220,255,0.28),
+            0 0 220px rgba(180,200,240,0.2),
+            0 0 280px rgba(150,180,220,0.15),
+            inset 0 7px 40px rgba(255,255,255,0.3),
+            inset 0 -18px 50px rgba(100,120,180,0.25);
+        filter: brightness(1.1);
+    }
+}
+
+@keyframes jellyfish-tentacle-wave {
+    0%, 100% {
+        transform: rotate(0deg) scaleY(1);
+        filter: blur(0.4px);
+    }
+    25% {
+        transform: rotate(8deg) scaleY(1.01);
+        filter: blur(0.45px);
+    }
+    50% {
+        transform: rotate(0deg) scaleY(0.99);
+        filter: blur(0.4px);
+    }
+    75% {
+        transform: rotate(-8deg) scaleY(1.01);
+        filter: blur(0.45px);
+    }
+}
+
+@keyframes jellyfish-birth {
+    from {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes jellyfish-end {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+}
+
+/* Pulse effect - graceful rhythmic breathing */
+.jellyfish-pulse,
+.jellyfish-bell.aurora-pulse {
+    animation: jellyfish-pulse-graceful 3.5s ease-in-out infinite, jellyfish-float 8s ease-in-out infinite !important;
+}
+
+@keyframes jellyfish-pulse-graceful {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 50px rgba(255,255,255,0.25),
+            0 0 100px rgba(200,220,255,0.18),
+            0 0 150px rgba(180,200,240,0.12),
+            inset 0 5px 30px rgba(255,255,255,0.25),
+            inset 0 10px 25px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+    25% {
+        transform: scale(1.15);
+        box-shadow: 
+            0 0 70px rgba(255,255,255,0.35),
+            0 0 140px rgba(200,220,255,0.25),
+            0 0 210px rgba(180,200,240,0.18),
+            0 0 280px rgba(150,180,220,0.12),
+            inset 0 6px 40px rgba(255,255,255,0.3),
+            inset 0 15px 35px rgba(255,255,255,0.25);
+        filter: brightness(1.08);
+    }
+    50% {
+        transform: scale(1.28);
+        box-shadow: 
+            0 0 95px rgba(255,255,255,0.45),
+            0 0 180px rgba(200,220,255,0.3),
+            0 0 270px rgba(180,200,240,0.22),
+            0 0 360px rgba(150,180,220,0.15),
+            0 0 450px rgba(120,150,200,0.1),
+            inset 0 8px 50px rgba(255,255,255,0.35),
+            inset 0 18px 45px rgba(255,255,255,0.3);
+        filter: brightness(1.12);
+    }
+    75% {
+        transform: scale(1.15);
+        box-shadow: 
+            0 0 70px rgba(255,255,255,0.4),
+            0 0 140px rgba(200,220,255,0.28),
+            0 0 210px rgba(180,200,240,0.2),
+            0 0 280px rgba(150,180,220,0.15),
+            inset 0 7px 40px rgba(255,255,255,0.3),
+            inset 0 15px 35px rgba(255,255,255,0.25);
+        filter: brightness(1.08);
+    }
+}
+
+.jellyfish-pulse .jellyfish-tentacle,
+.jellyfish-bell.aurora-pulse ~ .jellyfish-tentacle,
+.jellyfish-tentacle.aurora-pulse {
+    /* Animation delay from inline styles is preserved for variation */
+    animation: jellyfish-tentacle-wave-pulse 5s ease-in-out infinite;
+}
+
+@keyframes jellyfish-tentacle-wave-pulse {
+    /* Natural wave motion - same as normal tentacle-wave */
+    0%, 100% {
+        transform: rotate(0deg) scaleY(1);
+        filter: blur(0.4px);
+        box-shadow: 
+            0 0 12px rgba(255,255,255,0.7),
+            0 0 24px rgba(220,240,255,0.5),
+            0 0 36px rgba(200,230,255,0.3);
+        opacity: 0.85;
+    }
+    12.5% {
+        transform: rotate(8deg) scaleY(1.01);
+        filter: blur(0.45px);
+        box-shadow: 
+            0 0 15px rgba(255,255,255,0.8),
+            0 0 30px rgba(220,240,255,0.6),
+            0 0 45px rgba(200,230,255,0.4);
+        opacity: 0.9;
+    }
+    25% {
+        transform: rotate(0deg) scaleY(0.99);
+        filter: blur(0.4px);
+        box-shadow: 
+            0 0 25px rgba(255,255,255,0.95),
+            0 0 50px rgba(255,255,255,0.8),
+            0 0 75px rgba(220,240,255,0.6),
+            0 0 100px rgba(200,230,255,0.4);
+        opacity: 1;
+    }
+    37.5% {
+        transform: rotate(-8deg) scaleY(1.01);
+        filter: blur(0.45px);
+        box-shadow: 
+            0 0 15px rgba(255,255,255,0.8),
+            0 0 30px rgba(220,240,255,0.6),
+            0 0 45px rgba(200,230,255,0.4);
+        opacity: 0.9;
+    }
+    50% {
+        transform: rotate(0deg) scaleY(1);
+        filter: blur(0.4px);
+        box-shadow: 
+            0 0 12px rgba(255,255,255,0.7),
+            0 0 24px rgba(220,240,255,0.5),
+            0 0 36px rgba(200,230,255,0.3);
+        opacity: 0.85;
+    }
+    62.5% {
+        transform: rotate(-8deg) scaleY(1.01);
+        filter: blur(0.45px);
+        box-shadow: 
+            0 0 15px rgba(255,255,255,0.8),
+            0 0 30px rgba(220,240,255,0.6),
+            0 0 45px rgba(200,230,255,0.4);
+        opacity: 0.9;
+    }
+    75% {
+        transform: rotate(0deg) scaleY(0.99);
+        filter: blur(0.4px);
+        box-shadow: 
+            0 0 25px rgba(255,255,255,0.95),
+            0 0 50px rgba(255,255,255,0.8),
+            0 0 75px rgba(220,240,255,0.6),
+            0 0 100px rgba(200,230,255,0.4);
+        opacity: 1;
+    }
+    87.5% {
+        transform: rotate(8deg) scaleY(1.01);
+        filter: blur(0.45px);
+        box-shadow: 
+            0 0 15px rgba(255,255,255,0.8),
+            0 0 30px rgba(220,240,255,0.6),
+            0 0 45px rgba(200,230,255,0.4);
+        opacity: 0.9;
+    }
+}
+
+/* Animate effect - swimming motion */
+.jellyfish-bell.aurora-animate {
+    animation: jellyfish-swim 5s ease-in-out infinite, 
+               jellyfish-float 8s ease-in-out infinite;
+}
+
+@keyframes jellyfish-swim {
+    0%, 100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    20% {
+        transform: translate(25px, -30px) scale(1.12) rotate(6deg);
+    }
+    40% {
+        transform: translate(-30px, 25px) scale(0.94) rotate(-6deg);
+    }
+    60% {
+        transform: translate(30px, 30px) scale(1.1) rotate(10deg);
+    }
+    80% {
+        transform: translate(-25px, -20px) scale(0.97) rotate(-4deg);
+    }
+}
+
+.jellyfish-bell.aurora-animate ~ .jellyfish-tentacle,
+.jellyfish-tentacle.aurora-animate {
+    animation: jellyfish-tentacle-animate 2.5s ease-in-out infinite,
+               jellyfish-tentacle-wave 2s ease-in-out infinite;
+}
+
+/* Enhanced styling for colored jellyfish (when grayscale is removed) */
+.jellyfish-bell[style*="background"] {
+    backdrop-filter: blur(1px);
+    opacity: 0.7 !important;
+    box-shadow: 
+        0 0 45px rgba(255,255,255,0.25),
+        0 0 90px rgba(200,220,255,0.18),
+        0 0 135px rgba(180,200,240,0.12),
+        inset 0 5px 30px rgba(255,255,255,0.25),
+        inset 0 -15px 40px rgba(100,120,180,0.2),
+        inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.jellyfish-bell[style*="background"]::before {
+    opacity: 0.5;
+    background: 
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0%,
+            rgba(255,255,255,0.06) 8%,
+            transparent 16%,
+            rgba(255,255,255,0.04) 24%,
+            transparent 32%
+        ),
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 30%, transparent 60%);
+}
+
+.jellyfish-bell[style*="background"]::after {
+    opacity: 0.4;
+    border-color: rgba(255,255,255,0.12);
+}
+
+.jellyfish-tentacle[style*="background"] {
+    box-shadow: 
+        0 0 10px rgba(255,255,255,0.95),
+        0 0 20px rgba(255,255,255,0.7),
+        0 0 30px rgba(255,255,255,0.4),
+        inset 0 0 5px rgba(255,255,255,0.6),
+        inset -2px 0 4px rgba(255,255,255,0.3),
+        inset 2px 0 4px rgba(255,255,255,0.3);
+}
+
+@keyframes jellyfish-tentacle-animate {
+    0%, 100% {
+        transform: rotate(0deg) scaleY(1);
+        box-shadow: 0 0 14px rgba(255,255,255,0.8), 0 0 28px rgba(200,220,255,0.5);
+        filter: blur(0.5px);
+    }
+    25% {
+        transform: rotate(18deg) scaleY(1.06);
+        box-shadow: 0 0 22px rgba(255,255,255,0.95), 0 0 40px rgba(200,220,255,0.6);
+        filter: blur(0.6px);
+    }
+    50% {
+        transform: rotate(0deg) scaleY(0.94);
+        box-shadow: 0 0 16px rgba(255,255,255,0.85), 0 0 32px rgba(200,220,255,0.55);
+        filter: blur(0.5px);
+    }
+    75% {
+        transform: rotate(-18deg) scaleY(1.06);
+        box-shadow: 0 0 22px rgba(255,255,255,0.95), 0 0 40px rgba(200,220,255,0.6);
+        filter: blur(0.6px);
+    }
+}
+
