@@ -4,7 +4,7 @@ Simple math game with visual effects.
 
 ## Live Demo
 
-Play the game online at: **[https://lab.oceanofmaya.com/math-game](https://lab.oceanofmaya.com/math-game)**
+Play the game online at: **[https://math-game.oceanofmaya.com](https://math-game.oceanofmaya.com)**
 
 ## Table Of Contents
 
