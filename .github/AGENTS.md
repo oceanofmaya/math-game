@@ -112,13 +112,13 @@ All changes merged into this repository must include:
 
    All three locations must contain the same version number (e.g., `1.0.0`).
 
-3. **Git Tag**: Tags are automatically created by GitHub Actions when changes are merged to `main`. The workflow reads the version from `project.toml` and creates a tag `vX.Y.Z` if it doesn't already exist.
+3. **Git Tag and Release**: Tags and GitHub releases are automatically created by GitHub Actions when changes are merged to `main`. The workflow reads the version from `project.toml`, extracts the changelog entry for that version from `CHANGELOG.md`, creates a tag `vX.Y.Z` if it doesn't already exist, and creates a GitHub release with the changelog content.
 
-   **Manual tag creation** (if automation fails or for special cases):
+   **Manual tag/release creation** (if automation fails or for special cases):
 
    ```bash
    git tag -a vX.Y.Z -m "Version X.Y.Z"
    git push origin vX.Y.Z
    ```
 
-   Tags should match the version format in `CHANGELOG.md` and `project.toml` (e.g., if CHANGELOG shows `1.0.0`, update `project.toml` to `1.0.0` and the workflow will create tag `v1.0.0`).
+   Tags should match the version format in `CHANGELOG.md` and `project.toml` (e.g., if CHANGELOG shows `1.0.0`, update `project.toml` to `1.0.0` and the workflow will create tag `v1.0.0` and a corresponding GitHub release).

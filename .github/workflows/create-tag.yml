@@ -67,4 +67,53 @@ jobs:
           git tag -a "$TAG" -m "Version ${{ steps.get_version.outputs.version }}"
           git push origin "$TAG"
           echo "Created and pushed tag: $TAG"
+    
+      - name: Extract changelog for version
+        id: get_changelog
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          python3 << 'EOF'
+          import re
+          import os
+          
+          version = "${{ steps.get_version.outputs.version }}"
+          
+          with open('CHANGELOG.md', 'r') as f:
+              content = f.read()
+          
+          # Find the version section: ### X.Y.Z - YYYY-MM-DD
+          pattern = rf'^### {re.escape(version)} - \d{{4}}-\d{{2}}-\d{{2}}'
+          match = re.search(pattern, content, re.MULTILINE)
+          
+          if match:
+              start = match.start()
+              # Find the next version section or end of file
+              next_version = re.search(r'^### \d+\.\d+\.\d+', content[start+1:], re.MULTILINE)
+              if next_version:
+                  end = start + next_version.start()
+                  changelog_text = content[start:end].strip()
+              else:
+                  changelog_text = content[start:].strip()
+              
+              # Write to output using heredoc format
+              output_file = os.environ.get('GITHUB_OUTPUT')
+              with open(output_file, 'a') as out:
+                  out.write(f"changelog<<EOF\n{changelog_text}\nEOF\n")
+              print(f"Extracted changelog for version {version}")
+          else:
+              print(f"Warning: Could not find changelog section for version {version}")
+              output_file = os.environ.get('GITHUB_OUTPUT')
+              with open(output_file, 'a') as out:
+                  out.write('changelog<<EOF\nRelease notes not available\nEOF\n')
+          EOF
+    
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: v${{ steps.get_version.outputs.version }}
+          body: ${{ steps.get_changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
 
