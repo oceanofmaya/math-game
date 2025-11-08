@@ -1,0 +1,70 @@
+name: Create Version Tag
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'project.toml'
+      - 'CHANGELOG.md'
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+    
+      - name: Extract version from project.toml
+        id: get_version
+        run: |
+          python3 << 'EOF'
+          import re
+          import os
+          
+          with open('project.toml', 'r') as f:
+              content = f.read()
+          
+          # Match version = "1.0.0" (with quotes) or version = 1.0.0 (without quotes)
+          # Handle both quoted and unquoted values
+          match = re.search(r'^version\s*=\s*(?:"([^"]+)"|([^\s#]+))', content, re.MULTILINE)
+          if match:
+              version = match.group(1) or match.group(2)
+              version = version.strip()
+              output_file = os.environ.get('GITHUB_OUTPUT')
+              with open(output_file, 'a') as out:
+                  out.write(f"version={version}\n")
+              print(f"Extracted version: {version}")
+          else:
+              print("Error: Could not extract version from project.toml")
+              print(f"File content:\n{content}")
+              exit(1)
+          EOF
+    
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="v${{ steps.get_version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG does not exist, will create it"
+          fi
+    
+      - name: Create and push tag
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          TAG="v${{ steps.get_version.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Version ${{ steps.get_version.outputs.version }}"
+          git push origin "$TAG"
+          echo "Created and pushed tag: $TAG"
+
