@@ -58,13 +58,13 @@ Core files:
 | Every answer | `visual.updateShapeAging()` - Check and color aged elements |
 | `count >= 2X && count < 3X` | `visual.color(1)` - Apply color to 1 aged element |
 | `count >= 3X && count < 4X` | `visual.pulse(1)` - Apply pulse animation to 1 aged element |
-| `count >= 4X && count % X == 0` | `visual.color(-1)` - Apply color wave to all aged elements |
+| `count >= 4X && count % X == 0` | `visual.color(-1)` - Apply cascading color wave to all aged elements with pulse animation |
 
 ### On Wrong Answer or Skip
 
 - Removes one visual element (or element set) per wrong answer/skip
 - Elements fade out smoothly when removed
-- When wrongCount or skipCount reaches X, all visuals are reset and counts reset to zero
+- When the total of wrongCount + skipCount reaches X, all visuals are reset and counts reset to zero
 - Correct answers reset both wrongCount and skipCount to zero (for visualization rendering only)
 
 ### Collision Detection
@@ -202,7 +202,7 @@ Sample Mode provides an interactive way to test and preview visual themes withou
    - **Age (Remove Grayscale)**: Removes grayscale filter, revealing colors
    - **Color**: Applies color effect to aged elements
    - **Pulse**: Applies pulse animation to aged elements
-   - **Color Wave**: Applies color wave to all aged elements
+   - **Color Wave**: Applies cascading color wave to all aged elements with pulse animation (colors change in sequence with 50ms delays)
    - **End**: Removes elements with fade-out effect
    - **Reset**: Resets everything and removes all elements
 

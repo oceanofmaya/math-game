@@ -71,6 +71,7 @@ Each visual element consists of a **jellyfish**:
 - Color wave applies to **all jellyfish that have aged enough** (age ≥ X)
 - Newly created jellyfish (not yet aged) remain in grayscale
 - Creates a cascading bioluminescent effect across all aged jellyfish
+- Colors change in a cascading sequence (50ms delay between each element) with a pulse animation that scales to 1.15x and increases brightness by 30%, creating a more dynamic and visually engaging wave effect
 
 ## Visual Characteristics
 

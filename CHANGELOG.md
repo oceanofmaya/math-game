@@ -2,6 +2,18 @@
 
 ## Version 1
 
+### 1.0.1 - 2025-11-10
+
+#### Bug Fixes
+
+- Fixed hint system not resetting when visuals reset after 5 wrong/skip answers
+- Fixed visual reset logic to trigger when total wrong + skip reaches X (5), not when either individually reaches X
+- Fixed double-increment bug where wrong/skip/correct counts were incremented twice (once in MathGame, once in Visual Manager)
+
+#### UI/UX Improvements
+
+- Enhanced color wave with cascading animation (50ms delays) and pulse effects, plus background ripple circles
+
 ### 1.0.0 - 2025-11-08
 
 Initial release of Math Game - an interactive math practice tool with engaging visual feedback.
