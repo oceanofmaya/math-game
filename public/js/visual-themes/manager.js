@@ -137,8 +137,8 @@
             // Don't process if in sample mode
             if (this.sampleMode) return;
             
+            // Sync counts from MathGame (which already incremented correct)
             this.syncCounts();
-            this.countCorrect++;
             this.countWrong = 0;
             this.countSkip = 0;
 
@@ -178,19 +178,23 @@
             // Don't process if in sample mode
             if (this.sampleMode) return;
             
+            // Sync counts from MathGame (which already incremented wrong)
             this.syncCounts();
-            this.countWrong++;
 
             if (!this.currentTheme) return;
 
             this.currentTheme.end(1);
 
-            if (this.countWrong >= this.X || this.countSkip >= this.X) {
+            // Reset when total wrong + skip reaches X (not when either individually reaches X)
+            if ((this.countWrong + this.countSkip) >= this.X) {
                 this.currentTheme.reset();
                 this.countCorrect = 0;
                 this.countWrong = 0;
                 this.countSkip = 0;
                 this.colorsActivated = false;
+                // Force hint update after reset to show starting state
+                this.updateHint();
+                return;
             }
 
             this.updateHint();
@@ -200,19 +204,23 @@
             // Don't process if in sample mode
             if (this.sampleMode) return;
             
+            // Sync counts from MathGame (which already incremented skip)
             this.syncCounts();
-            this.countSkip++;
 
             if (!this.currentTheme) return;
 
             this.currentTheme.end(1);
 
-            if (this.countWrong >= this.X || this.countSkip >= this.X) {
+            // Reset when total wrong + skip reaches X (not when either individually reaches X)
+            if ((this.countWrong + this.countSkip) >= this.X) {
                 this.currentTheme.reset();
                 this.countCorrect = 0;
                 this.countWrong = 0;
                 this.countSkip = 0;
                 this.colorsActivated = false;
+                // Force hint update after reset to show starting state
+                this.updateHint();
+                return;
             }
 
             this.updateHint();

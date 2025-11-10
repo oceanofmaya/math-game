@@ -427,6 +427,12 @@
             return colorPalette[Math.floor(Math.random() * colorPalette.length)];
         };
 
+        // Convert hex color to RGB string
+        const hexToRgb = function(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '255, 255, 255';
+        };
+
         // Apply color to shape set
         const applyColor = function(set, color) {
             const primary = set.primaryElement;
@@ -600,19 +606,111 @@
         };
 
         // Color: Apply color effect
-        // If count is -1, apply color to all shape sets that have aged enough
+        // If count is -1, apply color to all shape sets that have aged enough with cascading wave effect
         this.color = function(count, currentCount, thresholdX) {
             const X = thresholdX || DEFAULT_THRESHOLD_X;
             const countParam = currentCount || 0;
             
             if (count === -1) {
-                // Color wave: apply color to ALL shape sets that have aged enough
+                // Color wave: apply color to ALL shape sets that have aged enough with cascading effect
+                const agedSets = [];
                 self.shapeSets.forEach(set => {
                     const shapeAge = countParam - set.birthCount;
                     if (shapeAge >= X) {
+                        agedSets.push(set);
+                    }
+                });
+                
+                // Shuffle sets for random cascading order
+                const shuffledSets = agedSets.sort(() => Math.random() - 0.5);
+                
+                // Create background ripple circles effect
+                const body = document.body;
+                if (body) {
+                    // Get a random color from the palette for the ripple effect
+                    const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                    const rippleColor = randomColor.colors[0];
+                    const rgb = hexToRgb(rippleColor);
+                    
+                    // Create container for ripples
+                    const rippleContainer = document.createElement('div');
+                    rippleContainer.className = 'color-wave-ripples';
+                    rippleContainer.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        pointer-events: none;
+                        z-index: -1;
+                        overflow: hidden;
+                    `;
+                    body.appendChild(rippleContainer);
+                    
+                    // Get center of screen
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    
+                    // Create 3-4 ripple circles with staggered timing
+                    const numRipples = 3 + Math.floor(Math.random() * 2); // 3 or 4 ripples
+                    const maxRadius = Math.max(window.innerWidth, window.innerHeight) * 0.8;
+                    
+                    for (let i = 0; i < numRipples; i++) {
+                        const ripple = document.createElement('div');
+                        ripple.className = 'color-wave-ripple';
+                        const delay = i * 150; // Stagger each ripple by 150ms
+                        const size = 20; // Starting size
+                        
+                        ripple.style.cssText = `
+                            position: absolute;
+                            left: ${centerX}px;
+                            top: ${centerY}px;
+                            width: ${size}px;
+                            height: ${size}px;
+                            margin-left: -${size/2}px;
+                            margin-top: -${size/2}px;
+                            border-radius: 50%;
+                            border: 2px solid rgba(${rgb}, 0.4);
+                            background: radial-gradient(circle, rgba(${rgb}, 0.15) 0%, transparent 70%);
+                            transform: scale(0);
+                            animation: ripple-expand ${1.2 + i * 0.2}s ease-out ${delay}ms forwards;
+                        `;
+                        rippleContainer.appendChild(ripple);
+                    }
+                    
+                    // Remove container after animation completes
+                    // Formula: last delay + last animation duration
+                    // Last delay = (numRipples - 1) * 150
+                    // Last duration = (1.2 + (numRipples - 1) * 0.2) * 1000 = 1200 + (numRipples - 1) * 200
+                    const totalDuration = (numRipples - 1) * 150 + (1200 + (numRipples - 1) * 200);
+                    setTimeout(() => {
+                        if (rippleContainer.parentNode) {
+                            rippleContainer.parentNode.removeChild(rippleContainer);
+                        }
+                    }, totalDuration);
+                }
+                
+                // Apply cascading color wave with delay between each element
+                shuffledSets.forEach((set, index) => {
+                    setTimeout(() => {
                         const color = getRandomColor(set);
                         applyColor(set, color);
-                    }
+                        
+                        // Add temporary pulse animation during color wave
+                        const primary = set.primaryElement;
+                        const secondaries = set.secondaryElements;
+                        const allElements = [primary, ...secondaries];
+                        
+                        allElements.forEach(element => {
+                            if (element) {
+                                // Add pulse class temporarily
+                                element.classList.add('color-wave-pulse');
+                                setTimeout(() => {
+                                    element.classList.remove('color-wave-pulse');
+                                }, 800);
+                            }
+                        });
+                    }, index * 50); // 50ms delay between each element for cascading effect
                 });
             } else {
                 // Apply color to specified number of shape sets that have aged enough
