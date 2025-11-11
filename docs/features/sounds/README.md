@@ -23,7 +23,7 @@ All tracks are licensed under [Creative Commons: By Attribution 4.0 License](htt
 - Music files are located in `public/sounds/music/`
 - Music configuration is in `public/js/sound-manager.js`
 - Each theme has its own unique music track
-- Music plays at 25% volume by default
+- Music plays at 30% volume by default
 - Music loops seamlessly when a theme is selected
 - Users can toggle music on/off using the ♪ button
 

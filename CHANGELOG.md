@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.0.3 - 2025-11-10
+
+#### Improvements
+
+- Increased music volume from 25% to 30% for better audio presence
+
 ### 1.0.2 - 2025-11-10
 
 #### Accessibility Improvements

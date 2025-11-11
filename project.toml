@@ -1,6 +1,6 @@
 [project]
 name = "math-game"
-version = "1.0.2"
+version = "1.0.3"
 description = "A simple math game with visual effects"
 license = "MIT"
 authors = ["Kishore Murthy"]
