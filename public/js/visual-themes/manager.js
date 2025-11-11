@@ -376,15 +376,21 @@
                     sampleFields.classList.add('hidden');
                     sampleFields.classList.remove('visible');
                 }
-                // Reset visual theme
-                if (this.currentTheme && this.currentTheme.reset) {
-                    this.currentTheme.reset();
+                // Reset MathGame counts when switching back to game mode
+                // This will also reset visual theme and Manager counts through handleFactorChange()
+                if (global.OceanOfMaya.MathGame && global.OceanOfMaya.MathGame.resetCounts) {
+                    global.OceanOfMaya.MathGame.resetCounts();
+                } else {
+                    // Fallback: reset manually if MathGame is not available
+                    if (this.currentTheme && this.currentTheme.reset) {
+                        this.currentTheme.reset();
+                    }
+                    this.countCorrect = 0;
+                    this.countWrong = 0;
+                    this.countSkip = 0;
+                    this.colorsActivated = false;
+                    this.updateHint();
                 }
-                this.countCorrect = 0;
-                this.countWrong = 0;
-                this.countSkip = 0;
-                this.colorsActivated = false;
-                this.updateHint();
             }
         },
 
