@@ -2,6 +2,16 @@
 
 ## Version 1
 
+### 1.0.2 - 2025-11-10
+
+#### Accessibility Improvements
+
+- Added keyboard navigation support for all interactive elements
+- Improved color contrast to meet WCAG AA standards
+- Added ARIA labels and roles for screen reader support
+- Added visible focus indicators for keyboard navigation
+- Added support for reduced motion preferences
+
 ### 1.0.1 - 2025-11-10
 
 #### Bug Fixes
