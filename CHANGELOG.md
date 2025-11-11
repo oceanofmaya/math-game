@@ -2,6 +2,13 @@
 
 ## Version 1
 
+### 1.0.5 - 2025-11-11
+
+#### UI/UX Improvements
+
+- Fixed mobile button alignment issue for mode toggle buttons (Game/Sample/Music/Help) - selected buttons now maintain consistent dimensions
+- Ensured all mode buttons have consistent borders and box-sizing across all states and breakpoints
+
 ### 1.0.4 - 2025-11-11
 
 #### UI/UX Improvements
