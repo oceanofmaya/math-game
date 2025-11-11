@@ -2,6 +2,20 @@
 
 ## Version 1
 
+### 1.0.6 - 2025-11-11
+
+#### UI/UX Improvements
+
+- Fixed operation button alignment on mobile devices - active and inactive buttons now maintain consistent dimensions
+- Improved button consistency across all button types (operation, submit, skip, reset, change max number) with consistent borders and box-sizing
+- Cleaned up redundant CSS properties in button styling
+
+#### Visual Effects Improvements
+
+- Enhanced color wave ripple effect with more natural animation timing and smoother opacity fade
+- Visual elements now change colors when ripple effect completes, creating a more cohesive visual experience
+- Improved ripple animation with gradual opacity transitions and natural easing curves
+
 ### 1.0.5 - 2025-11-11
 
 #### UI/UX Improvements
