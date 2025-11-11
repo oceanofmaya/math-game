@@ -2,6 +2,13 @@
 
 ## Version 1
 
+### 1.0.4 - 2025-11-11
+
+#### UI/UX Improvements
+
+- Fixed mobile button alignment issue for operation buttons - selected buttons now maintain consistent dimensions
+- Enhanced fieldset borders with softer appearance and subtle shadow for better visual depth
+
 ### 1.0.3 - 2025-11-10
 
 #### Improvements
