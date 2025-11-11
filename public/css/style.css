@@ -107,7 +107,7 @@ input[type=submit],
 input[type=button] {
     padding: var(--spacing-md) var(--spacing-lg);
     margin: 0;
-    border: none;
+    border: 2px solid transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
     font-size: var(--font-size-xl);
@@ -123,6 +123,8 @@ input[type=button] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
 }
 
 input[type=submit] {
@@ -198,9 +200,11 @@ input[type=button]:focus-visible {
 }
 
 .operation-btn {
-    width: 40px;
-    height: 40px;
-    padding: 0;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
     margin: 0;
     background-color: var(--color-gray-400);
     color: white;
@@ -216,6 +220,7 @@ input[type=button]:focus-visible {
     line-height: 1;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
 }
 
 .operation-btn:hover {
@@ -226,9 +231,11 @@ input[type=button]:focus-visible {
 
 .operation-btn.active {
     background-color: var(--color-primary);
-    color: white;
-    border: 2px solid transparent;
-    box-sizing: border-box;
+    padding: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
 }
 
 .operation-btn.active:hover {
@@ -577,19 +584,16 @@ input[type=number]:focus-visible {
 }
 
 .mode-button.active {
-    font-weight: bold;
     background-color: var(--color-primary);
     color: white;
-    border: 2px solid transparent;
-    box-sizing: border-box;
+    padding: var(--spacing-lg) var(--spacing-2xl);
 }
 
 .mode-button.inactive {
     font-weight: normal;
     background-color: var(--color-gray-100);
     color: #2a2a2a; /* WCAG AA compliant: 7.5:1 contrast ratio on light background (#e0e0e0) */
-    border: 2px solid transparent;
-    box-sizing: border-box;
+    padding: var(--spacing-lg) var(--spacing-2xl);
 }
 
 .mode-button:hover {
@@ -614,6 +618,7 @@ input[type=number]:focus-visible {
 .sample-controls-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: var(--spacing-lg);
     /* Prevent layout shifts when visual elements are created */
     min-height: 400px;
@@ -670,16 +675,25 @@ input[type=number]:focus-visible {
 .sample-button {
     padding: var(--spacing-lg);
     font-weight: bold;
+    width: 100%;
+    max-width: var(--max-width-input);
+    box-sizing: border-box;
 }
 
 .sample-button-reset {
     padding: var(--spacing-lg);
     margin-top: var(--spacing-lg);
     background-color: var(--color-gray-400);
+    width: 100%;
+    max-width: var(--max-width-input);
+    box-sizing: border-box;
 }
 
 .sample-button-secondary {
     padding: var(--spacing-lg);
+    width: 100%;
+    max-width: var(--max-width-input);
+    box-sizing: border-box;
 }
 
 
@@ -734,6 +748,11 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
     /* Make music button square but match mode button height at 768px */
     #musicToggleButton.mode-button {
         width: 32px;
@@ -748,6 +767,13 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
     /* Make help button match music button at 768px */
     #helpToggle.mode-button {
         width: 32px;
@@ -760,6 +786,13 @@ fieldset .button-container {
         justify-content: center;
         border: 2px solid transparent;
         box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
     }
     
     .separator {
@@ -832,6 +865,7 @@ fieldset .button-container {
         min-height: auto;
         width: auto;
         height: auto;
+        border: 2px solid transparent;
         box-sizing: border-box;
     }
     
@@ -873,11 +907,24 @@ fieldset .button-container {
     }
     
     .operation-btn {
-        width: 32px;
-        height: 32px;
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
         font-size: var(--font-size-lg);
         border: 2px solid transparent;
         box-sizing: border-box;
+        padding: 0 !important;
+        flex-shrink: 0;
+    }
+    
+    .operation-btn.active {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        padding: 0 !important;
+        flex-shrink: 0;
     }
     
     .mode-toggle-container {
@@ -891,6 +938,11 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
     /* Make music button match operation buttons size at 480px */
     #musicToggleButton.mode-button {
         width: 32px;
@@ -901,6 +953,13 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
     /* Make help button match music button at 480px */
     #helpToggle.mode-button {
         width: 32px;
@@ -909,6 +968,13 @@ fieldset .button-container {
         font-size: var(--font-size-lg);
         border: 2px solid transparent;
         box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
     }
     
     .separator {
@@ -985,6 +1051,11 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
     .separator {
         font-size: var(--font-size-sm);
         margin: 0 var(--spacing-xs);
@@ -996,20 +1067,34 @@ fieldset .button-container {
     }
     
     input[type=submit],
-    input[type=button],
-    .operation-btn {
+    input[type=button] {
         min-width: 28px;
         min-height: auto;
         width: auto;
         height: auto;
         font-size: var(--font-size-sm);
+        border: 2px solid transparent;
         box-sizing: border-box;
     }
     
     .operation-btn {
-        width: 28px;
-        height: 28px;
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
         border: 2px solid transparent;
+        flex-shrink: 0;
+        box-sizing: border-box;
+    }
+    
+    .operation-btn.active {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+        flex-shrink: 0;
     }
     
     /* Make music button match operation buttons size at 360px */
@@ -1023,6 +1108,13 @@ fieldset .button-container {
         box-sizing: border-box;
     }
     
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+    }
+    
     /* Make help button match music button at 360px */
     #helpToggle.mode-button {
         width: 28px;
@@ -1032,6 +1124,13 @@ fieldset .button-container {
         min-width: 28px;
         border: 2px solid transparent;
         box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
     }
 }
 
@@ -1151,10 +1250,19 @@ fieldset .button-container {
 @keyframes ripple-expand {
     0% {
         transform: scale(0);
-        opacity: 0.8;
+        opacity: 0.6;
     }
-    50% {
-        opacity: 0.4;
+    20% {
+        opacity: 0.5;
+    }
+    40% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.15;
+    }
+    80% {
+        opacity: 0.05;
     }
     100% {
         transform: scale(40);

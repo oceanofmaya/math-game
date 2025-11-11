@@ -673,7 +673,7 @@
                             border: 2px solid rgba(${rgb}, 0.4);
                             background: radial-gradient(circle, rgba(${rgb}, 0.15) 0%, transparent 70%);
                             transform: scale(0);
-                            animation: ripple-expand ${1.2 + i * 0.2}s ease-out ${delay}ms forwards;
+                            animation: ripple-expand ${1.4 + i * 0.15}s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms forwards;
                         `;
                         rippleContainer.appendChild(ripple);
                     }
@@ -681,37 +681,64 @@
                     // Remove container after animation completes
                     // Formula: last delay + last animation duration
                     // Last delay = (numRipples - 1) * 150
-                    // Last duration = (1.2 + (numRipples - 1) * 0.2) * 1000 = 1200 + (numRipples - 1) * 200
-                    const totalDuration = (numRipples - 1) * 150 + (1200 + (numRipples - 1) * 200);
+                    // Last duration = (1.4 + (numRipples - 1) * 0.15) * 1000 = 1400 + (numRipples - 1) * 150
+                    const totalDuration = (numRipples - 1) * 150 + (1400 + (numRipples - 1) * 150);
+                    
+                    // Apply cascading color wave when ripple effect ends
+                    setTimeout(() => {
+                        shuffledSets.forEach((set, index) => {
+                            setTimeout(() => {
+                                const color = getRandomColor(set);
+                                applyColor(set, color);
+                                
+                                // Add temporary pulse animation during color wave
+                                const primary = set.primaryElement;
+                                const secondaries = set.secondaryElements;
+                                const allElements = [primary, ...secondaries];
+                                
+                                allElements.forEach(element => {
+                                    if (element) {
+                                        // Add pulse class temporarily
+                                        element.classList.add('color-wave-pulse');
+                                        setTimeout(() => {
+                                            element.classList.remove('color-wave-pulse');
+                                        }, 800);
+                                    }
+                                });
+                            }, index * 50); // 50ms delay between each element for cascading effect
+                        });
+                    }, totalDuration);
+                    
+                    // Remove ripple container after animation completes
                     setTimeout(() => {
                         if (rippleContainer.parentNode) {
                             rippleContainer.parentNode.removeChild(rippleContainer);
                         }
                     }, totalDuration);
+                } else {
+                    // No ripple effect, apply color wave immediately
+                    shuffledSets.forEach((set, index) => {
+                        setTimeout(() => {
+                            const color = getRandomColor(set);
+                            applyColor(set, color);
+                            
+                            // Add temporary pulse animation during color wave
+                            const primary = set.primaryElement;
+                            const secondaries = set.secondaryElements;
+                            const allElements = [primary, ...secondaries];
+                            
+                            allElements.forEach(element => {
+                                if (element) {
+                                    // Add pulse class temporarily
+                                    element.classList.add('color-wave-pulse');
+                                    setTimeout(() => {
+                                        element.classList.remove('color-wave-pulse');
+                                    }, 800);
+                                }
+                            });
+                        }, index * 50); // 50ms delay between each element for cascading effect
+                    });
                 }
-                
-                // Apply cascading color wave with delay between each element
-                shuffledSets.forEach((set, index) => {
-                    setTimeout(() => {
-                        const color = getRandomColor(set);
-                        applyColor(set, color);
-                        
-                        // Add temporary pulse animation during color wave
-                        const primary = set.primaryElement;
-                        const secondaries = set.secondaryElements;
-                        const allElements = [primary, ...secondaries];
-                        
-                        allElements.forEach(element => {
-                            if (element) {
-                                // Add pulse class temporarily
-                                element.classList.add('color-wave-pulse');
-                                setTimeout(() => {
-                                    element.classList.remove('color-wave-pulse');
-                                }, 800);
-                            }
-                        });
-                    }, index * 50); // 50ms delay between each element for cascading effect
-                });
             } else {
                 // Apply color to specified number of shape sets that have aged enough
                 let colored = 0;
