@@ -19,6 +19,8 @@ Workflow: Create branch from `main` → Make changes → Update version/changelo
 
 Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification as documented in [README.md#contributing](../README.md#contributing). All commit messages must use the conventional commit format with appropriate types (feat, fix, docs, chore, refactor, etc.).
 
+**Keep commit messages concise**: Since changes are documented in `CHANGELOG.md`, commit messages should be brief and descriptive. Avoid verbose bullet points in commit messages - the changelog provides the detailed change list.
+
 ## Logging
 
 Always use appropriate logging levels when logging messages like `console.info()`, `console.error()`, `console.warn()`, `console.info()`, `console.debug()`, etc.

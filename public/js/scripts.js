@@ -312,8 +312,10 @@
                 if (btn) {
                     if (op === currentOperation) {
                         btn.classList.add('active');
+                        btn.setAttribute('aria-pressed', 'true');
                     } else {
                         btn.classList.remove('active');
+                        btn.setAttribute('aria-pressed', 'false');
                     }
                 }
             });

@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="language" content="EN" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content="1.0.1" />
+    <meta name="version" content="1.0.2" />
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
@@ -31,28 +31,52 @@
   </head>
 
   <body>
-    <div id="version-display" class="version-display"></div>
-    <form id="gameForm" onsubmit="event.preventDefault();">
+    <div id="version-display" class="version-display" aria-hidden="true"></div>
+    <!-- Live region for screen reader announcements -->
+    <div id="ariaLiveRegion" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <form id="gameForm" onsubmit="event.preventDefault();" role="main" aria-label="Math Game">
       <h1>Math Game</h1>
-      <div class="flex-container count-container">
-        <div>Correct:&nbsp;<span id="countCorrect" class="success"></span></div>
-        <div>&nbsp;Wrong:&nbsp;<span id="countWrong" class="fail"></span></div>
-        <div>&nbsp;Skipped:&nbsp;<span id="countSkip" class="skip"></span></div>
+      <div class="flex-container count-container" role="status" aria-label="Score">
+        <div>Correct:&nbsp;<span id="countCorrect" class="success" aria-label="Correct answers">0</span></div>
+        <div>&nbsp;Wrong:&nbsp;<span id="countWrong" class="fail" aria-label="Wrong answers">0</span></div>
+        <div>&nbsp;Skipped:&nbsp;<span id="countSkip" class="skip" aria-label="Skipped questions">0</span></div>
       </div>
       <div class="flex-container flex-direction-column">
         <div>
           <fieldset>
             <legend>Mode</legend>
-            <div class="mode-toggle-container">
-              <button type="button" id="gameModeButton" class="mode-button">Game</button>
-              <button type="button" id="sampleModeButton" class="mode-button inactive">Sample</button>
-              <span class="separator">|</span>
-              <button type="button" id="musicToggleButton" class="mode-button" title="Toggle theme music">♪</button>
+            <div class="mode-toggle-container" role="toolbar" aria-label="Game controls">
+              <button type="button" id="gameModeButton" class="mode-button" aria-label="Game mode" aria-pressed="true">
+                Game
+              </button>
+              <button
+                type="button"
+                id="sampleModeButton"
+                class="mode-button inactive"
+                aria-label="Sample mode"
+                aria-pressed="false"
+              >
+                Sample
+              </button>
+              <span class="separator" aria-hidden="true">|</span>
+              <button
+                type="button"
+                id="musicToggleButton"
+                class="mode-button"
+                title="Toggle theme music"
+                aria-label="Toggle theme music"
+                aria-pressed="false"
+              >
+                ♪
+              </button>
               <button
                 type="button"
                 id="helpToggle"
                 class="mode-button help-toggle-button"
                 title="Show/Hide How to Play"
+                aria-label="Show help information"
+                aria-expanded="false"
+                aria-controls="helpContent"
               >
                 ?
               </button>
@@ -91,7 +115,8 @@
           <div>
             <fieldset>
               <legend>Theme</legend>
-              <select id="visualThemeSelect">
+              <label for="visualThemeSelect" class="sr-only">Select visual theme</label>
+              <select id="visualThemeSelect" aria-label="Select visual theme">
                 <option value="" selected disabled>Choose...</option>
                 <option value="firefly">Firefly</option>
                 <option value="jellyfish">Jellyfish</option>
@@ -110,7 +135,8 @@
           <div>
             <fieldset>
               <legend>Theme</legend>
-              <select id="visualThemeSelectSample">
+              <label for="visualThemeSelectSample" class="sr-only">Select visual theme for sample mode</label>
+              <select id="visualThemeSelectSample" aria-label="Select visual theme for sample mode">
                 <option value="" selected disabled>Choose...</option>
                 <option value="firefly">Firefly</option>
                 <option value="jellyfish">Jellyfish</option>
@@ -123,9 +149,10 @@
           <fieldset>
             <legend>Theme Controls</legend>
             <div class="sample-controls-container">
-              <label class="sample-element-label">
+              <div class="sample-element-label">
                 <span class="sample-element-label-text">Elements:</span>
-                <select id="sampleElementCount" class="sample-element-select">
+                <label for="sampleElementCount" class="sr-only">Number of visual elements</label>
+                <select id="sampleElementCount" class="sample-element-select" aria-label="Number of visual elements">
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -139,45 +166,121 @@
                   <option value="15">15</option>
                   <option value="20">20</option>
                 </select>
-              </label>
+              </div>
               <div class="sample-element-hint">Click "Birth" to create elements</div>
               <div class="sample-lifecycle-hint">Lifecycle progression (top to bottom):</div>
-              <button type="button" id="sampleBirth" class="sample-button">Birth</button>
-              <button type="button" id="sampleAge" class="sample-button-secondary">Age (Remove Grayscale)</button>
-              <button type="button" id="sampleColor" class="sample-button-secondary">Color</button>
-              <button type="button" id="samplePulse" class="sample-button-secondary">Pulse</button>
-              <button type="button" id="sampleColorWave" class="sample-button-secondary">Color Wave</button>
-              <button type="button" id="sampleEnd" class="sample-button-secondary">End</button>
-              <button type="button" id="sampleReset" class="sample-button-reset">Reset</button>
+              <button type="button" id="sampleBirth" class="sample-button" aria-label="Create visual elements">
+                Birth
+              </button>
+              <button
+                type="button"
+                id="sampleAge"
+                class="sample-button-secondary"
+                aria-label="Remove grayscale filter from elements"
+              >
+                Age (Remove Grayscale)
+              </button>
+              <button
+                type="button"
+                id="sampleColor"
+                class="sample-button-secondary"
+                aria-label="Apply color to elements"
+              >
+                Color
+              </button>
+              <button type="button" id="samplePulse" class="sample-button-secondary" aria-label="Apply pulse animation">
+                Pulse
+              </button>
+              <button
+                type="button"
+                id="sampleColorWave"
+                class="sample-button-secondary"
+                aria-label="Apply color wave effect"
+              >
+                Color Wave
+              </button>
+              <button type="button" id="sampleEnd" class="sample-button-secondary" aria-label="Remove elements">
+                End
+              </button>
+              <button type="button" id="sampleReset" class="sample-button-reset" aria-label="Reset all visual elements">
+                Reset
+              </button>
             </div>
           </fieldset>
         </div>
         <div class="game-mode-fields">
           <fieldset>
             <legend>Operation</legend>
-            <div class="operation-selector">
-              <input type="button" class="operation-btn" id="op-add" value="+" title="Addition" />
-              <input type="button" class="operation-btn" id="op-subtract" value="−" title="Subtraction" />
-              <input type="button" class="operation-btn active" id="op-multiply" value="×" title="Multiplication" />
-              <input type="button" class="operation-btn" id="op-divide" value="÷" title="Division" />
-              <span class="separator">|</span>
-              <input type="button" class="operation-btn" id="op-reset" value="↺" title="Reset Counts" />
+            <div class="operation-selector" role="group" aria-label="Math operation">
+              <input
+                type="button"
+                class="operation-btn"
+                id="op-add"
+                value="+"
+                title="Addition"
+                aria-label="Addition"
+                aria-pressed="false"
+              />
+              <input
+                type="button"
+                class="operation-btn"
+                id="op-subtract"
+                value="−"
+                title="Subtraction"
+                aria-label="Subtraction"
+                aria-pressed="false"
+              />
+              <input
+                type="button"
+                class="operation-btn active"
+                id="op-multiply"
+                value="×"
+                title="Multiplication"
+                aria-label="Multiplication"
+                aria-pressed="true"
+              />
+              <input
+                type="button"
+                class="operation-btn"
+                id="op-divide"
+                value="÷"
+                title="Division"
+                aria-label="Division"
+                aria-pressed="false"
+              />
+              <span class="separator" aria-hidden="true">|</span>
+              <input
+                type="button"
+                class="operation-btn"
+                id="op-reset"
+                value="↺"
+                title="Reset Counts"
+                aria-label="Reset score counts"
+              />
             </div>
           </fieldset>
         </div>
         <div class="game-mode-fields">
           <fieldset>
             <legend>
-              <span id="number1"></span>
-              <span id="operationSymbol">&nbsp;×&nbsp;</span>
-              <span id="number2"></span>
+              <span id="number1" aria-label="First number"></span>
+              <span id="operationSymbol" aria-hidden="true">&nbsp;×&nbsp;</span>
+              <span id="number2" aria-label="Second number"></span>
             </legend>
-            <input id="answer" type="number" placeholder="Answer" autofocus />
+            <label for="answer" class="sr-only">Enter your answer</label>
+            <input
+              id="answer"
+              type="number"
+              placeholder="Answer"
+              autofocus
+              aria-label="Enter your answer"
+              aria-required="true"
+            />
             <div class="button-container">
-              <input type="submit" id="submitAnswer" value="✓" title="Done" />
-              <input type="button" id="skipQuestion" value="⏭" title="Skip" />
+              <input type="submit" id="submitAnswer" value="✓" title="Submit answer" aria-label="Submit answer" />
+              <input type="button" id="skipQuestion" value="⏭" title="Skip question" aria-label="Skip this question" />
             </div>
-            <div id="answerMessage">
+            <div id="answerMessage" role="status" aria-live="polite" aria-atomic="true">
               <!-- answer message is going to go here -->
             </div>
           </fieldset>
@@ -185,9 +288,24 @@
         <div class="game-mode-fields">
           <fieldset>
             <legend>Max Number</legend>
-            <input id="maxNumber" type="number" value="20" placeholder="Number" />
+            <label for="maxNumber" class="sr-only">Maximum number for problems</label>
+            <input
+              id="maxNumber"
+              type="number"
+              value="20"
+              placeholder="Number"
+              aria-label="Maximum number for problems"
+              min="1"
+              max="999"
+            />
             <div class="button-container">
-              <input type="button" id="changeMaxNumber" value="↻" title="Change" />
+              <input
+                type="button"
+                id="changeMaxNumber"
+                value="↻"
+                title="Change maximum number"
+                aria-label="Apply maximum number change"
+              />
             </div>
           </fieldset>
         </div>
@@ -238,11 +356,27 @@
           }
         }
 
+        // Helper function to add keyboard support to buttons
+        function addKeyboardSupport(button, clickHandler) {
+          if (button) {
+            button.addEventListener('click', clickHandler);
+            button.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                clickHandler();
+              }
+            });
+          }
+        }
+
         if (gameButton && sampleButton) {
-          gameButton.addEventListener('click', function () {
+          // Game mode button handler
+          addKeyboardSupport(gameButton, function () {
             if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
               OceanOfMaya.VisualThemes.Manager.setMode('game');
             }
+            gameButton.setAttribute('aria-pressed', 'true');
+            sampleButton.setAttribute('aria-pressed', 'false');
             // Update help content if it's currently visible
             setTimeout(function () {
               if (helpContent && !helpContent.classList.contains('hidden')) {
@@ -250,10 +384,13 @@
               }
             }, 0);
           });
-          sampleButton.addEventListener('click', function () {
+          // Sample mode button handler
+          addKeyboardSupport(sampleButton, function () {
             if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
               OceanOfMaya.VisualThemes.Manager.setMode('sample');
             }
+            gameButton.setAttribute('aria-pressed', 'false');
+            sampleButton.setAttribute('aria-pressed', 'true');
             // Update help content if it's currently visible
             setTimeout(function () {
               if (helpContent && !helpContent.classList.contains('hidden')) {
@@ -272,48 +409,41 @@
         const sampleEnd = document.getElementById('sampleEnd');
         const sampleReset = document.getElementById('sampleReset');
 
-        if (sampleBirth)
-          sampleBirth.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleBirth();
-            }
-          });
-        if (sampleAge)
-          sampleAge.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleAge();
-            }
-          });
-        if (sampleColor)
-          sampleColor.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleColor();
-            }
-          });
-        if (samplePulse)
-          samplePulse.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.samplePulse();
-            }
-          });
-        if (sampleColorWave)
-          sampleColorWave.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleColorWave();
-            }
-          });
-        if (sampleEnd)
-          sampleEnd.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleEnd();
-            }
-          });
-        if (sampleReset)
-          sampleReset.addEventListener('click', function () {
-            if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
-              OceanOfMaya.VisualThemes.Manager.sampleReset();
-            }
-          });
+        addKeyboardSupport(sampleBirth, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleBirth();
+          }
+        });
+        addKeyboardSupport(sampleAge, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleAge();
+          }
+        });
+        addKeyboardSupport(sampleColor, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleColor();
+          }
+        });
+        addKeyboardSupport(samplePulse, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.samplePulse();
+          }
+        });
+        addKeyboardSupport(sampleColorWave, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleColorWave();
+          }
+        });
+        addKeyboardSupport(sampleEnd, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleEnd();
+          }
+        });
+        addKeyboardSupport(sampleReset, function () {
+          if (OceanOfMaya.VisualThemes && OceanOfMaya.VisualThemes.Manager) {
+            OceanOfMaya.VisualThemes.Manager.sampleReset();
+          }
+        });
 
         // Theme selectors
         const themeSelect = document.getElementById('visualThemeSelect');
@@ -385,11 +515,27 @@
               OceanOfMaya.MathGame.validateAnswer();
             }
           });
+          // Keyboard support: Enter key submits answer
+          submitAnswer.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              if (OceanOfMaya.MathGame) {
+                OceanOfMaya.MathGame.validateAnswer();
+              }
+            }
+          });
         }
 
         if (skipQuestion) {
           skipQuestion.addEventListener('click', function () {
             if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.skipQuestion();
+          });
+          // Keyboard support: Space or Enter skips question
+          skipQuestion.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.skipQuestion();
+            }
           });
         }
 
@@ -455,11 +601,20 @@
             if (isHidden) {
               helpToggle.classList.remove('active');
               helpToggle.classList.add('inactive');
+              helpToggle.setAttribute('aria-expanded', 'false');
             } else {
               helpToggle.classList.remove('inactive');
               helpToggle.classList.add('active');
+              helpToggle.setAttribute('aria-expanded', 'true');
               // Update content based on current mode when showing
               updateHelpContent();
+            }
+          });
+          // Keyboard support for help toggle
+          helpToggle.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              helpToggle.click();
             }
           });
         }
@@ -506,9 +661,11 @@
               musicToggleButton.classList.add('active');
             }
 
-            musicToggleButton.addEventListener('click', function () {
+            // Define the click handler function
+            const handleMusicToggle = function () {
               const isMuted = OceanOfMaya.Sound.Manager.toggleMute();
               musicToggleButton.title = isMuted ? 'Enable theme music' : 'Disable theme music';
+              musicToggleButton.setAttribute('aria-pressed', isMuted ? 'false' : 'true');
               // Update button styling based on mute state (colors indicate state, icon stays the same)
               if (isMuted) {
                 musicToggleButton.classList.add('inactive');
@@ -516,6 +673,12 @@
               } else {
                 musicToggleButton.classList.add('active');
                 musicToggleButton.classList.remove('inactive');
+              }
+
+              // Announce state change to screen readers
+              const liveRegion = document.getElementById('ariaLiveRegion');
+              if (liveRegion) {
+                liveRegion.textContent = isMuted ? 'Theme music disabled' : 'Theme music enabled';
               }
 
               // If unmuted and theme is set, resume music
@@ -531,6 +694,15 @@
                 if (themeSelect) {
                   OceanOfMaya.Sound.Manager.playThemeMusic(themeSelect.value);
                 }
+              }
+            };
+
+            // Add click and keyboard support
+            musicToggleButton.addEventListener('click', handleMusicToggle);
+            musicToggleButton.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleMusicToggle();
               }
             });
           }
