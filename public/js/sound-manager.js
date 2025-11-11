@@ -19,7 +19,7 @@
             track: 'sounds/music/jellyfish-theme.mp3',
             title: 'Ambiment',
             artist: 'Kevin MacLeod',
-            volume: 0.25, // 25% volume for ambient music
+            volume: 0.30, // 30% volume for ambient music
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100630'
         },
@@ -27,7 +27,7 @@
             track: 'sounds/music/firefly-theme.mp3',
             title: 'Ethereal Relaxation',
             artist: 'Kevin MacLeod',
-            volume: 0.25, // 25% volume for ambient music
+            volume: 0.30, // 30% volume for ambient music
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2100031'
         },
@@ -35,7 +35,7 @@
             track: 'sounds/music/pearl-theme.mp3',
             title: 'Kalimba Relaxation Music',
             artist: 'Kevin MacLeod',
-            volume: 0.25, // 25% volume for ambient music
+            volume: 0.30, // 30% volume for ambient music
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900039'
         },
@@ -43,7 +43,7 @@
             track: 'sounds/music/mushroom-theme.mp3',
             title: 'Magic Forest',
             artist: 'Kevin MacLeod',
-            volume: 0.25, // 25% volume for ambient music
+            volume: 0.30, // 30% volume for ambient music
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600044'
         },
@@ -51,7 +51,7 @@
             track: 'sounds/music/maple-theme.mp3',
             title: 'Evening',
             artist: 'Kevin MacLeod',
-            volume: 0.25, // 25% volume for ambient music
+            volume: 0.30, // 30% volume for ambient music
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2300002'
         }
@@ -63,7 +63,7 @@
         currentTheme: null,
         isMuted: false,
         masterVolume: 1.0, // 0.0 to 1.0
-        musicVolume: 0.25, // Default music volume (25%)
+        musicVolume: 0.30, // Default music volume (30%)
 
         // Initialize sound system
         initialize: function() {
@@ -121,7 +121,7 @@
             // Create new audio element
             const audio = new Audio(musicConfig.track);
             audio.loop = true;
-            audio.volume = this.masterVolume * this.musicVolume * (musicConfig.volume || 0.25);
+            audio.volume = this.masterVolume * this.musicVolume * (musicConfig.volume || 0.30);
             
             // Handle errors gracefully
             audio.addEventListener('error', function(e) {
@@ -162,7 +162,7 @@
             this.masterVolume = Math.max(0, Math.min(1, volume));
             if (this.currentAudio) {
                 const musicConfig = ThemeMusicRegistry[this.currentTheme];
-                const musicVolume = musicConfig ? (musicConfig.volume || 0.25) : 0.25;
+                const musicVolume = musicConfig ? (musicConfig.volume || 0.30) : 0.30;
                 this.currentAudio.volume = this.masterVolume * this.musicVolume * musicVolume;
             }
         },
@@ -172,7 +172,7 @@
             this.musicVolume = Math.max(0, Math.min(1, volume));
             if (this.currentAudio) {
                 const musicConfig = ThemeMusicRegistry[this.currentTheme];
-                const musicVolume = musicConfig ? (musicConfig.volume || 0.25) : 0.25;
+                const musicVolume = musicConfig ? (musicConfig.volume || 0.30) : 0.30;
                 this.currentAudio.volume = this.masterVolume * this.musicVolume * musicVolume;
             }
         },
