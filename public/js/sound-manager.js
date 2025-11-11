@@ -27,7 +27,7 @@
             track: 'sounds/music/firefly-theme.mp3',
             title: 'Ethereal Relaxation',
             artist: 'Kevin MacLeod',
-            volume: 0.30, // 30% volume for ambient music
+            volume: 0.50, // 50% volume - softer track needs higher volume
             license: 'CC BY 4.0',
             attributionUrl: 'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2100031'
         },

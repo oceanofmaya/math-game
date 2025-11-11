@@ -2,6 +2,16 @@
 
 ## Version 1
 
+### 1.0.7 - 2025-11-11
+
+#### Bug Fixes
+
+- Fixed mode switching issue - MathGame counts now properly reset when switching from sample mode back to game mode
+
+#### Audio Improvements
+
+- Increased firefly theme music volume to 50% (from 30%) to compensate for the softer track
+
 ### 1.0.6 - 2025-11-11
 
 #### UI/UX Improvements
