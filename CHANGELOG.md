@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.6 - 2025-11-11
+
+#### Bug Fixes
+
+- Fixed scrollbars appearing and causing UI shifts when using maple theme
+
 ### 1.1.5 - 2025-11-11
 
 #### Bug Fixes
