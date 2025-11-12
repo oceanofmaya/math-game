@@ -30,14 +30,8 @@
             leaf.style.width = leafWidth + 'px';
             leaf.style.height = leafHeight + 'px';
             leaf.style.position = 'absolute';
-            // Account for drop-shadow extent (20px) to prevent scrollbars
-            const dropShadowExtent = 20;
-            const minX = dropShadowExtent;
-            const maxX = Math.max(minX, window.innerWidth - leafWidth - dropShadowExtent);
-            const minY = dropShadowExtent;
-            const maxY = Math.max(minY, window.innerHeight - leafHeight - dropShadowExtent);
-            leaf.style.left = Math.random() * (maxX - minX) + minX + 'px';
-            leaf.style.top = Math.random() * (maxY - minY) + minY + 'px';
+            leaf.style.left = Math.random() * Math.max(1, (window.innerWidth - leafWidth)) + 'px';
+            leaf.style.top = Math.random() * Math.max(1, (window.innerHeight - leafHeight)) + 'px';
             leaf.style.filter = 'none';
             leaf.style.opacity = '1';
             leaf.style.transition = 'transform 0.5s';
