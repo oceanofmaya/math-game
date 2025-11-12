@@ -35,8 +35,14 @@
             pearl.style.width = pearlSize + 'px';
             pearl.style.height = pearlSize + 'px';
             pearl.style.position = 'absolute';
-            pearl.style.left = Math.random() * (window.innerWidth - pearlSize) + 'px';
-            pearl.style.top = Math.random() * (window.innerHeight - pearlSize) + 'px';
+            // Account for pearl box-shadow extent (35px) to prevent scrollbars
+            const shadowExtent = 35;
+            const minX = shadowExtent;
+            const maxX = Math.max(minX, window.innerWidth - pearlSize - shadowExtent);
+            const minY = shadowExtent;
+            const maxY = Math.max(minY, window.innerHeight - pearlSize - shadowExtent);
+            pearl.style.left = Math.random() * (maxX - minX) + minX + 'px';
+            pearl.style.top = Math.random() * (maxY - minY) + minY + 'px';
             // New shapes always start in grayscale
             pearl.style.filter = 'blur(0.2px) grayscale(100%)';
             pearl.style.opacity = '0';
