@@ -12,7 +12,7 @@
         // Game Configuration
         // Maximum number value used in problems (applies to all operations: addition, subtraction, multiplication, division)
         DEFAULT_MAX_NUMBER: 20,
-        DEFAULT_OPERATION: 'multiply',
+        DEFAULT_OPERATION: 'mixed',
         DEFAULT_THRESHOLD_X: 5,
         
         // Timing Constants (in milliseconds)
@@ -77,7 +77,7 @@
         ANSWER_TOLERANCE: 0.0001,
         
         // Application Version
-        VERSION: '1.1.6'
+        VERSION: '1.1.7'
     };
 
 })(typeof window !== 'undefined' ? window : this);

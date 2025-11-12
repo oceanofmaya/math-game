@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.7 - 2025-11-12
+
+#### Updates
+
+- Changed default operation from multiplication to mixed operations
+
 ### 1.1.6 - 2025-11-11
 
 #### Bug Fixes
