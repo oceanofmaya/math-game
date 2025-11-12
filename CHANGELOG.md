@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.3 - 2025-11-11
+
+#### Bug Fixes
+
+- Fixed mobile scroll behavior - title and score remain accessible when keyboard appears, and form reliably scrolls to top when keyboard is dismissed
+
 ### 1.1.2 - 2025-11-11
 
 #### Bug Fixes
