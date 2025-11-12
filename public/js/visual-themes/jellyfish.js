@@ -39,8 +39,14 @@
             bell.style.width = bellWidth + 'px';
             bell.style.height = bellHeight + 'px';
             bell.style.position = 'absolute';
-            bell.style.left = Math.random() * (window.innerWidth - bellWidth) + 'px';
-            bell.style.top = Math.random() * (window.innerHeight - bellHeight * 2) + 'px';
+            // Account for jellyfish box-shadow extent (450px) to prevent scrollbars
+            const shadowExtent = 450;
+            const minX = shadowExtent;
+            const maxX = Math.max(minX, window.innerWidth - bellWidth - shadowExtent);
+            const minY = shadowExtent;
+            const maxY = Math.max(minY, window.innerHeight - bellHeight * 2 - shadowExtent);
+            bell.style.left = Math.random() * (maxX - minX) + minX + 'px';
+            bell.style.top = Math.random() * (maxY - minY) + minY + 'px';
             // New shapes always start in grayscale
             bell.style.filter = 'blur(0.5px) grayscale(100%)';
             bell.style.opacity = '0';

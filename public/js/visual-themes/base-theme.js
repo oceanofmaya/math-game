@@ -103,20 +103,37 @@
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
                 // This prevents scale-up from pulse animation from reducing movement range
-                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
+                // For all themes, account for shadow/glow extents to prevent scrollbars
                 let checkWidth, checkHeight;
+                let shadowExtent = 0;
                 if (set.isJellyfish && set.bellSize) {
                     // Use base bell dimensions (accounting for bell being wider than tall)
                     const bellWidth = set.bellSize * 1.2; // bellWidth calculation from creation
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
-                    checkWidth = bellWidth;
-                    checkHeight = bellHeight;
+                    // Jellyfish has very large box-shadows (up to 450px in pulse animation)
+                    shadowExtent = 450;
+                    checkWidth = bellWidth + shadowExtent * 2;
+                    checkHeight = bellHeight + shadowExtent * 2;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
-                    // Add padding to prevent drop-shadow from extending beyond viewport
-                    const dropShadowExtent = 20;
-                    checkWidth = rect.width + dropShadowExtent * 2;
-                    checkHeight = rect.height + dropShadowExtent * 2;
+                    shadowExtent = 20;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isMushroom) {
+                    // Mushroom has box-shadows up to 90px in pulse animation
+                    shadowExtent = 90;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isFirefly) {
+                    // Firefly has box-shadows up to 110px in pulse animation
+                    shadowExtent = 110;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isPearl) {
+                    // Pearl has box-shadows up to 35px in pulse animation
+                    shadowExtent = 35;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
                 } else {
                     // For other themes, use actual rendered size
                     checkWidth = rect.width;
@@ -124,8 +141,8 @@
                 }
 
                 // Bounce off walls
-                // For maple, adjust boundary checks to account for drop-shadow padding
-                const boundaryPadding = set.isMaple ? 20 : 0;
+                // Adjust boundary checks to account for shadow/glow padding
+                const boundaryPadding = shadowExtent;
                 if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
                     set.velocityX *= -1;
                     newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
@@ -1032,25 +1049,43 @@
                 let y = Number.parseFloat(primary.style.top);
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
-                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
+                // For all themes, account for shadow/glow extents to prevent scrollbars
                 let checkWidth, checkHeight;
+                let shadowExtent = 0;
                 if (set.isJellyfish && set.bellSize) {
                     const bellWidth = set.bellSize * 1.2;
                     const bellHeight = set.bellSize * 0.7;
-                    checkWidth = bellWidth;
-                    checkHeight = bellHeight;
+                    // Jellyfish has very large box-shadows (up to 450px in pulse animation)
+                    shadowExtent = 450;
+                    checkWidth = bellWidth + shadowExtent * 2;
+                    checkHeight = bellHeight + shadowExtent * 2;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
-                    const dropShadowExtent = 20;
-                    checkWidth = rect.width + dropShadowExtent * 2;
-                    checkHeight = rect.height + dropShadowExtent * 2;
+                    shadowExtent = 20;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isMushroom) {
+                    // Mushroom has box-shadows up to 90px in pulse animation
+                    shadowExtent = 90;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isFirefly) {
+                    // Firefly has box-shadows up to 110px in pulse animation
+                    shadowExtent = 110;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
+                } else if (set.isPearl) {
+                    // Pearl has box-shadows up to 35px in pulse animation
+                    shadowExtent = 35;
+                    checkWidth = rect.width + shadowExtent * 2;
+                    checkHeight = rect.height + shadowExtent * 2;
                 } else {
                     checkWidth = rect.width;
                     checkHeight = rect.height;
                 }
 
-                // For maple, adjust boundary checks to account for drop-shadow padding
-                const boundaryPadding = set.isMaple ? 20 : 0;
+                // Adjust boundary checks to account for shadow/glow padding
+                const boundaryPadding = shadowExtent;
                 if (x + checkWidth > window.innerWidth - boundaryPadding) {
                     primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
                 }

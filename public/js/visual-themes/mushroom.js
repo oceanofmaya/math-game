@@ -36,8 +36,14 @@
             cap.style.width = capSize + 'px';
             cap.style.height = capSize * 0.7 + 'px'; // Slightly flattened
             cap.style.position = 'absolute';
-            cap.style.left = Math.random() * (window.innerWidth - capSize) + 'px';
-            cap.style.top = Math.random() * (window.innerHeight - capSize * 1.5) + 'px';
+            // Account for mushroom box-shadow extent (90px) to prevent scrollbars
+            const shadowExtent = 90;
+            const minX = shadowExtent;
+            const maxX = Math.max(minX, window.innerWidth - capSize - shadowExtent);
+            const minY = shadowExtent;
+            const maxY = Math.max(minY, window.innerHeight - capSize * 1.5 - shadowExtent);
+            cap.style.left = Math.random() * (maxX - minX) + minX + 'px';
+            cap.style.top = Math.random() * (maxY - minY) + minY + 'px';
             // New shapes always start in grayscale
             cap.style.filter = 'blur(0.3px) grayscale(100%)';
             cap.style.opacity = '0';

@@ -36,8 +36,14 @@
             firefly.style.width = fireflySize + 'px';
             firefly.style.height = fireflySize + 'px';
             firefly.style.position = 'absolute';
-            firefly.style.left = Math.random() * (window.innerWidth - fireflySize) + 'px';
-            firefly.style.top = Math.random() * (window.innerHeight - fireflySize) + 'px';
+            // Account for firefly box-shadow extent (110px) to prevent scrollbars
+            const shadowExtent = 110;
+            const minX = shadowExtent;
+            const maxX = Math.max(minX, window.innerWidth - fireflySize - shadowExtent);
+            const minY = shadowExtent;
+            const maxY = Math.max(minY, window.innerHeight - fireflySize - shadowExtent);
+            firefly.style.left = Math.random() * (maxX - minX) + minX + 'px';
+            firefly.style.top = Math.random() * (maxY - minY) + minY + 'px';
             // New shapes always start in grayscale
             firefly.style.filter = 'blur(0.3px) grayscale(100%)';
             firefly.style.opacity = '0';

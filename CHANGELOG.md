@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.8 - 2025-11-12
+
+#### Bug Fixes
+
+- Fixed scrollbars appearing and causing UI shifts for jellyfish, mushroom, firefly, and pearl themes
+
 ### 1.1.7 - 2025-11-12
 
 #### Updates
