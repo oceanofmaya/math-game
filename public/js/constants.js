@@ -77,7 +77,7 @@
         ANSWER_TOLERANCE: 0.0001,
         
         // Application Version
-        VERSION: '1.1.2'
+        VERSION: '1.1.3'
     };
 
 })(typeof window !== 'undefined' ? window : this);
