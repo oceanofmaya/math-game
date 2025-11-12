@@ -2,24 +2,6 @@
 
 ## Version 1
 
-### 1.1.10 - 2025-11-12
-
-#### Bug Fixes
-
-- Fixed scrollbars appearing and causing UI shifts when using jellyfish theme
-
-### 1.1.9 - 2025-11-12
-
-#### Bug Fixes
-
-- Fixed jellyfish theme positioning and movement issues caused by excessive shadow extent padding
-
-### 1.1.8 - 2025-11-12
-
-#### Bug Fixes
-
-- Fixed scrollbars appearing and causing UI shifts for jellyfish, mushroom, firefly, and pearl themes
-
 ### 1.1.7 - 2025-11-12
 
 #### Updates
