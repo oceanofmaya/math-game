@@ -2,11 +2,17 @@
 
 ## Version 1
 
+### 1.1.12 - 2025-11-12
+
+#### Bug Fixes
+
+- Reverted scrollbar fixes from version 1.1.6 that were causing UI issues
+
 ### 1.1.11 - 2025-11-12
 
 #### Bug Fixes
 
-- Reverted scrollbar fixes from versions 1.1.8, 1.1.9, and 1.1.10 that were causing UI issues
+- reverted scrollbar fixes from versions 1.1.8, 1.1.9, and 1.1.10 that were causing UI issues
 
 ### 1.1.7 - 2025-11-12
 

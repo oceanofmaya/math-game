@@ -103,7 +103,6 @@
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
                 // This prevents scale-up from pulse animation from reducing movement range
-                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
                 let checkWidth, checkHeight;
                 if (set.isJellyfish && set.bellSize) {
                     // Use base bell dimensions (accounting for bell being wider than tall)
@@ -111,12 +110,6 @@
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
                     checkWidth = bellWidth;
                     checkHeight = bellHeight;
-                } else if (set.isMaple) {
-                    // Account for drop-shadow extent (20px is the largest shadow)
-                    // Add padding to prevent drop-shadow from extending beyond viewport
-                    const dropShadowExtent = 20;
-                    checkWidth = rect.width + dropShadowExtent * 2;
-                    checkHeight = rect.height + dropShadowExtent * 2;
                 } else {
                     // For other themes, use actual rendered size
                     checkWidth = rect.width;
@@ -124,15 +117,13 @@
                 }
 
                 // Bounce off walls
-                // For maple, adjust boundary checks to account for drop-shadow padding
-                const boundaryPadding = set.isMaple ? 20 : 0;
-                if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
+                if (newX <= 0 || newX + checkWidth >= window.innerWidth) {
                     set.velocityX *= -1;
-                    newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
+                    newX = Math.max(0, Math.min(newX, window.innerWidth - checkWidth));
                 }
-                if (newY <= boundaryPadding || newY + checkHeight >= window.innerHeight - boundaryPadding) {
+                if (newY <= 0 || newY + checkHeight >= window.innerHeight) {
                     set.velocityY *= -1;
-                    newY = Math.max(boundaryPadding, Math.min(newY, window.innerHeight - checkHeight - boundaryPadding));
+                    newY = Math.max(0, Math.min(newY, window.innerHeight - checkHeight));
                 }
 
                 primary.style.left = newX + 'px';
@@ -1032,36 +1023,22 @@
                 let y = Number.parseFloat(primary.style.top);
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
-                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
                 let checkWidth, checkHeight;
                 if (set.isJellyfish && set.bellSize) {
                     const bellWidth = set.bellSize * 1.2;
                     const bellHeight = set.bellSize * 0.7;
                     checkWidth = bellWidth;
                     checkHeight = bellHeight;
-                } else if (set.isMaple) {
-                    // Account for drop-shadow extent (20px is the largest shadow)
-                    const dropShadowExtent = 20;
-                    checkWidth = rect.width + dropShadowExtent * 2;
-                    checkHeight = rect.height + dropShadowExtent * 2;
                 } else {
                     checkWidth = rect.width;
                     checkHeight = rect.height;
                 }
 
-                // For maple, adjust boundary checks to account for drop-shadow padding
-                const boundaryPadding = set.isMaple ? 20 : 0;
-                if (x + checkWidth > window.innerWidth - boundaryPadding) {
-                    primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
+                if (x + checkWidth > window.innerWidth) {
+                    primary.style.left = (window.innerWidth - checkWidth) + 'px';
                 }
-                if (x < boundaryPadding) {
-                    primary.style.left = boundaryPadding + 'px';
-                }
-                if (y + checkHeight > window.innerHeight - boundaryPadding) {
-                    primary.style.top = (window.innerHeight - checkHeight - boundaryPadding) + 'px';
-                }
-                if (y < boundaryPadding) {
-                    primary.style.top = boundaryPadding + 'px';
+                if (y + checkHeight > window.innerHeight) {
+                    primary.style.top = (window.innerHeight - checkHeight) + 'px';
                 }
             });
         });
