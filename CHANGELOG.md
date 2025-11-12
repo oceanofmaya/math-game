@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.9 - 2025-11-12
+
+#### Bug Fixes
+
+- Fixed jellyfish theme positioning and movement issues caused by excessive shadow extent padding
+
 ### 1.1.8 - 2025-11-12
 
 #### Bug Fixes

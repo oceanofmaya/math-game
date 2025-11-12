@@ -39,8 +39,8 @@
             bell.style.width = bellWidth + 'px';
             bell.style.height = bellHeight + 'px';
             bell.style.position = 'absolute';
-            // Account for jellyfish box-shadow extent (450px) to prevent scrollbars
-            const shadowExtent = 450;
+            // Account for jellyfish box-shadow extent (120px visible glow) to prevent scrollbars
+            const shadowExtent = 120;
             const minX = shadowExtent;
             const maxX = Math.max(minX, window.innerWidth - bellWidth - shadowExtent);
             const minY = shadowExtent;
