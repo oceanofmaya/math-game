@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.10 - 2025-11-12
+
+#### Bug Fixes
+
+- Fixed scrollbars appearing and causing UI shifts when using jellyfish theme
+
 ### 1.1.9 - 2025-11-12
 
 #### Bug Fixes

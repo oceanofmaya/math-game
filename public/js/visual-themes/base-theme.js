@@ -110,10 +110,13 @@
                     // Use base bell dimensions (accounting for bell being wider than tall)
                     const bellWidth = set.bellSize * 1.2; // bellWidth calculation from creation
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
-                    // Jellyfish has box-shadows with visible glow up to ~120px
-                    shadowExtent = 120;
-                    checkWidth = bellWidth + shadowExtent * 2;
-                    checkHeight = bellHeight + shadowExtent * 2;
+                    // Jellyfish has box-shadows with visible glow up to ~200px (accounts for 450px shadows at low opacity)
+                    shadowExtent = 200;
+                    // Include pulse scale and tentacle length to prevent vertical overflow
+                    const scaleMax = 1.3; // Matches CSS pulse max (~1.28)
+                    const tentacleMax = set.tentacleMaxLength || 140;
+                    checkWidth = bellWidth * scaleMax + shadowExtent;
+                    checkHeight = (bellHeight + tentacleMax) * scaleMax + shadowExtent;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
                     shadowExtent = 20;
@@ -142,14 +145,32 @@
 
                 // Bounce off walls
                 // Adjust boundary checks to account for shadow/glow padding
+                // Add small buffer to prevent edge cases where element might briefly touch boundary
                 const boundaryPadding = shadowExtent;
-                if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
-                    set.velocityX *= -1;
-                    newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
-                }
-                if (newY <= boundaryPadding || newY + checkHeight >= window.innerHeight - boundaryPadding) {
-                    set.velocityY *= -1;
-                    newY = Math.max(boundaryPadding, Math.min(newY, window.innerHeight - checkHeight - boundaryPadding));
+                const safetyBuffer = 1;
+                if (set.isJellyfish && set.bellSize) {
+                    // Jellyfish: checkWidth includes element + shadow on right
+                    // Left edge: shadow extends S pixels left, so X >= S
+                    // Right edge: element + shadow extends to X + W + S, so X + W + S <= viewport
+                    // Since checkWidth = W + S, we check: X + checkWidth <= viewport
+                    if (newX <= boundaryPadding + safetyBuffer || newX + checkWidth >= window.innerWidth - safetyBuffer) {
+                        set.velocityX *= -1;
+                        newX = Math.max(boundaryPadding + safetyBuffer, Math.min(newX, window.innerWidth - checkWidth - safetyBuffer));
+                    }
+                    if (newY <= boundaryPadding + safetyBuffer || newY + checkHeight >= window.innerHeight - safetyBuffer) {
+                        set.velocityY *= -1;
+                        newY = Math.max(boundaryPadding + safetyBuffer, Math.min(newY, window.innerHeight - checkHeight - safetyBuffer));
+                    }
+                } else {
+                    // Other themes: checkWidth includes shadow on both sides
+                    if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
+                        set.velocityX *= -1;
+                        newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
+                    }
+                    if (newY <= boundaryPadding || newY + checkHeight >= window.innerHeight - boundaryPadding) {
+                        set.velocityY *= -1;
+                        newY = Math.max(boundaryPadding, Math.min(newY, window.innerHeight - checkHeight - boundaryPadding));
+                    }
                 }
 
                 primary.style.left = newX + 'px';
@@ -1055,10 +1076,13 @@
                 if (set.isJellyfish && set.bellSize) {
                     const bellWidth = set.bellSize * 1.2;
                     const bellHeight = set.bellSize * 0.7;
-                    // Jellyfish has box-shadows with visible glow up to ~120px
-                    shadowExtent = 120;
-                    checkWidth = bellWidth + shadowExtent * 2;
-                    checkHeight = bellHeight + shadowExtent * 2;
+                    // Jellyfish has box-shadows with visible glow up to ~200px (accounts for 450px shadows at low opacity)
+                    shadowExtent = 200;
+                    // Include pulse scale and tentacle length to prevent vertical overflow
+                    const scaleMax = 1.3; // Matches CSS pulse max (~1.28)
+                    const tentacleMax = set.tentacleMaxLength || 140;
+                    checkWidth = bellWidth * scaleMax + shadowExtent;
+                    checkHeight = (bellHeight + tentacleMax) * scaleMax + shadowExtent;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
                     shadowExtent = 20;
@@ -1085,18 +1109,40 @@
                 }
 
                 // Adjust boundary checks to account for shadow/glow padding
+                // Add small buffer to prevent edge cases where element might briefly touch boundary
                 const boundaryPadding = shadowExtent;
-                if (x + checkWidth > window.innerWidth - boundaryPadding) {
-                    primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
-                }
-                if (x < boundaryPadding) {
-                    primary.style.left = boundaryPadding + 'px';
-                }
-                if (y + checkHeight > window.innerHeight - boundaryPadding) {
-                    primary.style.top = (window.innerHeight - checkHeight - boundaryPadding) + 'px';
-                }
-                if (y < boundaryPadding) {
-                    primary.style.top = boundaryPadding + 'px';
+                const safetyBuffer = 1;
+                if (set.isJellyfish && set.bellSize) {
+                    // Jellyfish: checkWidth includes element + shadow on right
+                    // Left edge: shadow extends S pixels left, so X >= S
+                    // Right edge: element + shadow extends to X + W + S, so X + W + S <= viewport
+                    // Since checkWidth = W + S, we check: X + checkWidth <= viewport
+                    if (x + checkWidth >= window.innerWidth - safetyBuffer) {
+                        primary.style.left = (window.innerWidth - checkWidth - safetyBuffer) + 'px';
+                    }
+                    if (x <= boundaryPadding + safetyBuffer) {
+                        primary.style.left = (boundaryPadding + safetyBuffer) + 'px';
+                    }
+                    if (y + checkHeight >= window.innerHeight - safetyBuffer) {
+                        primary.style.top = (window.innerHeight - checkHeight - safetyBuffer) + 'px';
+                    }
+                    if (y <= boundaryPadding + safetyBuffer) {
+                        primary.style.top = (boundaryPadding + safetyBuffer) + 'px';
+                    }
+                } else {
+                    // Other themes: checkWidth includes shadow on both sides
+                    if (x + checkWidth > window.innerWidth - boundaryPadding) {
+                        primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
+                    }
+                    if (x < boundaryPadding) {
+                        primary.style.left = boundaryPadding + 'px';
+                    }
+                    if (y + checkHeight > window.innerHeight - boundaryPadding) {
+                        primary.style.top = (window.innerHeight - checkHeight - boundaryPadding) + 'px';
+                    }
+                    if (y < boundaryPadding) {
+                        primary.style.top = boundaryPadding + 'px';
+                    }
                 }
             });
         });
