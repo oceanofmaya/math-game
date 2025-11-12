@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="language" content="EN" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content="1.1.1" />
+    <meta name="version" content="1.1.2" />
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
@@ -785,49 +785,50 @@
         }
 
         // Mobile keyboard handling - ensure inputs scroll into view when focused
-        function scrollInputIntoView(input) {
-          if (!input) return;
+        // and scroll back to top when keyboard is dismissed
+        const form = document.getElementById('gameForm');
+        let viewportHeight = window.innerHeight;
+        let resizeTimeout = null;
+        let keyboardWasVisible = false;
 
-          // Find the scrollable container (form element)
-          const form = input.closest('form');
-          if (!form) return;
+        function scrollInputIntoView(input) {
+          if (!input || !form) return;
 
           // Use setTimeout to ensure keyboard has appeared
           setTimeout(function () {
-            const countContainer = document.querySelector('.count-container');
-            const countContainerRect = countContainer ? countContainer.getBoundingClientRect() : null;
+            // Calculate input position relative to form
             const inputRect = input.getBoundingClientRect();
             const formRect = form.getBoundingClientRect();
-
-            // Calculate if we need to scroll, ensuring score stays visible
             const viewportHeight = window.innerHeight;
-            const keyboardHeight = viewportHeight < 600 ? 250 : 0; // Estimate keyboard height on mobile
+
+            // Estimate keyboard height on mobile
+            const keyboardHeight = viewportHeight < 600 ? 250 : 0;
             const availableHeight = viewportHeight - keyboardHeight;
 
-            // If input is below available viewport area, scroll it up but keep score visible
+            // Check if input is below the available viewport area
             if (inputRect.bottom > availableHeight) {
-              // Calculate scroll position: position input just above keyboard, but don't hide score
-              const scrollNeeded = inputRect.bottom - availableHeight + 20; // 20px padding
+              // Calculate scroll position to show input above keyboard
+              // Position input near top of available viewport, leaving room for title/score
+              const inputOffsetTop = inputRect.top - formRect.top + form.scrollTop;
+              const padding = 20; // Small padding from top
+              const targetScrollTop = inputOffsetTop - padding;
 
-              // Get current scroll position
-              const currentScrollTop = form.scrollTop;
-
-              // If score would be hidden, adjust scroll to keep it visible
-              if (countContainerRect && countContainerRect.top - scrollNeeded < 0) {
-                // Only scroll enough to show input without hiding score
-                const maxScroll = countContainerRect.top;
-                form.scrollTop = currentScrollTop + Math.min(scrollNeeded, maxScroll);
-              } else {
-                // Calculate the position relative to the form
-                const inputOffsetTop = inputRect.top - formRect.top + currentScrollTop;
-                const targetScrollTop = inputOffsetTop - (availableHeight - inputRect.height) / 2;
-
-                // Additional small adjustment for keyboard on mobile
-                const adjustment = window.innerHeight < 600 ? 20 : 0;
-                form.scrollTop = Math.max(0, targetScrollTop - adjustment);
-              }
+              // Use direct scrollTop assignment for instant scroll that doesn't interfere with manual scrolling
+              // This allows users to manually scroll back to top at any time
+              form.scrollTop = Math.max(0, targetScrollTop);
             }
+            // If input is already visible, don't scroll - allows manual scrolling
           }, 300);
+        }
+
+        function scrollToTop() {
+          if (!form) return;
+          // Scroll form back to top when keyboard is dismissed
+          // Use smooth scroll for better UX when keyboard dismisses
+          form.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         }
 
         // Handle answer input focus
@@ -847,25 +848,54 @@
         }
 
         // Handle viewport resize (keyboard appearing/disappearing)
-        let viewportHeight = window.innerHeight;
-        let resizeTimeout = null;
         window.addEventListener('resize', function () {
           // Debounce resize events
           clearTimeout(resizeTimeout);
           resizeTimeout = setTimeout(function () {
             const currentHeight = window.innerHeight;
-            // Only scroll when keyboard appears (viewport shrinks), not when it disappears
-            // This prevents interfering with user's ability to scroll back up
-            if (currentHeight < viewportHeight - 150) {
-              // Scroll focused input into view only when keyboard appears
+            const heightDifference = viewportHeight - currentHeight;
+
+            // Keyboard appeared (viewport shrunk significantly)
+            if (heightDifference > 150) {
+              keyboardWasVisible = true;
+              // Scroll focused input into view when keyboard appears
               const activeElement = document.activeElement;
               if (activeElement && (activeElement.id === 'answer' || activeElement.id === 'maxNumber')) {
                 scrollInputIntoView(activeElement);
               }
             }
+            // Keyboard dismissed (viewport expanded significantly)
+            else if (keyboardWasVisible && heightDifference < -150) {
+              keyboardWasVisible = false;
+              // Scroll back to top when keyboard is dismissed
+              scrollToTop();
+            }
+
             viewportHeight = currentHeight;
           }, 100);
         });
+
+        // Also handle blur events to scroll back to top when input loses focus
+        // This catches cases where keyboard is dismissed by tapping outside
+        // Use a longer delay to ensure resize event has fired first
+        function handleInputBlur() {
+          setTimeout(function () {
+            // Only scroll to top if keyboard was visible and is now dismissed
+            // Check viewport height to confirm keyboard is gone
+            if (keyboardWasVisible && window.innerHeight >= viewportHeight + 100) {
+              keyboardWasVisible = false;
+              scrollToTop();
+            }
+          }, 300);
+        }
+
+        if (answerInput) {
+          answerInput.addEventListener('blur', handleInputBlur);
+        }
+
+        if (maxNumberInputForScroll) {
+          maxNumberInputForScroll.addEventListener('blur', handleInputBlur);
+        }
       });
     </script>
   </body>
