@@ -61,14 +61,13 @@
 }
 
 html {
-    overflow: hidden;
     height: 100%;
     width: 100%;
 }
 
 body {
     min-height: 100vh;
-    height: 100vh;
+    height: auto;
     background-color: var(--color-bg-primary);
     background-image: linear-gradient(var(--color-bg-primary), var(--color-bg-secondary));
     margin: 0 auto;
@@ -79,7 +78,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Arial, sans-serif;
     min-width: 300px;
     text-align: center;
-    overflow: hidden;
+    overflow: auto;
     box-sizing: border-box;
     line-height: 1.5;
     position: relative;
@@ -408,8 +407,6 @@ form {
     height: auto;
     box-sizing: border-box;
     justify-content: flex-start;
-    overflow-y: auto;
-    overflow-x: hidden;
     width: 100%;
     position: relative;
 }

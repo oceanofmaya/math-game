@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.4 - 2025-11-12
+
+#### Bug Fixes
+
+- Further improve mobile scroll behavior: reliably return to top after keyboard dismissal and preserve access to title/score while inputs are focused
+
 ### 1.1.3 - 2025-11-11
 
 #### Bug Fixes

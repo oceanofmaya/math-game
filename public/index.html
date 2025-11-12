@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="language" content="EN" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content="1.1.3" />
+    <meta name="version" content="1.1.4" />
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
@@ -784,68 +784,52 @@
           });
         }
 
-        // Mobile keyboard handling - ensure inputs scroll into view when focused
-        // and scroll back to top when keyboard is dismissed
+        // Mobile keyboard handling with body scrolling (avoid nested scroll containers)
+        // Uses visualViewport when available for reliable keyboard detection
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        // Ensure we start at the top on page load (and after bfcache restores)
+        window.addEventListener('pageshow', function () {
+          setTimeout(function () {
+            window.scrollTo(0, 0);
+          }, 0);
+        });
+
         const form = document.getElementById('gameForm');
-        let initialViewportHeight = window.innerHeight;
-        let resizeTimeout = null;
+        const visualViewport = window.visualViewport || null;
+        let initialViewportHeight = visualViewport ? visualViewport.height : window.innerHeight;
         let keyboardWasVisible = false;
         let scrollToTopTimeout = null;
 
+        function getViewportHeight() {
+          return visualViewport ? visualViewport.height : window.innerHeight;
+        }
+
         function scrollInputIntoView(input) {
-          if (!input || !form) return;
-
-          // Use setTimeout to ensure keyboard has appeared
+          if (!input) return;
+          // Defer to allow keyboard to animate in
           setTimeout(function () {
-            const inputRect = input.getBoundingClientRect();
-            const formRect = form.getBoundingClientRect();
-            const currentViewportHeight = window.innerHeight;
-
-            // Estimate keyboard height on mobile
-            const keyboardHeight = currentViewportHeight < 600 ? 250 : 0;
-            const availableHeight = currentViewportHeight - keyboardHeight;
-
-            // Only scroll if input is actually hidden by keyboard
-            if (inputRect.bottom > availableHeight) {
-              // Calculate the input's absolute position within the form
-              const inputOffsetTop = inputRect.top - formRect.top + form.scrollTop;
-              
-              // Calculate target scroll position: position input just above keyboard
-              // This ensures input is visible with some padding, but doesn't hide title/score unnecessarily
-              const padding = 20; // Padding above keyboard
-              const targetScrollTop = inputOffsetTop - (availableHeight - inputRect.height) + padding;
-              
-              // Only scroll if it's necessary and doesn't push title/score too far out of view
-              // This allows users to manually scroll back to see title/score
-              if (targetScrollTop > form.scrollTop) {
-                form.scrollTop = Math.max(0, targetScrollTop);
-              }
+            const viewportHeight = getViewportHeight();
+            const padding = 20;
+            const rect = input.getBoundingClientRect();
+            if (rect.bottom > viewportHeight - padding) {
+              const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+              const delta = rect.bottom - (viewportHeight - padding);
+              const targetY = Math.max(0, currentScrollY + delta);
+              window.scrollTo({ top: targetY, behavior: 'auto' });
             }
           }, 300);
         }
 
         function scrollToTop() {
-          if (!form) return;
-          
-          // Clear any pending scroll-to-top timeouts
           if (scrollToTopTimeout) {
             clearTimeout(scrollToTopTimeout);
           }
-          
-          // Use a small delay to ensure keyboard animation completes
+          // Small delay to let keyboard dismissal finish
           scrollToTopTimeout = setTimeout(function () {
-            // Use scrollTo with smooth behavior for better UX
-            // Don't set scrollTop directly as it would cancel the smooth animation
-            if (form.scrollTo) {
-              form.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              });
-            } else {
-              // Fallback for older browsers
-              form.scrollTop = 0;
-            }
-          }, 150);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }
 
         // Handle answer input focus
@@ -865,50 +849,46 @@
         }
 
         // Handle viewport resize (keyboard appearing/disappearing)
-        window.addEventListener('resize', function () {
-          // Debounce resize events
-          clearTimeout(resizeTimeout);
-          resizeTimeout = setTimeout(function () {
-            const currentHeight = window.innerHeight;
-            const heightDifference = initialViewportHeight - currentHeight;
+        function handleViewportResize() {
+          const currentHeight = getViewportHeight();
+          const heightDifference = initialViewportHeight - currentHeight;
 
-            // Keyboard appeared (viewport shrunk significantly)
-            if (heightDifference > 150) {
-              keyboardWasVisible = true;
-              // Scroll focused input into view when keyboard appears
-              const activeElement = document.activeElement;
-              if (activeElement && (activeElement.id === 'answer' || activeElement.id === 'maxNumber')) {
-                scrollInputIntoView(activeElement);
-              }
+          // Keyboard appeared
+          if (heightDifference > 150) {
+            keyboardWasVisible = true;
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.id === 'answer' || activeElement.id === 'maxNumber')) {
+              scrollInputIntoView(activeElement);
             }
-            // Keyboard dismissed (viewport expanded significantly)
-            else if (keyboardWasVisible && currentHeight > initialViewportHeight) {
-              keyboardWasVisible = false;
-              // Update initial viewport height immediately
-              initialViewportHeight = currentHeight;
-              // Scroll back to top when keyboard is dismissed
-              scrollToTop();
-            }
-          }, 100);
-        });
+          }
+          // Keyboard dismissed
+          else if (keyboardWasVisible && currentHeight >= initialViewportHeight - 10) {
+            keyboardWasVisible = false;
+            initialViewportHeight = currentHeight;
+            scrollToTop();
+          }
+        }
+        if (visualViewport) {
+          visualViewport.addEventListener('resize', handleViewportResize);
+        } else {
+          window.addEventListener('resize', handleViewportResize);
+        }
 
         // Also handle blur events to scroll back to top when input loses focus
         // This catches cases where keyboard is dismissed by tapping outside
         // The blur handler acts as a backup in case resize events don't fire reliably
         function handleInputBlur() {
-          // Use a delay to allow resize event to fire first (which is more reliable)
+          // Use a delay to allow resize event to fire first (more reliable on iOS)
           setTimeout(function () {
-            // Only act if keyboard was visible and resize handler hasn't already handled it
             if (keyboardWasVisible) {
-              const currentHeight = window.innerHeight;
-              // Check if viewport has expanded back (keyboard dismissed)
-              if (currentHeight >= initialViewportHeight - 50) {
+              const currentHeight = getViewportHeight();
+              if (currentHeight >= initialViewportHeight - 10) {
                 keyboardWasVisible = false;
                 initialViewportHeight = currentHeight;
                 scrollToTop();
               }
             }
-          }, 400);
+          }, 300);
         }
 
         if (answerInput) {
