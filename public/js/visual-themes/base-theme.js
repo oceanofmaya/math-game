@@ -110,8 +110,8 @@
                     // Use base bell dimensions (accounting for bell being wider than tall)
                     const bellWidth = set.bellSize * 1.2; // bellWidth calculation from creation
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
-                    // Jellyfish has very large box-shadows (up to 450px in pulse animation)
-                    shadowExtent = 450;
+                    // Jellyfish has box-shadows with visible glow up to ~120px
+                    shadowExtent = 120;
                     checkWidth = bellWidth + shadowExtent * 2;
                     checkHeight = bellHeight + shadowExtent * 2;
                 } else if (set.isMaple) {
@@ -1055,8 +1055,8 @@
                 if (set.isJellyfish && set.bellSize) {
                     const bellWidth = set.bellSize * 1.2;
                     const bellHeight = set.bellSize * 0.7;
-                    // Jellyfish has very large box-shadows (up to 450px in pulse animation)
-                    shadowExtent = 450;
+                    // Jellyfish has box-shadows with visible glow up to ~120px
+                    shadowExtent = 120;
                     checkWidth = bellWidth + shadowExtent * 2;
                     checkHeight = bellHeight + shadowExtent * 2;
                 } else if (set.isMaple) {
