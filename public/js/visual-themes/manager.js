@@ -357,6 +357,21 @@
                     sampleFields.classList.remove('hidden');
                     sampleFields.classList.add('visible');
                 }
+                // Disable timed mode (doesn't make sense in sample mode)
+                const timedModeButton = document.getElementById('timedModeButton');
+                // Stop timer if running and reset timed mode (check before changing button state)
+                if (global.OceanOfMaya && global.OceanOfMaya.MathGame) {
+                    // Toggle timed mode off if it was on (this will stop timer and reset everything)
+                    if (timedModeButton && timedModeButton.classList.contains('active')) {
+                        global.OceanOfMaya.MathGame.toggleTimedMode();
+                    }
+                }
+                // Update button state
+                if (timedModeButton) {
+                    timedModeButton.classList.add('inactive');
+                    timedModeButton.classList.remove('active');
+                    timedModeButton.setAttribute('aria-pressed', 'false');
+                }
                 // Reset and create sample element
                 this.sampleReset();
             } else {

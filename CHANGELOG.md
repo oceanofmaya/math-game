@@ -2,6 +2,13 @@
 
 ## Version 1
 
+### 1.1.0 - 2025-11-11
+
+#### Features
+
+- Added Mixed Operations mode (±) - randomly selects from all four operations for each question, with dynamic operation symbol display
+- Added Timed Mode (⏱) - answer as many questions as possible within a 5-minute time limit with timer display and session results
+
 ### 1.0.7 - 2025-11-11
 
 #### Bug Fixes

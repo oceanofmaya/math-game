@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="language" content="EN" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content="1.0.7" />
+    <meta name="version" content="1.1.0" />
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
@@ -40,6 +40,10 @@
         <div>Correct:&nbsp;<span id="countCorrect" class="success" aria-label="Correct answers">0</span></div>
         <div>&nbsp;Wrong:&nbsp;<span id="countWrong" class="fail" aria-label="Wrong answers">0</span></div>
         <div>&nbsp;Skipped:&nbsp;<span id="countSkip" class="skip" aria-label="Skipped questions">0</span></div>
+        <div id="timerContainer" class="hidden">
+          <span>&nbsp;Time:&nbsp;</span>
+          <span id="timerDisplay" aria-label="Time remaining">0:00</span>
+        </div>
       </div>
       <div class="flex-container flex-direction-column">
         <div>
@@ -80,6 +84,17 @@
               >
                 ?
               </button>
+              <span class="separator" aria-hidden="true">|</span>
+              <button
+                type="button"
+                id="timedModeButton"
+                class="mode-button inactive"
+                title="Toggle timed mode"
+                aria-label="Toggle timed mode"
+                aria-pressed="false"
+              >
+                ⏱
+              </button>
             </div>
           </fieldset>
           <fieldset id="helpContent" class="help-content hidden">
@@ -90,6 +105,10 @@
                 <strong>Visual Effects:</strong> Correct answers create visual elements. They start grayscale and become
                 colorful as you progress. More correct answers unlock pulse and wave effects.
               </p>
+              <p>
+                <strong>Operations:</strong> Choose a specific operation (+, −, ×, ÷) or select <strong>±</strong> for
+                Mixed Operations mode, which randomly selects from all four operations for each question.
+              </p>
               <p><strong>Max Number:</strong> Sets the difficulty range (1-999), but varies by operation:</p>
               <ul class="help-list">
                 <li><strong>+</strong> and <strong>×</strong>: Both numbers from 1 to max</li>
@@ -99,6 +118,11 @@
               <p>
                 <strong>Skip vs Wrong:</strong> Both remove visual elements. Use Skip when you don't know the answer;
                 Wrong is for incorrect submissions.
+              </p>
+              <p>
+                <strong>Timed Mode:</strong> Click the ⏱ button to start a 5-minute timed session. The timer begins
+                immediately and counts down. Answer as many questions as possible before time runs out. Click the ⏱
+                button again to stop the timer and reset. Your timed session results will be shown when the timer ends.
               </p>
             </div>
             <div id="helpTextSample" class="help-text hidden">
@@ -246,6 +270,16 @@
                 value="÷"
                 title="Division"
                 aria-label="Division"
+                aria-pressed="false"
+              />
+              <span class="separator" aria-hidden="true">|</span>
+              <input
+                type="button"
+                class="operation-btn"
+                id="op-mixed"
+                value="±"
+                title="Mixed Operations"
+                aria-label="Mixed Operations (random)"
                 aria-pressed="false"
               />
               <span class="separator" aria-hidden="true">|</span>
@@ -470,6 +504,7 @@
         const opSubtract = document.getElementById('op-subtract');
         const opMultiply = document.getElementById('op-multiply');
         const opDivide = document.getElementById('op-divide');
+        const opMixed = document.getElementById('op-mixed');
         const opReset = document.getElementById('op-reset');
 
         if (opAdd)
@@ -487,6 +522,10 @@
         if (opDivide)
           opDivide.addEventListener('click', function () {
             if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('divide');
+          });
+        if (opMixed)
+          opMixed.addEventListener('click', function () {
+            if (OceanOfMaya.MathGame) OceanOfMaya.MathGame.setOperation('mixed');
           });
         if (opReset)
           opReset.addEventListener('click', function () {
@@ -627,6 +666,13 @@
           sampleButton.classList.remove('active');
         }
 
+        // Initialize timed mode button to inactive
+        const timedModeButtonInit = document.getElementById('timedModeButton');
+        if (timedModeButtonInit) {
+          timedModeButtonInit.classList.add('inactive');
+          timedModeButtonInit.classList.remove('active');
+        }
+
         // Initialize help content to show game mode by default
         updateHelpContent();
 
@@ -726,6 +772,100 @@
           document.addEventListener('click', enableMusicAfterInteraction, { once: true });
           document.addEventListener('keydown', enableMusicAfterInteraction, { once: true });
         }
+
+        // Timed mode controls
+        const timedModeButton = document.getElementById('timedModeButton');
+
+        if (timedModeButton) {
+          addKeyboardSupport(timedModeButton, function () {
+            if (OceanOfMaya.MathGame) {
+              OceanOfMaya.MathGame.toggleTimedMode();
+            }
+          });
+        }
+
+        // Mobile keyboard handling - ensure inputs scroll into view when focused
+        function scrollInputIntoView(input) {
+          if (!input) return;
+
+          // Use setTimeout to ensure keyboard has appeared
+          setTimeout(function () {
+            const countContainer = document.querySelector('.count-container');
+            const countContainerRect = countContainer ? countContainer.getBoundingClientRect() : null;
+            const inputRect = input.getBoundingClientRect();
+
+            // Calculate if we need to scroll, ensuring score stays visible
+            const viewportHeight = window.innerHeight;
+            const keyboardHeight = viewportHeight < 600 ? 250 : 0; // Estimate keyboard height on mobile
+            const availableHeight = viewportHeight - keyboardHeight;
+
+            // Check if score is currently visible
+            const scoreVisible =
+              countContainerRect && countContainerRect.top >= 0 && countContainerRect.bottom <= viewportHeight;
+
+            // If input is below available viewport area, scroll it up but keep score visible
+            if (inputRect.bottom > availableHeight) {
+              // Calculate scroll position: position input just above keyboard, but don't hide score
+              const scrollNeeded = inputRect.bottom - availableHeight + 20; // 20px padding
+
+              // If score would be hidden, adjust scroll to keep it visible
+              if (countContainerRect && countContainerRect.top - scrollNeeded < 0) {
+                // Only scroll enough to show input without hiding score
+                const maxScroll = countContainerRect.top;
+                window.scrollBy({
+                  top: Math.min(scrollNeeded, maxScroll),
+                  behavior: 'smooth',
+                });
+              } else {
+                // Safe to scroll normally
+                input.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'nearest',
+                  inline: 'nearest',
+                });
+
+                // Additional small adjustment for keyboard on mobile
+                if (window.innerHeight < 600) {
+                  window.scrollBy({
+                    top: 20,
+                    behavior: 'smooth',
+                  });
+                }
+              }
+            }
+          }, 300);
+        }
+
+        // Handle answer input focus
+        const answerInput = document.getElementById('answer');
+        if (answerInput) {
+          answerInput.addEventListener('focus', function () {
+            scrollInputIntoView(this);
+          });
+        }
+
+        // Handle max number input focus
+        const maxNumberInputForScroll = document.getElementById('maxNumber');
+        if (maxNumberInputForScroll) {
+          maxNumberInputForScroll.addEventListener('focus', function () {
+            scrollInputIntoView(this);
+          });
+        }
+
+        // Handle viewport resize (keyboard appearing/disappearing)
+        let viewportHeight = window.innerHeight;
+        window.addEventListener('resize', function () {
+          const currentHeight = window.innerHeight;
+          // If viewport height decreased significantly, keyboard likely appeared
+          if (currentHeight < viewportHeight - 150) {
+            // Scroll focused input into view
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.id === 'answer' || activeElement.id === 'maxNumber')) {
+              scrollInputIntoView(activeElement);
+            }
+          }
+          viewportHeight = currentHeight;
+        });
       });
     </script>
   </body>
