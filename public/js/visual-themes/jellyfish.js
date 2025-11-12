@@ -39,6 +39,8 @@
             bell.style.width = bellWidth + 'px';
             bell.style.height = bellHeight + 'px';
             bell.style.position = 'absolute';
+            bell.style.left = Math.random() * (window.innerWidth - bellWidth) + 'px';
+            bell.style.top = Math.random() * (window.innerHeight - bellHeight * 2) + 'px';
             // New shapes always start in grayscale
             bell.style.filter = 'blur(0.5px) grayscale(100%)';
             bell.style.opacity = '0';
@@ -54,13 +56,11 @@
 
             // Create tentacles (stored as secondaryElements)
             const tentacles = [];
-            const tentacleLengthsLocal = [];
             for (let i = 0; i < numTentacles; i++) {
                 const tentacle = document.createElement('div');
                 tentacle.className = 'jellyfish-tentacle';
                 tentacle.style.position = 'absolute';
                 const tentacleLength = 60 + Math.random() * 80; // 60-140px
-                tentacleLengthsLocal.push(tentacleLength);
                 
                 // Create unique wave pattern for each tentacle
                 const waveAmplitude = 2 + Math.random() * 3; // 2-5px variation
@@ -85,7 +85,6 @@
                 tentacle.style.filter = 'blur(0.4px) grayscale(100%)';
                 tentacle.style.opacity = '0';
                 tentacle.style.transition = 'opacity 0.3s';
-                
                 container.appendChild(tentacle);
                 tentacles.push(tentacle);
             }
@@ -98,21 +97,6 @@
                 const offsetX = (i + 1) * tentacleSpacing - (bellWidth / 2);
                 tentacleOffsets.push(offsetX);
             }
-
-            // Calculate max tentacle length for positioning
-            const tentacleMaxLength = tentacleLengthsLocal.length ? Math.max.apply(null, tentacleLengthsLocal) : 140;
-            
-            // Position bell accounting for shadow extent, pulse scale, and tentacle length
-            // Use reasonable bounds that allow free movement while preventing overflow
-            const shadowExtent = 200;
-            const safetyBuffer = 1;
-            const scaleMax = 1.3; // Matches max pulse scale (~1.28)
-            const minX = shadowExtent;
-            const maxX = Math.max(minX, window.innerWidth - (bellWidth * scaleMax) - shadowExtent);
-            const minY = shadowExtent;
-            const maxY = Math.max(minY, window.innerHeight - ((bellHeight + tentacleMaxLength) * scaleMax) - shadowExtent);
-            bell.style.left = Math.random() * (maxX - minX) + minX + 'px';
-            bell.style.top = Math.random() * (maxY - minY) + minY + 'px';
 
             // Random rotation direction and speed for variety - graceful and calming
             const rotationDirection = Math.random() < 0.5 ? -1 : 1; // Random clockwise or counter-clockwise
@@ -133,8 +117,7 @@
                 // Store jellyfish-specific data
                 bellSize: bellSize,
                 tentacleOffsets: tentacleOffsets,
-                tentacleLengths: tentacleLengthsLocal,
-                tentacleMaxLength: tentacleMaxLength,
+                tentacleLengths: tentacles.map(() => 60 + Math.random() * 80),
                 isJellyfish: true, // Flag to identify jellyfish in physics loop
                 rotationSpeed: rotationSpeed // Rotation speed in degrees per frame
             };
@@ -175,25 +158,6 @@
             };
 
             // Animate in - ensure proper initial state
-            // Temporarily hide overflow during birth animation to prevent scrollbar
-            // Use a counter to handle multiple simultaneous births
-            if (!window._jellyfishBirthCount) {
-                window._jellyfishBirthCount = 0;
-            }
-            if (!window._jellyfishOriginalOverflow) {
-                window._jellyfishOriginalOverflow = {
-                    body: document.body.style.overflow,
-                    html: document.documentElement.style.overflow
-                };
-            }
-            
-            window._jellyfishBirthCount++;
-            if (window._jellyfishBirthCount === 1) {
-                // First birth - hide overflow
-                document.body.style.overflow = 'hidden';
-                document.documentElement.style.overflow = 'hidden';
-            }
-            
             requestAnimationFrame(() => {
                 // Reset transform for proper animation
                 bell.style.transform = 'scale(0) translateY(20px)';
@@ -205,17 +169,6 @@
                 // Animate bell in first
                 bell.style.opacity = '1';
                 bell.style.transform = 'scale(1) translateY(0)';
-                
-                // Restore overflow after birth animation completes (0.5s transition + buffer)
-                setTimeout(() => {
-                    window._jellyfishBirthCount--;
-                    if (window._jellyfishBirthCount === 0) {
-                        // Last birth completed - restore overflow
-                        document.body.style.overflow = window._jellyfishOriginalOverflow.body;
-                        document.documentElement.style.overflow = window._jellyfishOriginalOverflow.html;
-                        window._jellyfishOriginalOverflow = null;
-                    }
-                }, 600);
                 
                 // Start tentacle positioning after bell animation begins (wait for scale to be applied)
                 setTimeout(() => {

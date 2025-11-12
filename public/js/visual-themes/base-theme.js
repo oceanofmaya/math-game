@@ -103,40 +103,20 @@
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
                 // This prevents scale-up from pulse animation from reducing movement range
-                // For all themes, account for shadow/glow extents to prevent scrollbars
+                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
                 let checkWidth, checkHeight;
-                let shadowExtent = 0;
                 if (set.isJellyfish && set.bellSize) {
                     // Use base bell dimensions (accounting for bell being wider than tall)
                     const bellWidth = set.bellSize * 1.2; // bellWidth calculation from creation
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
-                    // Jellyfish has box-shadows with visible glow up to ~200px (accounts for 450px shadows at low opacity)
-                    shadowExtent = 200;
-                    // Include pulse scale and tentacle length to prevent vertical overflow
-                    const scaleMax = 1.3; // Matches CSS pulse max (~1.28)
-                    const tentacleMax = set.tentacleMaxLength || 140;
-                    checkWidth = bellWidth * scaleMax + shadowExtent;
-                    checkHeight = (bellHeight + tentacleMax) * scaleMax + shadowExtent;
+                    checkWidth = bellWidth;
+                    checkHeight = bellHeight;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
-                    shadowExtent = 20;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isMushroom) {
-                    // Mushroom has box-shadows up to 90px in pulse animation
-                    shadowExtent = 90;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isFirefly) {
-                    // Firefly has box-shadows up to 110px in pulse animation
-                    shadowExtent = 110;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isPearl) {
-                    // Pearl has box-shadows up to 35px in pulse animation
-                    shadowExtent = 35;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
+                    // Add padding to prevent drop-shadow from extending beyond viewport
+                    const dropShadowExtent = 20;
+                    checkWidth = rect.width + dropShadowExtent * 2;
+                    checkHeight = rect.height + dropShadowExtent * 2;
                 } else {
                     // For other themes, use actual rendered size
                     checkWidth = rect.width;
@@ -144,33 +124,15 @@
                 }
 
                 // Bounce off walls
-                // Adjust boundary checks to account for shadow/glow padding
-                // Add small buffer to prevent edge cases where element might briefly touch boundary
-                const boundaryPadding = shadowExtent;
-                const safetyBuffer = 1;
-                if (set.isJellyfish && set.bellSize) {
-                    // Jellyfish: checkWidth includes element + shadow on right
-                    // Left edge: shadow extends S pixels left, so X >= S
-                    // Right edge: element + shadow extends to X + W + S, so X + W + S <= viewport
-                    // Since checkWidth = W + S, we check: X + checkWidth <= viewport
-                    if (newX <= boundaryPadding + safetyBuffer || newX + checkWidth >= window.innerWidth - safetyBuffer) {
-                        set.velocityX *= -1;
-                        newX = Math.max(boundaryPadding + safetyBuffer, Math.min(newX, window.innerWidth - checkWidth - safetyBuffer));
-                    }
-                    if (newY <= boundaryPadding + safetyBuffer || newY + checkHeight >= window.innerHeight - safetyBuffer) {
-                        set.velocityY *= -1;
-                        newY = Math.max(boundaryPadding + safetyBuffer, Math.min(newY, window.innerHeight - checkHeight - safetyBuffer));
-                    }
-                } else {
-                    // Other themes: checkWidth includes shadow on both sides
-                    if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
-                        set.velocityX *= -1;
-                        newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
-                    }
-                    if (newY <= boundaryPadding || newY + checkHeight >= window.innerHeight - boundaryPadding) {
-                        set.velocityY *= -1;
-                        newY = Math.max(boundaryPadding, Math.min(newY, window.innerHeight - checkHeight - boundaryPadding));
-                    }
+                // For maple, adjust boundary checks to account for drop-shadow padding
+                const boundaryPadding = set.isMaple ? 20 : 0;
+                if (newX <= boundaryPadding || newX + checkWidth >= window.innerWidth - boundaryPadding) {
+                    set.velocityX *= -1;
+                    newX = Math.max(boundaryPadding, Math.min(newX, window.innerWidth - checkWidth - boundaryPadding));
+                }
+                if (newY <= boundaryPadding || newY + checkHeight >= window.innerHeight - boundaryPadding) {
+                    set.velocityY *= -1;
+                    newY = Math.max(boundaryPadding, Math.min(newY, window.innerHeight - checkHeight - boundaryPadding));
                 }
 
                 primary.style.left = newX + 'px';
@@ -1070,79 +1032,36 @@
                 let y = Number.parseFloat(primary.style.top);
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
-                // For all themes, account for shadow/glow extents to prevent scrollbars
+                // For maple, account for drop-shadow extent (20px) to prevent scrollbars
                 let checkWidth, checkHeight;
-                let shadowExtent = 0;
                 if (set.isJellyfish && set.bellSize) {
                     const bellWidth = set.bellSize * 1.2;
                     const bellHeight = set.bellSize * 0.7;
-                    // Jellyfish has box-shadows with visible glow up to ~200px (accounts for 450px shadows at low opacity)
-                    shadowExtent = 200;
-                    // Include pulse scale and tentacle length to prevent vertical overflow
-                    const scaleMax = 1.3; // Matches CSS pulse max (~1.28)
-                    const tentacleMax = set.tentacleMaxLength || 140;
-                    checkWidth = bellWidth * scaleMax + shadowExtent;
-                    checkHeight = (bellHeight + tentacleMax) * scaleMax + shadowExtent;
+                    checkWidth = bellWidth;
+                    checkHeight = bellHeight;
                 } else if (set.isMaple) {
                     // Account for drop-shadow extent (20px is the largest shadow)
-                    shadowExtent = 20;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isMushroom) {
-                    // Mushroom has box-shadows up to 90px in pulse animation
-                    shadowExtent = 90;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isFirefly) {
-                    // Firefly has box-shadows up to 110px in pulse animation
-                    shadowExtent = 110;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
-                } else if (set.isPearl) {
-                    // Pearl has box-shadows up to 35px in pulse animation
-                    shadowExtent = 35;
-                    checkWidth = rect.width + shadowExtent * 2;
-                    checkHeight = rect.height + shadowExtent * 2;
+                    const dropShadowExtent = 20;
+                    checkWidth = rect.width + dropShadowExtent * 2;
+                    checkHeight = rect.height + dropShadowExtent * 2;
                 } else {
                     checkWidth = rect.width;
                     checkHeight = rect.height;
                 }
 
-                // Adjust boundary checks to account for shadow/glow padding
-                // Add small buffer to prevent edge cases where element might briefly touch boundary
-                const boundaryPadding = shadowExtent;
-                const safetyBuffer = 1;
-                if (set.isJellyfish && set.bellSize) {
-                    // Jellyfish: checkWidth includes element + shadow on right
-                    // Left edge: shadow extends S pixels left, so X >= S
-                    // Right edge: element + shadow extends to X + W + S, so X + W + S <= viewport
-                    // Since checkWidth = W + S, we check: X + checkWidth <= viewport
-                    if (x + checkWidth >= window.innerWidth - safetyBuffer) {
-                        primary.style.left = (window.innerWidth - checkWidth - safetyBuffer) + 'px';
-                    }
-                    if (x <= boundaryPadding + safetyBuffer) {
-                        primary.style.left = (boundaryPadding + safetyBuffer) + 'px';
-                    }
-                    if (y + checkHeight >= window.innerHeight - safetyBuffer) {
-                        primary.style.top = (window.innerHeight - checkHeight - safetyBuffer) + 'px';
-                    }
-                    if (y <= boundaryPadding + safetyBuffer) {
-                        primary.style.top = (boundaryPadding + safetyBuffer) + 'px';
-                    }
-                } else {
-                    // Other themes: checkWidth includes shadow on both sides
-                    if (x + checkWidth > window.innerWidth - boundaryPadding) {
-                        primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
-                    }
-                    if (x < boundaryPadding) {
-                        primary.style.left = boundaryPadding + 'px';
-                    }
-                    if (y + checkHeight > window.innerHeight - boundaryPadding) {
-                        primary.style.top = (window.innerHeight - checkHeight - boundaryPadding) + 'px';
-                    }
-                    if (y < boundaryPadding) {
-                        primary.style.top = boundaryPadding + 'px';
-                    }
+                // For maple, adjust boundary checks to account for drop-shadow padding
+                const boundaryPadding = set.isMaple ? 20 : 0;
+                if (x + checkWidth > window.innerWidth - boundaryPadding) {
+                    primary.style.left = (window.innerWidth - checkWidth - boundaryPadding) + 'px';
+                }
+                if (x < boundaryPadding) {
+                    primary.style.left = boundaryPadding + 'px';
+                }
+                if (y + checkHeight > window.innerHeight - boundaryPadding) {
+                    primary.style.top = (window.innerHeight - checkHeight - boundaryPadding) + 'px';
+                }
+                if (y < boundaryPadding) {
+                    primary.style.top = boundaryPadding + 'px';
                 }
             });
         });
