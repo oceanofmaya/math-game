@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.1 - 2025-11-11
+
+#### Bug Fixes
+
+- Fixed mobile scroll issue - users can now scroll back to top after keyboard appears when focusing max number input
+
 ### 1.1.0 - 2025-11-11
 
 #### Features
