@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.2 - 2025-11-11
+
+#### Bug Fixes
+
+- Improved mobile scroll behavior - users can now manually scroll to top while keyboard is visible, and form automatically scrolls to top when keyboard is dismissed
+
 ### 1.1.1 - 2025-11-11
 
 #### Bug Fixes
