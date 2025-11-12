@@ -19,6 +19,8 @@ Workflow: Create branch from `main` → Make changes → Update version/changelo
 
 Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification as documented in [README.md#contributing](../README.md#contributing). All commit messages must use the conventional commit format with appropriate types (feat, fix, docs, chore, refactor, etc.).
 
+**Before writing a commit message**: Check `CHANGELOG.md` to understand the nature of changes (new features, bug fixes, refactors, etc.) to ensure the correct commit type is used. The changelog categorizes changes and should guide the commit message type.
+
 **Keep commit messages concise**: Since changes are documented in `CHANGELOG.md`, commit messages should be brief and descriptive. Avoid verbose bullet points in commit messages - the changelog provides the detailed change list.
 
 ## Logging
@@ -104,8 +106,10 @@ All changes merged into this repository must include:
 1. **Changelog Entry**: Update `CHANGELOG.md` with a new version entry following this pattern:
    - Major version grouping: `## Version X` (if creating a new major version, otherwise add to existing major version section)
    - Version heading: `### X.Y.Z - YYYY-MM-DD` (placed under the appropriate major version section)
+   - **Date Check**: Always use the current date (YYYY-MM-DD format) when creating a new changelog entry. Use `date +%Y-%m-%d` command to get the current date if needed.
    - Category headings: Use `#### Category` for organizing changes (e.g., `Breaking Changes`, `Updates`, `UI/UX Improvements`, `Chore`, `Features`, etc.)
    - List items under each category describing the changes
+   - **Conciseness**: Changelog entries should be concise summaries, not detailed explanations. Focus on what changed from the user's perspective, not implementation details. Avoid verbose bullet points - keep entries brief and to the point.
 
 2. **Version Update**: Update the version in all locations to match the version in `CHANGELOG.md` following [semantic versioning](https://semver.org/):
    - `project.toml` - Update the `version` field in the `[project]` section

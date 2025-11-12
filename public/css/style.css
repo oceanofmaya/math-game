@@ -19,7 +19,7 @@
     --color-primary: #2196F3;
     --color-primary-hover: #1976D2;
     --color-success: #81D4FA; /* WCAG AA compliant: 5.5:1 contrast ratio on dark background (#2e2e2e) */
-    --color-error: #ff5252; /* WCAG AA compliant: 4.6:1 contrast ratio on dark background (#2e2e2e) - brighter red for better visibility */
+    --color-error: #ff6b6b; /* WCAG AA compliant: 5.1:1 contrast ratio on dark background (#2e2e2e) */
     
     /* Spacing Scale - Consistent */
     --spacing-xs: 2px;
@@ -404,14 +404,21 @@ form {
     flex-direction: column;
     align-items: center;
     padding: var(--spacing-sm);
-    height: 100vh;
-    max-height: 100vh;
+    min-height: 100vh;
+    height: auto;
     box-sizing: border-box;
     justify-content: flex-start;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
     position: relative;
+}
+
+/* Mobile viewport height handling - use dynamic viewport units when available */
+@supports (height: 100dvh) {
+    form {
+        min-height: 100dvh;
+    }
 }
 
 .flex-direction-column {
@@ -583,6 +590,7 @@ input[type=number]:focus-visible {
     -webkit-tap-highlight-color: transparent;
 }
 
+
 .mode-button.active {
     background-color: var(--color-primary);
     color: white;
@@ -596,7 +604,13 @@ input[type=number]:focus-visible {
     padding: var(--spacing-lg) var(--spacing-2xl);
 }
 
-.mode-button:hover {
+.mode-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.mode-button:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -705,6 +719,7 @@ input[type=number]:focus-visible {
     gap: var(--spacing-lg);
 }
 
+
 /* Max Number button container - centered below input */
 fieldset .button-container {
     margin-top: var(--spacing-xs);
@@ -794,6 +809,28 @@ fieldset .button-container {
         height: 32px;
         padding: 0;
     }
+    
+    /* Make timed mode toggle button match music/help buttons at 768px */
+    #timedModeButton.mode-button {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-xl);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
     
     .separator {
         font-size: var(--font-size-lg);
@@ -927,6 +964,7 @@ fieldset .button-container {
         flex-shrink: 0;
     }
     
+    
     .mode-toggle-container {
         gap: var(--spacing-sm);
     }
@@ -976,6 +1014,24 @@ fieldset .button-container {
         height: 32px;
         padding: 0;
     }
+    
+    /* Make timed mode toggle button match music/help buttons at 480px */
+    #timedModeButton.mode-button {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-lg);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
     
     .separator {
         font-size: var(--font-size-md);
@@ -1097,6 +1153,7 @@ fieldset .button-container {
         flex-shrink: 0;
     }
     
+    
     /* Make music button match operation buttons size at 360px */
     #musicToggleButton.mode-button {
         width: 28px;
@@ -1132,6 +1189,25 @@ fieldset .button-container {
         height: 28px;
         padding: 0;
     }
+    
+    /* Make timed mode toggle button match music/help buttons at 360px */
+    #timedModeButton.mode-button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: var(--font-size-sm);
+        min-width: 28px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+    }
+    
 }
 
 /* Version Display - Unobtrusive */

@@ -23,15 +23,27 @@
         let number1 = 0;
         let number2 = 0;
         let maxNumber = Constants.DEFAULT_MAX_NUMBER || 20;
-        let currentOperation = Constants.DEFAULT_OPERATION || 'multiply'; // 'add', 'subtract', 'multiply', 'divide'
+        let currentOperation = Constants.DEFAULT_OPERATION || 'multiply'; // 'add', 'subtract', 'multiply', 'divide', 'mixed'
+        let currentQuestionOperation = null; // The actual operation for the current question (used in mixed mode)
         let questionHistory = []; // Track recent questions to avoid duplicates
+        
+        // Timed mode state
+        let isTimedMode = false;
+        let timerInterval = null;
+        let timeRemaining = 0; // in seconds
+        let timedSessionCorrect = 0;
+        let timedSessionWrong = 0;
+        let timedSessionSkip = 0;
 
         const operationSymbols = {
             'add': '+',
             'subtract': '−',
             'multiply': '×',
-            'divide': '÷'
+            'divide': '÷',
+            'mixed': '±'
         };
+
+        const availableOperations = ['add', 'subtract', 'multiply', 'divide'];
 
         // Calculate maximum possible questions for current operation
         function getMaxPossibleQuestions(operation, max) {
@@ -90,8 +102,21 @@
             }
         }
 
+        // Update the operation symbol displayed in the question
+        function updateOperationSymbol(operation) {
+            const symbolElement = document.getElementById("operationSymbol");
+            if (symbolElement && operationSymbols[operation]) {
+                symbolElement.innerHTML = '&nbsp;' + operationSymbols[operation] + '&nbsp;';
+            }
+        }
+
         return {
             setOperation: function(operation) {
+                // Stop timed mode if running
+                if (isTimedMode && timerInterval) {
+                    global.OceanOfMaya.MathGame.toggleTimedMode();
+                }
+                
                 // Change operation and reset counts and visual effects
                 currentOperation = operation;
                 updateOperationUI();
@@ -114,6 +139,16 @@
                     return;
                 }
                 
+                // Determine the operation for this question
+                let questionOp = currentOperation;
+                if (currentOperation === 'mixed') {
+                    // Randomly select an operation for mixed mode
+                    questionOp = availableOperations[Math.floor(Math.random() * availableOperations.length)];
+                    currentQuestionOperation = questionOp;
+                } else {
+                    currentQuestionOperation = null; // Clear when not in mixed mode
+                }
+                
                 // Generate a new question that's not in recent history
                 const maxAttempts = 100; // Prevent infinite loops
                 let attempts = 0;
@@ -122,7 +157,7 @@
                 while (!foundNewQuestion && attempts < maxAttempts) {
                     attempts++;
                     
-                    if (currentOperation === 'divide') {
+                    if (questionOp === 'divide') {
                         // For division, ensure whole number results
                         // Generate number2 (divisor) from 1 to maxNumber, then generate a multiplier from 1 to maxNumber
                         // number1 (dividend) = number2 × multiplier, ensuring the result is always a whole number
@@ -130,7 +165,7 @@
                         number2 = Math.floor((Math.random() * maxNumber) + 1);
                         const multiplier = Math.floor((Math.random() * maxNumber) + 1);
                         number1 = number2 * multiplier;
-                    } else if (currentOperation === 'subtract') {
+                    } else if (questionOp === 'subtract') {
                         // For subtraction, ensure non-negative results
                         number1 = Math.floor((Math.random() * maxNumber) + 1);
                         number2 = Math.floor((Math.random() * number1) + 1);
@@ -141,7 +176,7 @@
                     }
                     
                     // Check if this question was recently asked
-                    if (!isQuestionInHistory(number1, number2, currentOperation)) {
+                    if (!isQuestionInHistory(number1, number2, questionOp)) {
                         foundNewQuestion = true;
                     }
                 }
@@ -153,7 +188,14 @@
                 }
                 
                 // Add to history
-                addQuestionToHistory(number1, number2, currentOperation);
+                addQuestionToHistory(number1, number2, questionOp);
+                
+                // Update UI to show the operation symbol (always update, especially important for mixed mode)
+                if (currentOperation === 'mixed') {
+                    updateOperationSymbol(questionOp);
+                } else {
+                    updateOperationSymbol(currentOperation);
+                }
                 
                 number1Element.innerHTML = number1;
                 number2Element.innerHTML = number2;
@@ -179,8 +221,11 @@
                     doneButton.disabled = true;
                 }
 
+                // Use the current question's operation (for mixed mode) or the current operation
+                const questionOp = currentQuestionOperation || currentOperation;
+                
                 let answer;
-                switch (currentOperation) {
+                switch (questionOp) {
                     case 'add':
                         answer = number1 + number2;
                         break;
@@ -215,6 +260,11 @@
             },
 
             changeMaxNumber: function () {
+                // Stop timed mode if running
+                if (isTimedMode && timerInterval) {
+                    global.OceanOfMaya.MathGame.toggleTimedMode();
+                }
+                
                 const maxNumberInput = document.getElementById("maxNumber");
                 if (!maxNumberInput) {
                     console.error('Max number input element not found');
@@ -252,6 +302,10 @@
 
             skipQuestion: function () {
                 numberSkip++;
+                // Track for timed session
+                if (global.OceanOfMaya.MathGame.isTimedModeActive()) {
+                    timedSessionSkip++;
+                }
                 if (global.OceanOfMaya.VisualThemes && global.OceanOfMaya.VisualThemes.Manager) {
                     global.OceanOfMaya.VisualThemes.Manager.handleSkip();
                 }
@@ -261,6 +315,11 @@
             },
 
             resetCounts: function () {
+                // Stop timed mode if running
+                if (isTimedMode && timerInterval) {
+                    global.OceanOfMaya.MathGame.toggleTimedMode();
+                }
+                
                 numberCorrect = 0;
                 numberWrong = 0;
                 numberSkip = 0;
@@ -295,18 +354,116 @@
                 
                 if (answerInput) answerInput.value = "";
                 if (answerMessage) answerMessage.innerHTML = "";
+            },
+
+            toggleTimedMode: function() {
+                // Check if we're in sample mode - timed mode doesn't make sense there
+                const sampleButton = document.getElementById('sampleModeButton');
+                const isSampleMode = sampleButton && sampleButton.classList.contains('active');
+                
+                if (isSampleMode) {
+                    // Don't allow enabling timed mode in sample mode
+                    return;
+                }
+                
+                isTimedMode = !isTimedMode;
+                const timerContainer = document.getElementById('timerContainer');
+                const timerDisplay = document.getElementById('timerDisplay');
+                const timedButton = document.getElementById('timedModeButton');
+                
+                if (timedButton) {
+                    timedButton.setAttribute('aria-pressed', isTimedMode ? 'true' : 'false');
+                    if (isTimedMode) {
+                        timedButton.classList.add('active');
+                        timedButton.classList.remove('inactive');
+                        
+                        // Start timer immediately when timed mode is enabled
+                        if (!timerContainer || !timerDisplay) {
+                            return;
+                        }
+                        
+                        // Fixed time limit of 5 minutes
+                        const timeLimitMinutes = 5;
+                        timeRemaining = timeLimitMinutes * 60;
+                        
+                        // Reset timed session stats
+                        timedSessionCorrect = 0;
+                        timedSessionWrong = 0;
+                        timedSessionSkip = 0;
+                        
+                        // Show timer and update UI
+                        timerContainer.classList.remove('hidden');
+                        updateTimerDisplay();
+                        
+                        // Start countdown
+                        timerInterval = setInterval(function() {
+                            timeRemaining--;
+                            updateTimerDisplay();
+                            
+                            if (timeRemaining <= 0) {
+                                global.OceanOfMaya.MathGame.stopTimer();
+                                showTimedResults();
+                            }
+                        }, 1000);
+                    } else {
+                        timedButton.classList.remove('active');
+                        timedButton.classList.add('inactive');
+                        
+                        // Stop timer if running and reset all timed mode state
+                        if (timerInterval) {
+                            clearInterval(timerInterval);
+                            timerInterval = null;
+                        }
+                        
+                        // Reset all timed mode variables
+                        timeRemaining = 0;
+                        timedSessionCorrect = 0;
+                        timedSessionWrong = 0;
+                        timedSessionSkip = 0;
+                        
+                        // Hide timer container
+                        if (timerContainer) {
+                            timerContainer.classList.add('hidden');
+                        }
+                    }
+                }
+            },
+
+
+            stopTimer: function() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                
+                const timerContainer = document.getElementById('timerContainer');
+                
+                if (timerContainer) {
+                    timerContainer.classList.add('hidden');
+                }
+                
+                timeRemaining = 0;
+            },
+
+            isTimedModeActive: function() {
+                return isTimedMode && timerInterval !== null;
             }
         };
 
         function updateOperationUI() {
-            // Update operation symbol
-            const symbolElement = document.getElementById("operationSymbol");
-            if (symbolElement) {
-                symbolElement.innerHTML = '&nbsp;' + operationSymbols[currentOperation] + '&nbsp;';
+            // Update operation symbol (will be updated per question in mixed mode)
+            if (currentOperation === 'mixed') {
+                // In mixed mode, symbol will be updated when question is generated
+                const symbolElement = document.getElementById("operationSymbol");
+                if (symbolElement) {
+                    symbolElement.innerHTML = '&nbsp;' + operationSymbols['mixed'] + '&nbsp;';
+                }
+            } else {
+                updateOperationSymbol(currentOperation);
             }
 
             // Update active button state
-            const operations = ['add', 'subtract', 'multiply', 'divide'];
+            const operations = ['add', 'subtract', 'multiply', 'divide', 'mixed'];
             operations.forEach(function(op) {
                 const btn = document.getElementById('op-' + op);
                 if (btn) {
@@ -338,12 +495,20 @@
         function updateCount(isSuccess) {
             if (isSuccess) {
                 numberCorrect++;
+                // Track for timed session
+                if (global.OceanOfMaya.MathGame.isTimedModeActive()) {
+                    timedSessionCorrect++;
+                }
                 global.OceanOfMaya.MathGame.refreshCount();
                 if (global.OceanOfMaya.VisualThemes && global.OceanOfMaya.VisualThemes.Manager) {
                     global.OceanOfMaya.VisualThemes.Manager.handleCorrectAnswer();
                 }
             } else {
                 numberWrong++;
+                // Track for timed session
+                if (global.OceanOfMaya.MathGame.isTimedModeActive()) {
+                    timedSessionWrong++;
+                }
                 global.OceanOfMaya.MathGame.refreshCount();
                 if (global.OceanOfMaya.VisualThemes && global.OceanOfMaya.VisualThemes.Manager) {
                     global.OceanOfMaya.VisualThemes.Manager.handleWrongAnswer();
@@ -362,6 +527,36 @@
                     doneButton.disabled = false;
                 }
             }, actualDelay);
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            if (!timerDisplay) return;
+            
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerDisplay.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+            
+            // Update aria label for screen readers
+            timerDisplay.setAttribute('aria-label', 'Time remaining: ' + minutes + ' minute' + (minutes !== 1 ? 's' : '') + ' ' + seconds + ' second' + (seconds !== 1 ? 's' : ''));
+        }
+
+        function showTimedResults() {
+            const answerMessage = document.getElementById('answerMessage');
+            if (!answerMessage) return;
+            
+            const total = timedSessionCorrect + timedSessionWrong + timedSessionSkip;
+            const message = 'Time\'s up! You got ' + timedSessionCorrect + ' correct out of ' + total + ' questions.';
+            
+            answerMessage.classList.remove('fail');
+            answerMessage.classList.add('success');
+            answerMessage.innerHTML = message;
+            
+            // Announce to screen readers
+            const liveRegion = document.getElementById('ariaLiveRegion');
+            if (liveRegion) {
+                liveRegion.textContent = message;
+            }
         }
     })();
 })(typeof window !== 'undefined' ? window : this); 
