@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.5 - 2025-11-11
+
+#### Bug Fixes
+
+- Fixed background color inconsistency when scrolling on mobile devices
+
 ### 1.1.4 - 2025-11-12
 
 #### Bug Fixes

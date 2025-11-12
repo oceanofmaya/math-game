@@ -68,8 +68,9 @@ html {
 body {
     min-height: 100vh;
     height: auto;
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-bg-secondary);
     background-image: linear-gradient(var(--color-bg-primary), var(--color-bg-secondary));
+    background-attachment: fixed;
     margin: 0 auto;
     padding: 0;
     color: var(--color-text-primary);
