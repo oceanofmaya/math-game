@@ -3,6 +3,22 @@
 (function(global) {
     'use strict';
 
+    // Track active jellyfish birth animations to suppress scrollbars during multi-element spawning
+    let activeBirthAnimations = 0;
+    
+    const suppressScrollbars = function() {
+        activeBirthAnimations++;
+        document.body.classList.add('suppress-scrollbars');
+    };
+    
+    const releaseScrollbars = function() {
+        activeBirthAnimations--;
+        if (activeBirthAnimations <= 0) {
+            activeBirthAnimations = 0;
+            document.body.classList.remove('suppress-scrollbars');
+        }
+    };
+
     // Create namespace structure
     if (!global.OceanOfMaya) {
         global.OceanOfMaya = {};
@@ -39,12 +55,34 @@
             bell.style.width = bellWidth + 'px';
             bell.style.height = bellHeight + 'px';
             bell.style.position = 'absolute';
-            bell.style.left = Math.random() * (window.innerWidth - bellWidth) + 'px';
-            bell.style.top = Math.random() * (window.innerHeight - bellHeight * 2) + 'px';
+            const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+            const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+            const minViewportWidth = Constants.VISUAL_ELEMENT_MIN_VIEWPORT_WIDTH_FOR_FULL_PADDING || 768;
+            let themeExtraPadding = themePaddingMap['jellyfish'] || 0;
+            
+            // On smaller viewports, reduce theme-specific padding proportionally
+            if (themeExtraPadding > 0 && window.innerWidth < minViewportWidth) {
+                const scaleFactor = Math.max(0.2, window.innerWidth / minViewportWidth);
+                themeExtraPadding = Math.floor(themeExtraPadding * scaleFactor);
+            }
+            
+            const boundaryPadding = baseBoundaryPadding + themeExtraPadding;
+            const adjustedWidth = Math.max(0, window.innerWidth - boundaryPadding * 2);
+            const adjustedHeight = Math.max(0, window.innerHeight - boundaryPadding * 2);
+            // Account for tentacles extending below: tentacles can be 60-140px long
+            // Use maximum tentacle length (140px) plus bell height for positioning
+            const maxTentacleLength = 140; // Maximum tentacle length
+            const bellTotalHeight = bellHeight + maxTentacleLength;
+            // Account for birth animation translateY - add extra padding to prevent scrollbars during birth
+            // Reduced from 20px to 10px to minimize overshoot during birth animation
+            const birthAnimationOffset = 10;
+            const effectiveTotalHeight = bellTotalHeight + birthAnimationOffset;
+            bell.style.left = (boundaryPadding + Math.random() * Math.max(0, adjustedWidth - bellWidth)) + 'px';
+            bell.style.top = (boundaryPadding + Math.random() * Math.max(0, adjustedHeight - effectiveTotalHeight)) + 'px';
             // New shapes always start in grayscale
             bell.style.filter = 'blur(0.5px) grayscale(100%)';
             bell.style.opacity = '0';
-            bell.style.transform = 'scale(0) translateY(20px)';
+            bell.style.transform = 'scale(0) translateY(10px)';
             bell.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
             
             // Add random animation delay to prevent synchronization
@@ -157,10 +195,12 @@
                 }
             };
 
-            // Animate in - ensure proper initial state
+            // Animate in - suppress scrollbars during birth animation
+            suppressScrollbars();
+            
             requestAnimationFrame(() => {
                 // Reset transform for proper animation
-                bell.style.transform = 'scale(0) translateY(20px)';
+                bell.style.transform = 'scale(0) translateY(10px)';
                 bell.style.opacity = '0';
                 
                 // Trigger reflow to ensure initial state is applied
@@ -183,6 +223,11 @@
                             }
                         }, index * 40);
                     });
+                    
+                    // Release scrollbar suppression after birth animation completes
+                    setTimeout(() => {
+                        releaseScrollbars();
+                    }, 250); // 500ms total transition - 250ms already elapsed
                 }, 300); // Wait for bell scale animation to complete
             });
 

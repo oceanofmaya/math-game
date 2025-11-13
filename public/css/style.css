@@ -63,6 +63,7 @@
 html {
     height: 100%;
     width: 100%;
+    scrollbar-gutter: stable;
 }
 
 body {
@@ -83,6 +84,11 @@ body {
     box-sizing: border-box;
     line-height: 1.5;
     position: relative;
+}
+
+/* Suppress scrollbars during jellyfish birth animation */
+body.suppress-scrollbars {
+    overflow: hidden;
 }
 
 input {

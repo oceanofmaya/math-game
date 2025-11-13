@@ -36,8 +36,15 @@
             cap.style.width = capSize + 'px';
             cap.style.height = capSize * 0.7 + 'px'; // Slightly flattened
             cap.style.position = 'absolute';
-            cap.style.left = Math.random() * (window.innerWidth - capSize) + 'px';
-            cap.style.top = Math.random() * (window.innerHeight - capSize * 1.5) + 'px';
+            const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+            const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+            const themeExtraPadding = themePaddingMap['mushroom'] || 0;
+            const boundaryPadding = baseBoundaryPadding + themeExtraPadding;
+            const adjustedWidth = Math.max(0, window.innerWidth - boundaryPadding * 2);
+            const adjustedHeight = Math.max(0, window.innerHeight - boundaryPadding * 2);
+            const capTotalHeight = capSize * 1.5; // Account for stem extending below
+            cap.style.left = (boundaryPadding + Math.random() * Math.max(0, adjustedWidth - capSize)) + 'px';
+            cap.style.top = (boundaryPadding + Math.random() * Math.max(0, adjustedHeight - capTotalHeight)) + 'px';
             // New shapes always start in grayscale
             cap.style.filter = 'blur(0.3px) grayscale(100%)';
             cap.style.opacity = '0';
