@@ -84,10 +84,18 @@ Or simply double-click `public/index.html` in your file manager.
 
 #### Game Features
 
-- **Four Operations**: Addition, subtraction, multiplication, and division
+- **Operations**: Choose from addition, subtraction, multiplication, division, or **Mixed Operations** mode (±) which randomly selects from all four operations for each question
+- **Timed Mode** (⏱): Answer as many questions as possible within a 5-minute time limit with timer display and session results
 - **Configurable Difficulty**: Adjust the maximum number range (1-999)
 - **Duplicate Prevention**: Intelligent question generation ensures variety by avoiding recently asked questions
-- **Visual Feedback**: Engaging visual themes that respond to your performance
+- **Visual Feedback**: Five engaging visual themes that respond to your performance:
+  - **Jellyfish**: Organic jellyfish with flowing tentacles and graceful floating motion
+  - **Firefly**: Warm, bioluminescent orbs with organic wandering movement
+  - **Pearl**: Iridescent pearls with rolling and bouncing physics
+  - **Mushroom**: Natural, earthy mushrooms with gentle swaying motion
+  - **Maple**: Autumnal maple leaves with sophisticated breeze physics
+- **Sample Mode**: Interactive testing mode for visual themes - test visual effects without playing the game
+- **Theme Music**: Unique ambient music tracks for each visual theme that play automatically
 - **Score Tracking**: Track correct, wrong, and skipped answers
 
 #### Screenshots
