@@ -36,8 +36,14 @@
             firefly.style.width = fireflySize + 'px';
             firefly.style.height = fireflySize + 'px';
             firefly.style.position = 'absolute';
-            firefly.style.left = Math.random() * (window.innerWidth - fireflySize) + 'px';
-            firefly.style.top = Math.random() * (window.innerHeight - fireflySize) + 'px';
+            const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+            const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+            const themeExtraPadding = themePaddingMap['firefly'] || 0;
+            const boundaryPadding = baseBoundaryPadding + themeExtraPadding;
+            const adjustedWidth = Math.max(0, window.innerWidth - boundaryPadding * 2);
+            const adjustedHeight = Math.max(0, window.innerHeight - boundaryPadding * 2);
+            firefly.style.left = (boundaryPadding + Math.random() * Math.max(0, adjustedWidth - fireflySize)) + 'px';
+            firefly.style.top = (boundaryPadding + Math.random() * Math.max(0, adjustedHeight - fireflySize)) + 'px';
             // New shapes always start in grayscale
             firefly.style.filter = 'blur(0.3px) grayscale(100%)';
             firefly.style.opacity = '0';

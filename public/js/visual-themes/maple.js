@@ -30,8 +30,14 @@
             leaf.style.width = leafWidth + 'px';
             leaf.style.height = leafHeight + 'px';
             leaf.style.position = 'absolute';
-            leaf.style.left = Math.random() * Math.max(1, (window.innerWidth - leafWidth)) + 'px';
-            leaf.style.top = Math.random() * Math.max(1, (window.innerHeight - leafHeight)) + 'px';
+            const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+            const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+            const themeExtraPadding = themePaddingMap['maple'] || 0;
+            const boundaryPadding = baseBoundaryPadding + themeExtraPadding;
+            const adjustedWidth = Math.max(0, window.innerWidth - boundaryPadding * 2);
+            const adjustedHeight = Math.max(0, window.innerHeight - boundaryPadding * 2);
+            leaf.style.left = (boundaryPadding + Math.random() * Math.max(0, adjustedWidth - leafWidth)) + 'px';
+            leaf.style.top = (boundaryPadding + Math.random() * Math.max(0, adjustedHeight - leafHeight)) + 'px';
             leaf.style.filter = 'none';
             leaf.style.opacity = '1';
             leaf.style.transition = 'transform 0.5s';

@@ -76,8 +76,26 @@
         // Answer Validation
         ANSWER_TOLERANCE: 0.0001,
         
+        // Visual Element Boundary Padding
+        // Padding to prevent visual elements from extending beyond viewport and causing scrollbars
+        VISUAL_ELEMENT_BOUNDARY_PADDING: 20,
+        
+        // Theme-specific boundary padding (in addition to base padding)
+        // These account for shadows, transforms, and other effects that extend beyond element bounds
+        VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME: {
+            'firefly': 0,
+            'jellyfish': 20,  // Accounts for shadows (35px) and scale transforms (1.1x). Birth animation handled by scrollbar suppression.
+            'maple': 0,
+            'mushroom': 0,
+            'pearl': 0
+        },
+        
+        // Minimum viewport width (in pixels) to apply full theme-specific padding
+        // Below this width, theme padding is reduced proportionally or capped
+        VISUAL_ELEMENT_MIN_VIEWPORT_WIDTH_FOR_FULL_PADDING: 768,
+        
         // Application Version
-        VERSION: '1.1.12'
+        VERSION: '1.1.13'
     };
 
 })(typeof window !== 'undefined' ? window : this);

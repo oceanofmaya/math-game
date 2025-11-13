@@ -18,7 +18,32 @@
         this.shapeSets = [];
         let animationFrameId = null;
         const DEFAULT_THRESHOLD_X = Constants.DEFAULT_THRESHOLD_X || 5;
+        const BASE_BOUNDARY_PADDING = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+        const THEME_PADDING_MAP = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+        const MIN_VIEWPORT_WIDTH = Constants.VISUAL_ELEMENT_MIN_VIEWPORT_WIDTH_FOR_FULL_PADDING || 768;
         let colorActivated = false; // Track if color effects have been activated
+        
+        // Helper function to get adjusted viewport bounds for a specific theme
+        // Theme-specific padding is reduced on smaller viewports to prevent issues on mobile
+        const getAdjustedBounds = function(themeName) {
+            let themeExtraPadding = themeName ? (THEME_PADDING_MAP[themeName] || 0) : 0;
+            
+            // On smaller viewports, reduce theme-specific padding proportionally
+            // This prevents excessive padding on mobile devices where scrollbars are less of an issue
+            if (themeExtraPadding > 0 && window.innerWidth < MIN_VIEWPORT_WIDTH) {
+                // Scale down padding on smaller screens, but keep at least base padding
+                // Use a simple linear scaling: at 375px (typical mobile), use 20% of theme padding
+                const scaleFactor = Math.max(0.2, window.innerWidth / MIN_VIEWPORT_WIDTH);
+                themeExtraPadding = Math.floor(themeExtraPadding * scaleFactor);
+            }
+            
+            const totalPadding = BASE_BOUNDARY_PADDING + themeExtraPadding;
+            return {
+                width: Math.max(0, window.innerWidth - totalPadding * 2),
+                height: Math.max(0, window.innerHeight - totalPadding * 2),
+                padding: totalPadding
+            };
+        };
 
         // Create shape set (primary element + secondary elements)
         this.createShapeSet = function(birthCount) {
@@ -34,8 +59,10 @@
             primary.style.width = primarySize + 'px';
             primary.style.height = primarySize + 'px';
             primary.style.position = 'absolute';
-            primary.style.left = Math.random() * (window.innerWidth - primarySize) + 'px';
-            primary.style.top = Math.random() * (window.innerHeight - primarySize) + 'px';
+            // Base theme doesn't have a specific theme name, use base padding
+            const bounds = getAdjustedBounds();
+            primary.style.left = (bounds.padding + Math.random() * Math.max(0, bounds.width - primarySize)) + 'px';
+            primary.style.top = (bounds.padding + Math.random() * Math.max(0, bounds.height - primarySize)) + 'px';
             // New shapes always start in grayscale (will be colored later based on birthCount + X)
             primary.style.filter = 'blur(0.5px) grayscale(100%)';
             primary.style.opacity = '0';
@@ -103,27 +130,43 @@
 
                 // For jellyfish, use base size for boundary checks to account for CSS scale animations
                 // This prevents scale-up from pulse animation from reducing movement range
+                // Also account for tentacles extending below the bell
                 let checkWidth, checkHeight;
                 if (set.isJellyfish && set.bellSize) {
                     // Use base bell dimensions (accounting for bell being wider than tall)
                     const bellWidth = set.bellSize * 1.2; // bellWidth calculation from creation
                     const bellHeight = set.bellSize * 0.7; // bellHeight calculation from creation
                     checkWidth = bellWidth;
-                    checkHeight = bellHeight;
+                    // Account for tentacles extending below: tentacles can be 60-140px long
+                    // Use maximum tentacle length (140px) plus bell height for bottom boundary check
+                    const maxTentacleLength = 140; // Maximum tentacle length from jellyfish.js
+                    checkHeight = bellHeight + maxTentacleLength;
                 } else {
                     // For other themes, use actual rendered size
                     checkWidth = rect.width;
                     checkHeight = rect.height;
                 }
 
-                // Bounce off walls
-                if (newX <= 0 || newX + checkWidth >= window.innerWidth) {
+                // Bounce off walls (using adjusted bounds)
+                // Use theme-specific padding if available
+                const themeName = set.isJellyfish ? 'jellyfish' : 
+                                 set.isFirefly ? 'firefly' :
+                                 set.isMaple ? 'maple' :
+                                 set.isMushroom ? 'mushroom' :
+                                 set.isPearl ? 'pearl' : null;
+                const bounds = getAdjustedBounds(themeName);
+                const minX = bounds.padding;
+                const maxX = bounds.padding + bounds.width;
+                const minY = bounds.padding;
+                const maxY = bounds.padding + bounds.height;
+                
+                if (newX <= minX || newX + checkWidth >= maxX) {
                     set.velocityX *= -1;
-                    newX = Math.max(0, Math.min(newX, window.innerWidth - checkWidth));
+                    newX = Math.max(minX, Math.min(newX, maxX - checkWidth));
                 }
-                if (newY <= 0 || newY + checkHeight >= window.innerHeight) {
+                if (newY <= minY || newY + checkHeight >= maxY) {
                     set.velocityY *= -1;
-                    newY = Math.max(0, Math.min(newY, window.innerHeight - checkHeight));
+                    newY = Math.max(minY, Math.min(newY, maxY - checkHeight));
                 }
 
                 primary.style.left = newX + 'px';
@@ -1034,11 +1077,29 @@
                     checkHeight = rect.height;
                 }
 
-                if (x + checkWidth > window.innerWidth) {
-                    primary.style.left = (window.innerWidth - checkWidth) + 'px';
+                // Use theme-specific padding if available
+                const themeName = set.isJellyfish ? 'jellyfish' : 
+                                 set.isFirefly ? 'firefly' :
+                                 set.isMaple ? 'maple' :
+                                 set.isMushroom ? 'mushroom' :
+                                 set.isPearl ? 'pearl' : null;
+                const bounds = getAdjustedBounds(themeName);
+                const maxX = bounds.padding + bounds.width;
+                const maxY = bounds.padding + bounds.height;
+                const minX = bounds.padding;
+                const minY = bounds.padding;
+                
+                if (x + checkWidth > maxX) {
+                    primary.style.left = (maxX - checkWidth) + 'px';
                 }
-                if (y + checkHeight > window.innerHeight) {
-                    primary.style.top = (window.innerHeight - checkHeight) + 'px';
+                if (x < minX) {
+                    primary.style.left = minX + 'px';
+                }
+                if (y + checkHeight > maxY) {
+                    primary.style.top = (maxY - checkHeight) + 'px';
+                }
+                if (y < minY) {
+                    primary.style.top = minY + 'px';
                 }
             });
         });

@@ -35,8 +35,14 @@
             pearl.style.width = pearlSize + 'px';
             pearl.style.height = pearlSize + 'px';
             pearl.style.position = 'absolute';
-            pearl.style.left = Math.random() * (window.innerWidth - pearlSize) + 'px';
-            pearl.style.top = Math.random() * (window.innerHeight - pearlSize) + 'px';
+            const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
+            const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
+            const themeExtraPadding = themePaddingMap['pearl'] || 0;
+            const boundaryPadding = baseBoundaryPadding + themeExtraPadding;
+            const adjustedWidth = Math.max(0, window.innerWidth - boundaryPadding * 2);
+            const adjustedHeight = Math.max(0, window.innerHeight - boundaryPadding * 2);
+            pearl.style.left = (boundaryPadding + Math.random() * Math.max(0, adjustedWidth - pearlSize)) + 'px';
+            pearl.style.top = (boundaryPadding + Math.random() * Math.max(0, adjustedHeight - pearlSize)) + 'px';
             // New shapes always start in grayscale
             pearl.style.filter = 'blur(0.2px) grayscale(100%)';
             pearl.style.opacity = '0';

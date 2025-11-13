@@ -2,6 +2,14 @@
 
 ## Version 1
 
+### 1.1.13 - 2025-11-12
+
+#### Bug Fixes
+
+- Fixed scrollbars appearing during visual element birth animations, especially with jellyfish theme in sample mode
+- Fixed UI shifts caused by scrollbars when visual elements extend beyond viewport bounds
+- Improved jellyfish theme visual effects to prevent viewport overflow
+
 ### 1.1.12 - 2025-11-12
 
 #### Bug Fixes
