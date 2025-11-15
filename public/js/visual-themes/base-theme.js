@@ -498,14 +498,78 @@
 
             // Apply colors based on theme type
             if (set.isMushroom) {
-                // Mushroom-specific coloring: cap gets earthy colors, stem stays light, spots stay dark
+                // Mushroom-specific coloring: use CSS custom properties to preserve all realistic effects
                 const capColor = color.colors[0];
                 const capColor2 = color.colors[1] || capColor;
-                // Create earthy gradient for cap
-                const capGradient = `radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.3) 0%, ${capColor} 40%, ${capColor2} 70%, ${capColor} 100%)`;
-                primary.style.background = capGradient;
                 
-                // Stem stays light/beige colored
+                // Convert hex to RGB object for color manipulation
+                const hexToRgbObject = function(hex) {
+                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                    return result ? {
+                        r: parseInt(result[1], 16),
+                        g: parseInt(result[2], 16),
+                        b: parseInt(result[3], 16)
+                    } : { r: 200, g: 150, b: 100 };
+                };
+                
+                // Helper to darken RGB color
+                const darkenRgb = function(rgb, amount) {
+                    return {
+                        r: Math.max(0, Math.floor(rgb.r * (1 - amount))),
+                        g: Math.max(0, Math.floor(rgb.g * (1 - amount))),
+                        b: Math.max(0, Math.floor(rgb.b * (1 - amount)))
+                    };
+                };
+                
+                // Helper to lighten RGB color
+                const lightenRgb = function(rgb, amount) {
+                    return {
+                        r: Math.min(255, Math.floor(rgb.r + (255 - rgb.r) * amount)),
+                        g: Math.min(255, Math.floor(rgb.g + (255 - rgb.g) * amount)),
+                        b: Math.min(255, Math.floor(rgb.b + (255 - rgb.b) * amount))
+                    };
+                };
+                
+                // Convert colors to RGB
+                const capRgb1 = hexToRgbObject(capColor);
+                const capRgb2 = hexToRgbObject(capColor2);
+                
+                // Create color variations for cap gradient
+                const capColor1Rgb = lightenRgb(capRgb1, 0.15); // Lightest
+                const capColor2Rgb = capRgb1; // Base
+                const capColor3Rgb = darkenRgb(capRgb1, 0.2); // Darker
+                const capColor4Rgb = darkenRgb(capRgb1, 0.35); // Darkest
+                const capEdgeRgb = darkenRgb(capRgb1, 0.5); // Edge shadow
+                
+                // Set CSS custom properties for cap - preserves all layers (highlights, textures, gills)
+                primary.style.setProperty('--mushroom-cap-color-1', `rgba(${capColor1Rgb.r},${capColor1Rgb.g},${capColor1Rgb.b},0.85)`);
+                primary.style.setProperty('--mushroom-cap-color-2', `rgba(${capColor2Rgb.r},${capColor2Rgb.g},${capColor2Rgb.b},0.95)`);
+                primary.style.setProperty('--mushroom-cap-color-3', `rgba(${capColor3Rgb.r},${capColor3Rgb.g},${capColor3Rgb.b},1)`);
+                primary.style.setProperty('--mushroom-cap-color-4', `rgba(${capColor4Rgb.r},${capColor4Rgb.g},${capColor4Rgb.b},1)`);
+                primary.style.setProperty('--mushroom-cap-edge', `rgba(${capEdgeRgb.r},${capEdgeRgb.g},${capEdgeRgb.b},0.6)`);
+                
+                // Create gill colors (slightly lighter variations of cap color for natural look)
+                const gillColor1Rgb = lightenRgb(capRgb1, 0.1);
+                const gillColor2Rgb = lightenRgb(capRgb1, 0.15);
+                const gillColor3Rgb = lightenRgb(capRgb1, 0.2);
+                const gillColor4Rgb = capRgb1;
+                const gillDepth1Rgb = lightenRgb(capRgb1, 0.2);
+                const gillDepth2Rgb = lightenRgb(capRgb1, 0.15);
+                const gillDepth3Rgb = lightenRgb(capRgb1, 0.1);
+                const gillDepth4Rgb = darkenRgb(capRgb1, 0.1);
+                
+                // Set CSS custom properties for gills (via ::before pseudo-element)
+                // Note: CSS variables set on parent are inherited by pseudo-elements
+                primary.style.setProperty('--mushroom-gill-color-1', `rgba(${gillColor1Rgb.r},${gillColor1Rgb.g},${gillColor1Rgb.b},0.5)`);
+                primary.style.setProperty('--mushroom-gill-color-2', `rgba(${gillColor2Rgb.r},${gillColor2Rgb.g},${gillColor2Rgb.b},0.35)`);
+                primary.style.setProperty('--mushroom-gill-color-3', `rgba(${gillColor3Rgb.r},${gillColor3Rgb.g},${gillColor3Rgb.b},0.3)`);
+                primary.style.setProperty('--mushroom-gill-color-4', `rgba(${gillColor4Rgb.r},${gillColor4Rgb.g},${gillColor4Rgb.b},0.4)`);
+                primary.style.setProperty('--mushroom-gill-depth-1', `rgba(${gillDepth1Rgb.r},${gillDepth1Rgb.g},${gillDepth1Rgb.b},0.6)`);
+                primary.style.setProperty('--mushroom-gill-depth-2', `rgba(${gillDepth2Rgb.r},${gillDepth2Rgb.g},${gillDepth2Rgb.b},0.7)`);
+                primary.style.setProperty('--mushroom-gill-depth-3', `rgba(${gillDepth3Rgb.r},${gillDepth3Rgb.g},${gillDepth3Rgb.b},0.8)`);
+                primary.style.setProperty('--mushroom-gill-depth-4', `rgba(${gillDepth4Rgb.r},${gillDepth4Rgb.g},${gillDepth4Rgb.b},0.8)`);
+                
+                // Stem stays light/beige colored (no change needed)
                 if (secondaries.length > 0) {
                     const stem = secondaries[0];
                     stem.style.background = `linear-gradient(90deg, 

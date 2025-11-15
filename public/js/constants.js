@@ -95,7 +95,7 @@
         VISUAL_ELEMENT_MIN_VIEWPORT_WIDTH_FOR_FULL_PADDING: 768,
         
         // Application Version
-        VERSION: '1.1.14'
+        VERSION: '1.1.15'
     };
 
 })(typeof window !== 'undefined' ? window : this);

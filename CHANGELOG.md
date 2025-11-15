@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.15 - 2025-11-15
+
+#### Visual Improvements
+
+- Preserved realistic mushroom effects (gills, textures, highlights) when mushrooms are colored
+
 ### 1.1.14 - 2025-11-15
 
 #### Visual Improvements
