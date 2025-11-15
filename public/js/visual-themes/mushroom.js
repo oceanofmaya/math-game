@@ -36,6 +36,20 @@
             cap.style.width = capSize + 'px';
             cap.style.height = capSize * 0.7 + 'px'; // Slightly flattened
             cap.style.position = 'absolute';
+            
+            // Add slight variation to cap shape for realism
+            // Base shape: 50% 50% 50% 50% / 60% 60% 40% 40%
+            // Add small random variations (±5%) for organic feel
+            const br1 = 50 + (Math.random() - 0.5) * 10; // 45-55%
+            const br2 = 50 + (Math.random() - 0.5) * 10; // 45-55%
+            const br3 = 50 + (Math.random() - 0.5) * 10; // 45-55%
+            const br4 = 50 + (Math.random() - 0.5) * 10; // 45-55%
+            const br5 = 60 + (Math.random() - 0.5) * 10; // 55-65%
+            const br6 = 60 + (Math.random() - 0.5) * 10; // 55-65%
+            const br7 = 40 + (Math.random() - 0.5) * 10; // 35-45%
+            const br8 = 40 + (Math.random() - 0.5) * 10; // 35-45%
+            cap.style.borderRadius = `${br1}% ${br2}% ${br3}% ${br4}% / ${br5}% ${br6}% ${br7}% ${br8}%`;
+            
             const baseBoundaryPadding = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING || 20;
             const themePaddingMap = Constants.VISUAL_ELEMENT_BOUNDARY_PADDING_BY_THEME || {};
             const themeExtraPadding = themePaddingMap['mushroom'] || 0;
@@ -65,6 +79,20 @@
             const stemHeight = capSize * 0.8;
             stem.style.width = stemWidth + 'px';
             stem.style.height = stemHeight + 'px';
+            
+            // Add slight variation to stem shape for realism
+            // Base shape: 50% 50% 50% 50% / 60% 60% 40% 40%
+            // Add small random variations for organic feel
+            const stemBr1 = 50 + (Math.random() - 0.5) * 8; // 46-54%
+            const stemBr2 = 50 + (Math.random() - 0.5) * 8; // 46-54%
+            const stemBr3 = 50 + (Math.random() - 0.5) * 8; // 46-54%
+            const stemBr4 = 50 + (Math.random() - 0.5) * 8; // 46-54%
+            const stemBr5 = 60 + (Math.random() - 0.5) * 8; // 56-64%
+            const stemBr6 = 60 + (Math.random() - 0.5) * 8; // 56-64%
+            const stemBr7 = 40 + (Math.random() - 0.5) * 8; // 36-44%
+            const stemBr8 = 40 + (Math.random() - 0.5) * 8; // 36-44%
+            stem.style.borderRadius = `${stemBr1}% ${stemBr2}% ${stemBr3}% ${stemBr4}% / ${stemBr5}% ${stemBr6}% ${stemBr7}% ${stemBr8}%`;
+            
             // New stems always start in grayscale
             stem.style.filter = 'blur(0.2px) grayscale(100%)';
             stem.style.opacity = '0';
@@ -77,9 +105,40 @@
                 const spot = document.createElement('div');
                 spot.className = 'mushroom-spot';
                 spot.style.position = 'absolute';
-                const spotSize = capSize * (0.08 + Math.random() * 0.12); // 8-20% of cap size
+                
+                // Vary spot sizes - some larger clusters, some tiny
+                // More realistic distribution with a few bigger spots and many tiny ones
+                const spotSizeRange = Math.random();
+                let spotSize;
+                if (spotSizeRange > 0.7) {
+                    // Larger spots (30% chance) - 12-20% of cap
+                    spotSize = capSize * (0.12 + Math.random() * 0.08);
+                } else if (spotSizeRange > 0.4) {
+                    // Medium spots (30% chance) - 8-12% of cap
+                    spotSize = capSize * (0.08 + Math.random() * 0.04);
+                } else {
+                    // Small spots (40% chance) - 4-8% of cap
+                    spotSize = capSize * (0.04 + Math.random() * 0.04);
+                }
+                
                 spot.style.width = spotSize + 'px';
                 spot.style.height = spotSize + 'px';
+                
+                // Make each spot irregularly shaped for realism
+                // Randomize border-radius to create organic, non-circular shapes
+                const br1 = 40 + Math.random() * 20; // 40-60%
+                const br2 = 45 + Math.random() * 20; // 45-65%
+                const br3 = 50 + Math.random() * 15; // 50-65%
+                const br4 = 45 + Math.random() * 20; // 45-65%
+                const br5 = 40 + Math.random() * 20; // 40-60%
+                const br6 = 45 + Math.random() * 20; // 45-65%
+                const br7 = 50 + Math.random() * 15; // 50-65%
+                const br8 = 45 + Math.random() * 20; // 45-65%
+                spot.style.borderRadius = `${br1}% ${br2}% ${br3}% ${br4}% / ${br5}% ${br6}% ${br7}% ${br8}%`;
+                
+                // Random rotation for variety (0-360 degrees)
+                spot.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
                 // New spots always start in grayscale
                 spot.style.filter = 'blur(0.3px) grayscale(100%)';
                 spot.style.opacity = '0';

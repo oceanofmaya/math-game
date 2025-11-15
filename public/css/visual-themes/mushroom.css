@@ -2,43 +2,305 @@
 
 .mushroom-cap {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Flattened dome shape */
-    background: radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.3) 0%, rgba(200,150,100,0.8) 40%, rgba(150,100,70,0.9) 70%, rgba(120,80,50,1) 100%);
+    background: 
+        /* Glossy highlight - creates wet/shiny appearance */
+        radial-gradient(ellipse at 35% 20%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.25) 15%, transparent 40%),
+        /* Secondary light source */
+        radial-gradient(ellipse at 65% 25%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 12%, transparent 30%),
+        /* Main cap color with depth */
+        radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, rgba(200,150,100,0.85) 25%, rgba(150,100,70,0.95) 50%, rgba(120,80,50,1) 75%, rgba(100,65,40,1) 100%),
+        /* Edge shading for 3D effect */
+        radial-gradient(ellipse at 50% 70%, rgba(80,50,30,0.6) 0%, transparent 50%),
+        /* Subtle vein pattern */
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0%,
+            rgba(255,255,255,0.03) 15%,
+            transparent 30%,
+            rgba(0,0,0,0.02) 45%,
+            transparent 60%
+        );
     box-shadow: 
-        0 2px 8px rgba(0,0,0,0.3),
-        0 0 15px rgba(150,100,70,0.4),
-        inset 0 -10px 20px rgba(0,0,0,0.2),
-        inset 0 5px 15px rgba(255,255,255,0.2);
+        /* Outer shadow for depth */
+        0 3px 12px rgba(0,0,0,0.4),
+        0 0 20px rgba(150,100,70,0.3),
+        /* Inner shadows for cap curvature */
+        inset 0 -15px 30px rgba(0,0,0,0.3),
+        inset 0 8px 20px rgba(255,255,255,0.25),
+        /* Edge rim highlight */
+        inset 0 0 0 1px rgba(255,255,255,0.1);
     pointer-events: none;
     z-index: 1000;
     position: relative;
+    overflow: hidden;
+}
+
+/* Gills underneath the cap */
+.mushroom-cap::before {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 10%;
+    right: 10%;
+    height: 14px;
+    background: 
+        /* Gill texture - more detailed pattern */
+        repeating-linear-gradient(
+            90deg,
+            rgba(160,120,80,0.5) 0%,
+            rgba(160,120,80,0.5) 1.5px,
+            rgba(180,140,100,0.35) 1.5px,
+            rgba(180,140,100,0.35) 2.5px,
+            rgba(200,160,120,0.3) 2.5px,
+            rgba(200,160,120,0.3) 3.5px,
+            rgba(180,140,100,0.4) 3.5px,
+            rgba(180,140,100,0.4) 5px,
+            transparent 5px,
+            transparent 10px
+        ),
+        /* Gill depth - darker gills */
+        linear-gradient(to bottom,
+            rgba(200,160,120,0.6) 0%,
+            rgba(180,140,100,0.7) 30%,
+            rgba(160,120,80,0.8) 60%,
+            rgba(140,100,60,0.8) 100%
+        ),
+        /* Gill shadow for depth */
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 50%);
+    border-radius: 0 0 50% 50% / 0 0 30% 30%;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 
+        inset 0 2px 6px rgba(0,0,0,0.3),
+        0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Texture overlay for cap surface */
+.mushroom-cap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Secondary highlight for glossy effect */
+        radial-gradient(
+            ellipse at 40% 18%,
+            rgba(255,255,255,0.2) 0%,
+            transparent 20%
+        ),
+        /* Surface texture - subtle bumps */
+        repeating-radial-gradient(
+            circle at 15% 20%,
+            rgba(0,0,0,0.04) 0%,
+            transparent 3%
+        ),
+        repeating-radial-gradient(
+            circle at 75% 60%,
+            rgba(255,255,255,0.04) 0%,
+            transparent 3%
+        ),
+        /* Fine texture pattern */
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0%,
+            rgba(0,0,0,0.02) 1.5%,
+            transparent 3%
+        );
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.7;
 }
 
 .mushroom-stem {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    background: linear-gradient(90deg, 
-        rgba(220,200,180,0.9) 0%,
-        rgba(240,230,220,0.95) 20%,
-        rgba(250,245,240,1) 50%,
-        rgba(240,230,220,0.95) 80%,
-        rgba(220,200,180,0.9) 100%);
+    background: 
+        /* Cylindrical highlight - light from side */
+        linear-gradient(90deg, 
+            rgba(200,180,160,0.7) 0%,
+            rgba(220,200,180,0.85) 15%,
+            rgba(240,230,220,0.95) 30%,
+            rgba(250,245,240,1) 50%,
+            rgba(240,230,220,0.95) 70%,
+            rgba(220,200,180,0.85) 85%,
+            rgba(200,180,160,0.7) 100%),
+        /* Vertical gradient for depth */
+        linear-gradient(to bottom,
+            rgba(250,245,240,0.9) 0%,
+            rgba(240,230,220,0.95) 30%,
+            rgba(230,220,210,1) 60%,
+            rgba(220,210,200,1) 100%
+        );
     box-shadow: 
-        0 1px 4px rgba(0,0,0,0.2),
-        inset -2px 0 8px rgba(0,0,0,0.1),
-        inset 2px 0 8px rgba(255,255,255,0.3);
+        /* Outer shadow */
+        0 2px 6px rgba(0,0,0,0.25),
+        /* Cylindrical shading - left side darker */
+        inset -3px 0 10px rgba(0,0,0,0.15),
+        /* Cylindrical highlight - right side lighter */
+        inset 3px 0 10px rgba(255,255,255,0.4),
+        /* Top highlight */
+        inset 0 -2px 4px rgba(255,255,255,0.2),
+        /* Bottom shadow */
+        inset 0 2px 4px rgba(0,0,0,0.1);
     pointer-events: none;
     z-index: 999;
     position: relative;
+    overflow: hidden;
+}
+
+/* Stem texture and fibers */
+.mushroom-stem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Vertical fiber texture - more pronounced */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0%,
+            rgba(255,255,255,0.08) 0.8px,
+            transparent 1.8px,
+            rgba(0,0,0,0.03) 2.5px,
+            transparent 4px
+        ),
+        /* Horizontal growth rings/bands */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0%,
+            rgba(0,0,0,0.04) 3px,
+            transparent 6px
+        ),
+        /* Subtle directional texture */
+        repeating-linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,255,255,0.02) 0.5px,
+            transparent 1px
+        );
+    pointer-events: none;
+    opacity: 0.6;
+    border-radius: inherit;
+}
+
+/* Ring (annulus) around stem - for some mushroom types */
+.mushroom-stem::after {
+    content: '';
+    position: absolute;
+    top: 22%;
+    left: -3px;
+    right: -3px;
+    height: 4px;
+    background: 
+        /* Ring gradient */
+        linear-gradient(90deg,
+            transparent 0%,
+            rgba(200,180,160,0.4) 15%,
+            rgba(180,160,140,0.8) 35%,
+            rgba(190,170,150,0.9) 50%,
+            rgba(180,160,140,0.8) 65%,
+            rgba(200,180,160,0.4) 85%,
+            transparent 100%
+        ),
+        /* Ring shadow */
+        linear-gradient(to bottom,
+            rgba(0,0,0,0.15) 0%,
+            rgba(0,0,0,0.1) 50%,
+            transparent 100%
+        );
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.5;
+    box-shadow: 
+        inset 0 2px 3px rgba(0,0,0,0.25),
+        inset 0 -1px 2px rgba(255,255,255,0.2),
+        0 2px 3px rgba(0,0,0,0.2);
 }
 
 .mushroom-spot {
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(50,30,20,0.9) 0%, rgba(30,20,15,0.8) 50%, rgba(20,15,10,0.6) 100%);
+    /* Irregular shape - not perfect circle */
+    border-radius: 45% 55% 50% 50% / 50% 45% 55% 50%;
+    background: 
+        /* Glossy highlight on spot */
+        radial-gradient(ellipse at 30% 35%, 
+            rgba(255,255,255,0.15) 0%, 
+            transparent 25%
+        ),
+        /* Spot center - darker, deeper shadows */
+        radial-gradient(ellipse at 50% 50%, 
+            rgba(30,20,10,0.98) 0%, 
+            rgba(25,18,10,0.95) 20%,
+            rgba(20,14,8,0.9) 40%, 
+            rgba(18,12,6,0.85) 60%,
+            rgba(15,10,5,0.7) 100%
+        ),
+        /* Spot edge color variation */
+        radial-gradient(circle at 50% 50%,
+            transparent 70%,
+            rgba(60,35,20,0.4) 90%,
+            rgba(50,30,20,0.8) 100%
+        );
     box-shadow: 
-        0 1px 3px rgba(0,0,0,0.4),
-        inset 0 1px 2px rgba(255,255,255,0.1);
+        /* Outer shadow for depth */
+        0 2px 5px rgba(0,0,0,0.6),
+        /* Inner highlight for slight 3D effect */
+        inset 0 2px 4px rgba(255,255,255,0.1),
+        /* Subtle inner shadow for depth */
+        inset 0 -2px 4px rgba(0,0,0,0.4),
+        /* Light reflection */
+        inset -1px 1px 3px rgba(255,255,255,0.05);
     pointer-events: none;
     z-index: 1001;
     position: relative;
+    /* Slight rotation for variety */
+    transform: rotate(0deg);
+}
+
+/* Add subtle texture and highlight to spots */
+.mushroom-spot::before {
+    content: '';
+    position: absolute;
+    top: 8%;
+    left: 12%;
+    width: 35%;
+    height: 35%;
+    background: radial-gradient(circle,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.08) 40%,
+        transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.7;
+    filter: blur(1px);
+}
+
+/* Fine spot texture */
+.mushroom-spot::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Surface micro-texture */
+        repeating-radial-gradient(
+            circle at 20% 30%,
+            rgba(0,0,0,0.04) 0%,
+            transparent 2%
+        ),
+        repeating-radial-gradient(
+            circle at 75% 70%,
+            rgba(255,255,255,0.03) 0%,
+            transparent 2%
+        );
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 @keyframes mushroom-birth {
@@ -81,38 +343,38 @@
         filter: brightness(1);
     }
     25% {
-        opacity: 0.92;
-        transform: scale(1.08) scaleY(1.12);
+        opacity: 0.90;
+        transform: scale(1.05) scaleY(1.08);
         box-shadow: 
-            0 3px 10px rgba(0,0,0,0.35),
-            0 0 20px rgba(150,100,70,0.5),
-            0 0 40px rgba(150,100,70,0.3),
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
             inset 0 -11px 22px rgba(0,0,0,0.22),
-            inset 0 6px 18px rgba(255,255,255,0.25);
-        filter: brightness(1.05);
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
     }
     50% {
-        opacity: 1;
-        transform: scale(1.18) scaleY(1.25);
+        opacity: 0.95;
+        transform: scale(1.12) scaleY(1.18);
         box-shadow: 
-            0 4px 14px rgba(0,0,0,0.4),
-            0 0 30px rgba(150,100,70,0.7),
-            0 0 60px rgba(150,100,70,0.4),
-            0 0 90px rgba(150,100,70,0.2),
+            0 3px 12px rgba(0,0,0,0.38),
+            0 0 25px rgba(150,100,70,0.6),
+            0 0 50px rgba(150,100,70,0.35),
+            0 0 70px rgba(150,100,70,0.15),
             inset 0 -12px 28px rgba(0,0,0,0.25),
-            inset 0 8px 22px rgba(255,255,255,0.35);
-        filter: brightness(1.12);
+            inset 0 8px 22px rgba(255,255,255,0.32);
+        filter: brightness(1.08);
     }
     75% {
-        opacity: 0.92;
-        transform: scale(1.08) scaleY(1.12);
+        opacity: 0.90;
+        transform: scale(1.05) scaleY(1.08);
         box-shadow: 
-            0 3px 10px rgba(0,0,0,0.35),
-            0 0 20px rgba(150,100,70,0.5),
-            0 0 40px rgba(150,100,70,0.3),
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
             inset 0 -11px 22px rgba(0,0,0,0.22),
-            inset 0 6px 18px rgba(255,255,255,0.25);
-        filter: brightness(1.05);
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
     }
 }
 
@@ -198,16 +460,28 @@
 
 @keyframes mushroom-gentle-sway {
     0%, 100% {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1) rotateZ(0deg);
+    }
+    12% {
+        transform: translate(4px, -2px) scale(1.01) rotateZ(0.5deg);
     }
     25% {
-        transform: translate(5px, -3px) scale(1.02);
+        transform: translate(5px, -3px) scale(1.02) rotateZ(1deg);
+    }
+    37% {
+        transform: translate(2px, 1px) scale(1.015) rotateZ(0.8deg);
     }
     50% {
-        transform: translate(-4px, 4px) scale(0.98);
+        transform: translate(-4px, 4px) scale(0.98) rotateZ(-0.5deg);
+    }
+    62% {
+        transform: translate(-3px, 2px) scale(0.99) rotateZ(-0.8deg);
     }
     75% {
-        transform: translate(3px, 5px) scale(1.01);
+        transform: translate(3px, 5px) scale(1.01) rotateZ(0.3deg);
+    }
+    87% {
+        transform: translate(1px, 2px) scale(1.005) rotateZ(0.2deg);
     }
 }
 
@@ -217,16 +491,28 @@
 
 @keyframes mushroom-stem-sway {
     0%, 100% {
-        transform: translate(0, 0);
+        transform: translate(0, 0) scaleY(1);
+    }
+    12% {
+        transform: translate(2px, -1px) scaleY(1.01);
     }
     25% {
-        transform: translate(2px, -2px);
+        transform: translate(2px, -2px) scaleY(1.02);
+    }
+    37% {
+        transform: translate(1px, 0px) scaleY(1.015);
     }
     50% {
-        transform: translate(-2px, 2px);
+        transform: translate(-2px, 2px) scaleY(0.99);
+    }
+    62% {
+        transform: translate(-1px, 1px) scaleY(0.99);
     }
     75% {
-        transform: translate(1px, 2px);
+        transform: translate(1px, 2px) scaleY(1.01);
+    }
+    87% {
+        transform: translate(0px, 1px) scaleY(1.005);
     }
 }
 
