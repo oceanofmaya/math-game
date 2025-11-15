@@ -2,6 +2,13 @@
 
 ## Version 1
 
+### 1.1.14 - 2025-11-15
+
+#### Visual Improvements
+
+- Enhanced mushroom theme with more realistic appearance: glossy caps, detailed gills, textured stems, and natural spot variations
+- Improved animations for smoother, more organic movement
+
 ### 1.1.13 - 2025-11-12
 
 #### Bug Fixes
