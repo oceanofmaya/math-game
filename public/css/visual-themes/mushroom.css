@@ -2,15 +2,21 @@
 
 .mushroom-cap {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Flattened dome shape */
+    /* CSS custom properties for dynamic coloring - defaults to grayscale */
+    --mushroom-cap-color-1: rgba(200,150,100,0.85);
+    --mushroom-cap-color-2: rgba(150,100,70,0.95);
+    --mushroom-cap-color-3: rgba(120,80,50,1);
+    --mushroom-cap-color-4: rgba(100,65,40,1);
+    --mushroom-cap-edge: rgba(80,50,30,0.6);
     background: 
         /* Glossy highlight - creates wet/shiny appearance */
         radial-gradient(ellipse at 35% 20%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.25) 15%, transparent 40%),
         /* Secondary light source */
         radial-gradient(ellipse at 65% 25%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 12%, transparent 30%),
-        /* Main cap color with depth */
-        radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, rgba(200,150,100,0.85) 25%, rgba(150,100,70,0.95) 50%, rgba(120,80,50,1) 75%, rgba(100,65,40,1) 100%),
-        /* Edge shading for 3D effect */
-        radial-gradient(ellipse at 50% 70%, rgba(80,50,30,0.6) 0%, transparent 50%),
+        /* Main cap color with depth - uses CSS variables for dynamic coloring */
+        radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, var(--mushroom-cap-color-1) 25%, var(--mushroom-cap-color-2) 50%, var(--mushroom-cap-color-3) 75%, var(--mushroom-cap-color-4) 100%),
+        /* Edge shading for 3D effect - uses CSS variable */
+        radial-gradient(ellipse at 50% 70%, var(--mushroom-cap-edge) 0%, transparent 50%),
         /* Subtle vein pattern */
         repeating-radial-gradient(
             circle at 50% 50%,
@@ -43,27 +49,36 @@
     left: 10%;
     right: 10%;
     height: 14px;
+    /* CSS custom properties for gill coloring - defaults to grayscale */
+    --mushroom-gill-color-1: rgba(160,120,80,0.5);
+    --mushroom-gill-color-2: rgba(180,140,100,0.35);
+    --mushroom-gill-color-3: rgba(200,160,120,0.3);
+    --mushroom-gill-color-4: rgba(180,140,100,0.4);
+    --mushroom-gill-depth-1: rgba(200,160,120,0.6);
+    --mushroom-gill-depth-2: rgba(180,140,100,0.7);
+    --mushroom-gill-depth-3: rgba(160,120,80,0.8);
+    --mushroom-gill-depth-4: rgba(140,100,60,0.8);
     background: 
-        /* Gill texture - more detailed pattern */
+        /* Gill texture - more detailed pattern - uses CSS variables */
         repeating-linear-gradient(
             90deg,
-            rgba(160,120,80,0.5) 0%,
-            rgba(160,120,80,0.5) 1.5px,
-            rgba(180,140,100,0.35) 1.5px,
-            rgba(180,140,100,0.35) 2.5px,
-            rgba(200,160,120,0.3) 2.5px,
-            rgba(200,160,120,0.3) 3.5px,
-            rgba(180,140,100,0.4) 3.5px,
-            rgba(180,140,100,0.4) 5px,
+            var(--mushroom-gill-color-1) 0%,
+            var(--mushroom-gill-color-1) 1.5px,
+            var(--mushroom-gill-color-2) 1.5px,
+            var(--mushroom-gill-color-2) 2.5px,
+            var(--mushroom-gill-color-3) 2.5px,
+            var(--mushroom-gill-color-3) 3.5px,
+            var(--mushroom-gill-color-4) 3.5px,
+            var(--mushroom-gill-color-4) 5px,
             transparent 5px,
             transparent 10px
         ),
-        /* Gill depth - darker gills */
+        /* Gill depth - darker gills - uses CSS variables */
         linear-gradient(to bottom,
-            rgba(200,160,120,0.6) 0%,
-            rgba(180,140,100,0.7) 30%,
-            rgba(160,120,80,0.8) 60%,
-            rgba(140,100,60,0.8) 100%
+            var(--mushroom-gill-depth-1) 0%,
+            var(--mushroom-gill-depth-2) 30%,
+            var(--mushroom-gill-depth-3) 60%,
+            var(--mushroom-gill-depth-4) 100%
         ),
         /* Gill shadow for depth */
         radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 50%);
