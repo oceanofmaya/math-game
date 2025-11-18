@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.1.16 - 2025-11-17
+
+#### Bug Fixes
+
+- Fixed pulse effect not working for mushroom, pearl, firefly, and jellyfish themes
+
 ### 1.1.15 - 2025-11-15
 
 #### Visual Improvements

@@ -888,8 +888,52 @@
                 const shapeAge = countParam - set.birthCount;
                 // Only apply pulse to shapes that have aged enough
                 if (shapeAge >= X) {
+                    // Remove inline transform styles that might interfere with CSS animations
+                    // Different themes set different transforms during birth that need to be cleared
+                    if (set.primaryElement.style.transform) {
+                        const currentTransform = set.primaryElement.style.transform;
+                        
+                        // For pearls: preserve rotation, store in CSS variable
+                        if (set.isPearl) {
+                            const rotationMatch = currentTransform.match(/rotate\(([^)]+)\)/);
+                            if (rotationMatch) {
+                                set.primaryElement.style.setProperty('--pearl-rotation', rotationMatch[1]);
+                            }
+                        }
+                        // For maple: preserve rotation, store in CSS variable (though pulse doesn't use transform)
+                        else if (set.isMaple) {
+                            const rotationMatch = currentTransform.match(/rotate\(([^)]+)\)/);
+                            if (rotationMatch) {
+                                set.primaryElement.style.setProperty('--maple-rotation', rotationMatch[1]);
+                            }
+                        }
+                        // For jellyfish: preserve translateY if present (though CSS animations handle movement)
+                        // Clear inline transform to allow CSS animation to control it
+                        else if (set.isJellyfish) {
+                            // Jellyfish uses CSS animations for movement, so clear inline transform
+                            // The CSS animation will handle both scale and position
+                        }
+                        // For mushrooms and fireflies: just clear the transform
+                        // (mushrooms already handled, fireflies just have scale)
+                        
+                        // Clear inline transform to allow CSS animation to control it
+                        set.primaryElement.style.transform = '';
+                    }
                     set.primaryElement.classList.add('aurora-pulse');
                     set.secondaryElements.forEach(secondary => {
+                        // For mushrooms, spots have rotation set inline - preserve it via CSS variable
+                        if (set.isMushroom && secondary.style.transform) {
+                            const transformMatch = secondary.style.transform.match(/rotate\(([^)]+)\)/);
+                            if (transformMatch) {
+                                // Store rotation in CSS variable for pulse animation to use
+                                secondary.style.setProperty('--spot-rotation', transformMatch[1]);
+                            }
+                            // Clear inline transform to allow CSS animation
+                            secondary.style.transform = '';
+                        } else if (secondary.style.transform) {
+                            // For other themes, clear transforms from birth
+                            secondary.style.transform = '';
+                        }
                         secondary.classList.add('aurora-pulse');
                     });
                     pulsed++;
