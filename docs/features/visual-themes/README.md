@@ -58,6 +58,7 @@ Core files:
 | Every answer | `visual.updateShapeAging()` - Check and color aged elements |
 | `count >= 2X && count < 3X` | `visual.color(1)` - Apply color to 1 aged element |
 | `count >= 3X && count < 4X` | `visual.pulse(1)` - Apply pulse animation to 1 aged element |
+| `count >= 4X` | `visual.pulse(1)` - Continue applying pulse animation to 1 aged element |
 | `count >= 4X && count % X == 0` | `visual.color(-1)` - Apply cascading color wave to all aged elements with pulse animation |
 
 ### On Wrong Answer or Skip

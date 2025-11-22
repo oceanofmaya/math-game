@@ -2,6 +2,21 @@
 
 ## Version 1
 
+### 1.2.0 - 2025-11-21
+
+#### Features
+
+- Added robots.txt file for search engine crawler guidance
+- Added sitemap.xml for improved SEO indexing
+
+#### Bug Fixes
+
+- Fixed pulse effect not working after count 20 for all visual themes (mushroom, pearl, jellyfish, firefly, maple)
+
+#### Documentation
+
+- Updated AGENTS.md with sitemap update guidelines
+
 ### 1.1.16 - 2025-11-17
 
 #### Bug Fixes

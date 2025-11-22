@@ -165,10 +165,16 @@
                 }
                 this.currentTheme.color(1, count, this.X);
             } else if (count >= pulseThreshold && count < colorWaveThreshold) {
+                // Pulse phase: apply pulse to aged mushrooms
                 this.currentTheme.pulse(1, count, this.X);
-            } else if (count >= colorWaveThreshold && count % this.X === 0) {
-                // Color wave: apply color to ALL shape sets that have aged enough
-                this.currentTheme.color(-1, count, this.X);
+            } else if (count >= colorWaveThreshold) {
+                // Color wave phase: apply pulse to aged mushrooms AND color wave on multiples of X
+                // Continue pulsing aged mushrooms even after pulse phase ends
+                this.currentTheme.pulse(1, count, this.X);
+                if (count % this.X === 0) {
+                    // Color wave: apply color to ALL shape sets that have aged enough
+                    this.currentTheme.color(-1, count, this.X);
+                }
             }
 
             this.updateHint();

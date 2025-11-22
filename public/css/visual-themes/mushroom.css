@@ -345,6 +345,140 @@
     animation: mushroom-pulse-enhanced 3s ease-in-out infinite;
 }
 
+/* Combined pulse + sway animation when both classes are present */
+.mushroom-cap.aurora-pulse.aurora-animate {
+    animation: mushroom-pulse-sway-combined 24s ease-in-out infinite;
+}
+
+/* Combined animation: pulse (3s cycle) + sway (8s cycle) = 24s LCM */
+@keyframes mushroom-pulse-sway-combined {
+    /* Pulse at 0%, 3s, 6s, 9s, 12s, 15s, 18s, 21s (every 3s) */
+    /* Sway at 0%, 8s, 16s (every 8s) */
+    0%, 100% {
+        opacity: 0.85;
+        transform: translate(0, 0) scale(1) scaleY(1) rotateZ(0deg);
+        box-shadow: 
+            0 2px 8px rgba(0,0,0,0.3),
+            0 0 15px rgba(150,100,70,0.4),
+            0 0 30px rgba(150,100,70,0.2),
+            inset 0 -10px 20px rgba(0,0,0,0.2),
+            inset 0 5px 15px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+    4.17% { /* 1s / 24s - pulse 25% */
+        opacity: 0.90;
+        transform: translate(0.5px, -0.25px) scale(1.05) scaleY(1.08) rotateZ(0.1deg);
+        box-shadow: 
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
+            inset 0 -11px 22px rgba(0,0,0,0.22),
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
+    }
+    6.25% { /* 1.5s / 24s - pulse 50% */
+        opacity: 0.95;
+        transform: translate(0.75px, -0.5px) scale(1.12) scaleY(1.18) rotateZ(0.2deg);
+        box-shadow: 
+            0 3px 12px rgba(0,0,0,0.38),
+            0 0 25px rgba(150,100,70,0.6),
+            0 0 50px rgba(150,100,70,0.35),
+            0 0 70px rgba(150,100,70,0.15),
+            inset 0 -12px 28px rgba(0,0,0,0.25),
+            inset 0 8px 22px rgba(255,255,255,0.32);
+        filter: brightness(1.08);
+    }
+    8.33% { /* 2s / 24s - pulse 75% */
+        opacity: 0.90;
+        transform: translate(1px, -0.75px) scale(1.05) scaleY(1.08) rotateZ(0.3deg);
+        box-shadow: 
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
+            inset 0 -11px 22px rgba(0,0,0,0.22),
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
+    }
+    12.5% { /* 3s / 24s - pulse cycle complete, sway continues */
+        opacity: 0.85;
+        transform: translate(4px, -2px) scale(1) scaleY(1) rotateZ(0.5deg);
+        box-shadow: 
+            0 2px 8px rgba(0,0,0,0.3),
+            0 0 15px rgba(150,100,70,0.4),
+            0 0 30px rgba(150,100,70,0.2),
+            inset 0 -10px 20px rgba(0,0,0,0.2),
+            inset 0 5px 15px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+    25% { /* 6s / 24s - pulse cycle 2 */
+        opacity: 0.90;
+        transform: translate(5px, -3px) scale(1.05) scaleY(1.08) rotateZ(1deg);
+        box-shadow: 
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
+            inset 0 -11px 22px rgba(0,0,0,0.22),
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
+    }
+    33.33% { /* 8s / 24s - sway cycle complete */
+        opacity: 0.85;
+        transform: translate(2px, 1px) scale(1) scaleY(1) rotateZ(0.8deg);
+        box-shadow: 
+            0 2px 8px rgba(0,0,0,0.3),
+            0 0 15px rgba(150,100,70,0.4),
+            0 0 30px rgba(150,100,70,0.2),
+            inset 0 -10px 20px rgba(0,0,0,0.2),
+            inset 0 5px 15px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+    50% { /* 12s / 24s - pulse + sway midpoint */
+        opacity: 0.95;
+        transform: translate(-4px, 4px) scale(1.12) scaleY(1.18) rotateZ(-0.5deg);
+        box-shadow: 
+            0 3px 12px rgba(0,0,0,0.38),
+            0 0 25px rgba(150,100,70,0.6),
+            0 0 50px rgba(150,100,70,0.35),
+            0 0 70px rgba(150,100,70,0.15),
+            inset 0 -12px 28px rgba(0,0,0,0.25),
+            inset 0 8px 22px rgba(255,255,255,0.32);
+        filter: brightness(1.08);
+    }
+    66.67% { /* 16s / 24s - sway cycle 2 */
+        opacity: 0.85;
+        transform: translate(-3px, 2px) scale(1) scaleY(1) rotateZ(-0.8deg);
+        box-shadow: 
+            0 2px 8px rgba(0,0,0,0.3),
+            0 0 15px rgba(150,100,70,0.4),
+            0 0 30px rgba(150,100,70,0.2),
+            inset 0 -10px 20px rgba(0,0,0,0.2),
+            inset 0 5px 15px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+    75% { /* 18s / 24s - pulse cycle 6 */
+        opacity: 0.90;
+        transform: translate(3px, 5px) scale(1.05) scaleY(1.08) rotateZ(0.3deg);
+        box-shadow: 
+            0 2px 9px rgba(0,0,0,0.32),
+            0 0 18px rgba(150,100,70,0.45),
+            0 0 35px rgba(150,100,70,0.25),
+            inset 0 -11px 22px rgba(0,0,0,0.22),
+            inset 0 6px 18px rgba(255,255,255,0.24);
+        filter: brightness(1.03);
+    }
+    87.5% { /* 21s / 24s - near end */
+        opacity: 0.85;
+        transform: translate(1px, 2px) scale(1) scaleY(1) rotateZ(0.2deg);
+        box-shadow: 
+            0 2px 8px rgba(0,0,0,0.3),
+            0 0 15px rgba(150,100,70,0.4),
+            0 0 30px rgba(150,100,70,0.2),
+            inset 0 -10px 20px rgba(0,0,0,0.2),
+            inset 0 5px 15px rgba(255,255,255,0.2);
+        filter: brightness(1);
+    }
+}
+
 @keyframes mushroom-pulse-enhanced {
     0%, 100% {
         opacity: 0.85;
