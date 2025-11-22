@@ -11,8 +11,12 @@ math-game/
 │   │   └── visual-themes/      # Theme-specific styles
 │   ├── js/                     # JavaScript files
 │   │   └── visual-themes/      # Visual theme implementations
-│   └── sounds/                 # Audio files
-│       └── music/              # Theme music tracks
+│   ├── sounds/                 # Audio files
+│   │   └── music/              # Theme music tracks
+│   ├── robots.txt              # Search engine crawler guidance
+│   └── sitemap.xml             # SEO sitemap for search engines
+├── scripts/                    # Utility scripts
+│   └── generate-sitemap.sh     # Script to generate sitemap with current date
 └── docs/                       # Documentation
     ├── features/               # Feature documentation
     │   ├── visual-themes/      # Visual themes system
