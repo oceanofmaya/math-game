@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow crawling of audio files (they're large and not useful for search engines)
+Disallow: /sounds/
+
+# Sitemap location
+Sitemap: https://math-game.oceanofmaya.com/sitemap.xml
+
