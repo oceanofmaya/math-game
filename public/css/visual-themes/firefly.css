@@ -76,7 +76,8 @@
     }
 }
 
-.firefly-pulse {
+.firefly-pulse,
+.firefly-glow.aurora-pulse {
     animation: firefly-pulse-enhanced 2s ease-in-out infinite;
 }
 
