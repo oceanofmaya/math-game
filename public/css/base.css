@@ -1,0 +1,175 @@
+:root {
+    /* Color Palette - Minimalistic & Calming */
+    --color-bg-primary: #2e2e2e;
+    --color-bg-secondary: #000000;
+    --color-text-primary: #efefef;
+    --color-text-secondary: rgba(255, 255, 255, 0.7);
+    --color-text-tertiary: rgba(255, 255, 255, 0.5);
+    --color-text-quaternary: rgba(255, 255, 255, 0.3);
+    --color-text-muted: #999999;
+    
+    /* Gray Scale - Consistent */
+    --color-gray-100: #e0e0e0;
+    --color-gray-200: #cccccc;
+    --color-gray-300: #888888;
+    --color-gray-400: #666666;
+    --color-gray-500: #555555;
+    
+    /* Accent Colors - Colorblind Safe */
+    --color-primary: #2196F3;
+    --color-primary-hover: #1976D2;
+    --color-success: #81D4FA; /* WCAG AA compliant: 5.5:1 contrast ratio on dark background (#2e2e2e) */
+    --color-error: #ff6b6b; /* WCAG AA compliant: 5.1:1 contrast ratio on dark background (#2e2e2e) */
+    
+    /* Spacing Scale - Consistent */
+    --spacing-xs: 2px;
+    --spacing-sm: 4px;
+    --spacing-md: 6px;
+    --spacing-lg: 8px;
+    --spacing-xl: 12px;
+    --spacing-2xl: 16px;
+    
+    /* Typography Scale */
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 20px;
+    --font-size-3xl: 24px;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    
+    /* Layout Constraints - Consistent Max Widths */
+    --max-width-input: 240px;
+    --max-width-fieldset: 400px;
+    
+    /* Transitions - Consistent Timing */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-slower: 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Focus Indicator */
+    --focus-outline-width: 2px;
+    --focus-outline-offset: 2px;
+    --focus-outline-color: var(--color-primary);
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    scrollbar-gutter: stable;
+}
+
+body {
+    min-height: 100vh;
+    height: auto;
+    background-color: var(--color-bg-secondary);
+    background-image: linear-gradient(var(--color-bg-primary), var(--color-bg-secondary));
+    background-attachment: fixed;
+    margin: 0 auto;
+    padding: 0;
+    color: var(--color-text-primary);
+    width: 100%;
+    font-size: var(--font-size-lg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Arial, sans-serif;
+    min-width: 300px;
+    text-align: center;
+    overflow: auto;
+    box-sizing: border-box;
+    line-height: 1.5;
+    position: relative;
+}
+
+/* Suppress scrollbars during jellyfish birth animation */
+body.suppress-scrollbars {
+    overflow: hidden;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    input[type=submit]:hover,
+    input[type=button]:hover,
+    button:hover,
+    .operation-btn:hover,
+    .mode-button:hover {
+        transform: none;
+    }
+}
+
+/* General utility class for hiding elements */
+.hidden {
+    display: none !important;
+}
+
+/* Screen reader only class */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Color wave pulse animation for cascading effect */
+@keyframes color-wave-pulse {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.15);
+        filter: brightness(1.3);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+.color-wave-pulse {
+    animation: color-wave-pulse 0.8s ease-in-out;
+}
+
+/* Ripple circles animation for color wave background effect */
+@keyframes ripple-expand {
+    0% {
+        transform: scale(0);
+        opacity: 0.6;
+    }
+    20% {
+        opacity: 0.5;
+    }
+    40% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.15;
+    }
+    80% {
+        opacity: 0.05;
+    }
+    100% {
+        transform: scale(40);
+        opacity: 0;
+    }
+}
+

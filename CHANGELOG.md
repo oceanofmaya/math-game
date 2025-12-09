@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.2.1 - 2025-12-08
+
+#### Code Organization
+
+- Refactored code structure: extracted inline JavaScript and split CSS into modular files for improved maintainability
+
 ### 1.2.0 - 2025-11-21
 
 #### Features

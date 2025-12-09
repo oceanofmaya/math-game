@@ -1,0 +1,476 @@
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    fieldset {
+        max-width: 95%;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    /* Ensure fieldsets inside game-mode-fields also respect parent width */
+    .game-mode-fields > fieldset,
+    .game-mode-fields > div > fieldset {
+        max-width: 95%;
+    }
+    
+    .mode-toggle-container {
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+    }
+    
+    .mode-button {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: var(--font-size-sm);
+        min-height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    /* Make music button square but match mode button height at 768px */
+    #musicToggleButton.mode-button {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-xl);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    /* Make help button match music button at 768px */
+    #helpToggle.mode-button {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-xl);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    /* Make timed mode toggle button match music/help buttons at 768px */
+    #timedModeButton.mode-button {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-xl);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    
+    .separator {
+        font-size: var(--font-size-lg);
+        margin: 0 var(--spacing-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    html,
+    body {
+        font-size: var(--font-size-md);
+    }
+    
+    form {
+        padding: var(--spacing-xs);
+        min-height: 100vh;
+    }
+    
+    h1 {
+        font-size: var(--font-size-xl);
+        margin: var(--spacing-xs) 0 var(--spacing-sm) 0;
+        line-height: 1.2;
+    }
+    
+    .count-container {
+        font-size: var(--font-size-xs);
+        gap: var(--spacing-sm);
+        margin: var(--spacing-xs) 0 var(--spacing-sm) 0;
+        flex-wrap: wrap;
+    }
+    
+    .flex-direction-column {
+        gap: var(--spacing-xs);
+    }
+    
+    fieldset {
+        margin: var(--spacing-xs) auto;
+        padding: var(--spacing-sm) var(--spacing-md);
+        max-width: 95%;
+    }
+    
+    /* Ensure fieldsets inside game-mode-fields also respect parent width */
+    .game-mode-fields > fieldset,
+    .game-mode-fields > div > fieldset {
+        max-width: 95%;
+    }
+    
+    fieldset legend {
+        font-size: var(--font-size-sm);
+        padding: 0 var(--spacing-sm);
+    }
+    
+    input {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        margin: var(--spacing-xs);
+    }
+
+    input[type=number] {
+        margin: var(--spacing-sm) auto;
+        padding: var(--spacing-sm);
+    }
+    
+    input[type=submit],
+    input[type=button] {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-md);
+        min-width: 32px;
+        min-height: auto;
+        width: auto;
+        height: auto;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    select {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        margin: var(--spacing-xs);
+    }
+    
+    .hint-content {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-xs);
+    }
+    
+    .hint-message {
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .hint-description {
+        font-size: var(--font-size-xs);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .hint-progress-container {
+        margin-top: var(--spacing-sm);
+        height: 2px;
+    }
+    
+    #answerMessage {
+        font-size: var(--font-size-xs);
+        min-height: 18px;
+        margin-top: var(--spacing-xs);
+    }
+    
+    .operation-selector {
+        gap: var(--spacing-sm);
+        flex-wrap: wrap;
+    }
+    
+    .operation-btn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        font-size: var(--font-size-lg);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        padding: 0 !important;
+        flex-shrink: 0;
+    }
+    
+    .operation-btn.active {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        padding: 0 !important;
+        flex-shrink: 0;
+    }
+    
+    
+    .mode-toggle-container {
+        gap: var(--spacing-sm);
+    }
+    
+    .mode-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-xs);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    /* Make music button match operation buttons size at 480px */
+    #musicToggleButton.mode-button {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-lg);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    /* Make help button match music button at 480px */
+    #helpToggle.mode-button {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-lg);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    /* Make timed mode toggle button match music/help buttons at 480px */
+    #timedModeButton.mode-button {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: var(--font-size-lg);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    
+    .separator {
+        font-size: var(--font-size-md);
+        margin: 0 var(--spacing-xs);
+    }
+    
+    .sample-controls-container {
+        gap: var(--spacing-sm);
+    }
+    
+    .sample-button,
+    .sample-button-secondary,
+    .sample-button-reset {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+    
+    .sample-element-label {
+        gap: var(--spacing-xs);
+    }
+    
+    .sample-element-hint {
+        font-size: 0.75em;
+        margin-top: -1px;
+    }
+    
+    .sample-lifecycle-hint {
+        font-size: 0.7em;
+        margin-top: var(--spacing-xs);
+        margin-bottom: var(--spacing-xs);
+        padding: var(--spacing-xs) 0;
+    }
+    
+    .button-container {
+        gap: var(--spacing-sm);
+    }
+    
+    br {
+        display: none;
+    }
+}
+
+@media (max-width: 360px) {
+    html,
+    body {
+        font-size: var(--font-size-sm);
+    }
+    
+    h1 {
+        font-size: var(--font-size-lg);
+        margin: var(--spacing-xs) 0;
+    }
+    
+    .count-container {
+        font-size: 10px;
+        gap: var(--spacing-xs);
+        margin: var(--spacing-xs) 0;
+    }
+    
+    fieldset {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        margin: var(--spacing-xs) auto;
+    }
+    
+    fieldset legend {
+        font-size: 11px;
+    }
+    
+    .mode-button {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 10px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    .mode-button.active,
+    .mode-button.inactive {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    .separator {
+        font-size: var(--font-size-sm);
+        margin: 0 var(--spacing-xs);
+    }
+    
+    input {
+        padding: var(--spacing-xs);
+        font-size: var(--font-size-xs);
+    }
+    
+    input[type=submit],
+    input[type=button] {
+        min-width: 28px;
+        min-height: auto;
+        width: auto;
+        height: auto;
+        font-size: var(--font-size-sm);
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    .operation-btn {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+        border: 2px solid transparent;
+        flex-shrink: 0;
+        box-sizing: border-box;
+    }
+    
+    .operation-btn.active {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+        flex-shrink: 0;
+    }
+    
+    
+    /* Make music button match operation buttons size at 360px */
+    #musicToggleButton.mode-button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: var(--font-size-sm);
+        min-width: 28px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #musicToggleButton.mode-button.active,
+    #musicToggleButton.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+    }
+    
+    /* Make help button match music button at 360px */
+    #helpToggle.mode-button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: var(--font-size-sm);
+        min-width: 28px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #helpToggle.mode-button.active,
+    #helpToggle.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+    }
+    
+    /* Make timed mode toggle button match music/help buttons at 360px */
+    #timedModeButton.mode-button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: var(--font-size-sm);
+        min-width: 28px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+    
+    #timedModeButton.mode-button.active,
+    #timedModeButton.mode-button.inactive {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+    }
+    
+}
+
