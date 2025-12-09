@@ -50,7 +50,7 @@ All lint errors must be fixed before completing a task. Use `read_lints` to chec
 
 ### CSS Variables
 
-- **Location**: `:root` in `public/css/style.css` defines all CSS variables
+- **Location**: `:root` in `public/css/base.css` defines all CSS variables
 - **Usage**: Always use CSS variables instead of hard-coding:
   - Spacing: `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`, `var(--spacing-lg)`, `var(--spacing-xl)`, `var(--spacing-2xl)`
   - Colors: `var(--color-primary)`, `var(--color-gray-400)`, `var(--color-text-primary)`, etc.
@@ -58,7 +58,7 @@ All lint errors must be fixed before completing a task. Use `read_lints` to chec
   - Border radius: `var(--radius-sm)`, `var(--radius-md)`, `var(--radius-lg)`
   - Transitions: `var(--transition-fast)`, `var(--transition-base)`, `var(--transition-slow)`
 - **Example**: Use `padding: var(--spacing-lg)` instead of `padding: 8px`
-- **Creating New Variables**: If a new value is needed repeatedly, add it to `:root` in `style.css`
+- **Creating New Variables**: If a new value is needed repeatedly, add it to `:root` in `base.css`
 
 ### When Hard-coding is Acceptable
 
