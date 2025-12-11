@@ -433,6 +433,9 @@
 
             if (self.shapeSets.length > 0) {
                 animationFrameId = requestAnimationFrame(updatePhysics);
+            } else {
+                // No shapes left - reset animation frame ID so loop can restart when new shapes are added
+                animationFrameId = null;
             }
         };
 

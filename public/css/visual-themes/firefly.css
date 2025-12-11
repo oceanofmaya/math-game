@@ -79,11 +79,14 @@
 .firefly-pulse,
 .firefly-glow.aurora-pulse {
     animation: firefly-pulse-enhanced 2s ease-in-out infinite;
+    /* Use transform-origin to ensure scaling doesn't affect positioning */
+    transform-origin: center center;
 }
 
 @keyframes firefly-pulse-enhanced {
     0%, 100% {
         opacity: 0.75;
+        /* Only use scale, no translate - positioning is handled by JavaScript via left/top */
         transform: scale(1);
         box-shadow: 
             0 0 22px rgba(255,255,200,0.9),
@@ -93,6 +96,7 @@
     }
     50% {
         opacity: 1;
+        /* Only use scale, no translate - positioning is handled by JavaScript via left/top */
         transform: scale(1.35);
         box-shadow: 
             0 0 38px rgba(255,255,200,1),
