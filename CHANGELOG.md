@@ -2,6 +2,12 @@
 
 ## Version 1
 
+### 1.2.2 - 2025-12-10
+
+#### Bug Fixes
+
+- Fixed shapes not moving after removing all shapes and adding new ones
+
 ### 1.2.1 - 2025-12-08
 
 #### Code Organization
